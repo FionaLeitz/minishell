@@ -1,0 +1,31 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/sgoinfre/goinfre/Perso/masamoil/minishell'
+make -C libft
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/cd.c -o srcs/builtin/cd.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/pipes.c -o srcs/builtin/pipes.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/echo.c -o srcs/builtin/echo.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/env.c -o srcs/builtin/env.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/pwd.c -o srcs/builtin/pwd.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/exit.c -o srcs/builtin/exit.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/export.c -o srcs/builtin/export.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/export2.c -o srcs/builtin/export2.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/unset.c -o srcs/builtin/unset.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/get_env.c -o srcs/builtin/get_env.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/table_utils.c -o srcs/builtin/table_utils.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/select_builtin.c -o srcs/builtin/select_builtin.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/builtin/main_test.c -o srcs/builtin/main_test.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/prompt.c -o srcs/parsing/prompt.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/init.c -o srcs/parsing/init.o
+make: Leaving directory '/sgoinfre/goinfre/Perso/masamoil/minishell'
+ 
+make: *** No rule to make target 'srcs/parsing/calls.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/check_elements.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/funnels.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/get_calls.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/get_elements.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/get_funnels.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/parsing_utils.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/parsing.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/str_utils.o', needed by 'minishell'.
+make: *** No rule to make target 'srcs/parsing/table_utils.o', needed by 'minishell'.
+
