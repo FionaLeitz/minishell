@@ -23,6 +23,8 @@ SRCS =	srcs/builtin/cd.c						\
 		srcs/parsing/parsing.c					\
 		srcs/parsing/str_utils.c				\
 		srcs/parsing/table_utils.c				\
+		srcs/parsing/prompt.c 					\
+		srcs/parsing/init.c
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -37,7 +39,7 @@ LIBFT	= -L libft -lft
 all: 		lib ${NAME}
 
 ${NAME}: 	${OBJS}
-			${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME}
+			${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME} -l readline
 
 .c.o:		
 			${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@

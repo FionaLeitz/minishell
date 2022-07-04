@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+/*int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 //	(void)argv;
@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **envp)
 	free_export(params.export);
 	free_table2(params.env);
 //		ft_putstr_fd("Error\n", 2);
-}
+}*/
 
 /*
 int	main(int argc, char **argv, char **envp)
@@ -67,3 +67,17 @@ int	main(int argc, char **argv, char **envp)
 
 	return (0);
 }*/
+
+int	main(int ac, char **av, char **envp)
+{
+	(void)av;
+	(void)envp;
+	t_data data;
+
+	init_data(&data);
+	if (ac == 1)
+	{
+		print_prompt(&data);
+	}	
+	return (EXIT_SUCCESS);
+}

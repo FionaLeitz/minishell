@@ -12,6 +12,11 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
+#include <readline/readline.h>
+#include <readline/history.h>
+
+#define PROMPT "Minishell>"
+
 typedef struct	s_export
 {
 	char			*name;
@@ -65,6 +70,17 @@ typedef struct s_call {
 	char				**args;
 	t_funnel		**funnels;
 }	t_call;
+
+typedef struct s_data
+{
+        char    *input;
+        char    *trimmed;
+}t_data;
+
+//my fcts
+void	init_data(t_data *data);
+int	print_prompt(t_data *data);
+char	*readline(const char *prompt);
 
 int	command(t_call **calls, t_params *params);
 
