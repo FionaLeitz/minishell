@@ -1,0 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   table_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/10 09:30:18 by fleitz            #+#    #+#             */
+/*   Updated: 2022/05/10 09:30:20 by fleitz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+/*
+// Print string table
+void	print_table(char **table)
+{
+	int	i;
+
+	i = 0;
+	while (table[i])
+	{
+		ft_printf(table[i]);
+		if (table[i][0] != '\0')
+			ft_printf("\n");
+		i++;
+	}
+}
+*/
+void	free_table2(char **table)
+{
+	int	i;
+
+	i = 0;
+	while (table[i])
+	{
+		free(table[i]);
+		i++;
+	}
+	free(table);
+}
