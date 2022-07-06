@@ -9,6 +9,7 @@ SRCS =	srcs/builtin/cd.c						\
 		srcs/builtin/export.c					\
 		srcs/builtin/export2.c					\
 		srcs/builtin/unset.c					\
+		srcs/builtin/heredoc.c					\
 		srcs/builtin/get_env.c					\
 		srcs/builtin/table_utils.c				\
 		srcs/builtin/select_builtin.c			\
@@ -37,7 +38,7 @@ LIBFT	= -L libft -lft
 all: 		lib ${NAME}
 
 ${NAME}: 	${OBJS}
-			${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME}
+			${CC} ${CFLAGS} ${OBJS} ${LIBFT} -lreadline -o ${NAME}
 
 .c.o:		
 			${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@
