@@ -14,6 +14,7 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 
 # define PROMPT "Minishell>"
 
@@ -77,18 +78,20 @@ typedef struct s_data
 	char	*trimmed;
 }t_data;
 
-typedef struct s_list
-{
-	void			*value;
+typedef struct s_token
+{	
+	int		type;
 	struct s_list	*next;
 	struct s_list	*prev;
 
-}t_list;
+}t_token;
 
 //my fcts
 void		init_data(t_data *data);
 int			print_prompt(t_data *data);
 char		*readline(const char *prompt);
+void		sig_manage(int signal);
+void		ft_exit_d(t_data *data);
 
 int			command(t_call **calls, t_params *params);
 

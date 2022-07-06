@@ -24,7 +24,8 @@ SRCS =	srcs/builtin/cd.c						\
 		srcs/parsing/str_utils.c				\
 		srcs/parsing/table_utils.c				\
 		srcs/parsing/prompt.c 					\
-		srcs/parsing/init.c
+		srcs/parsing/init.c					\
+		srcs/parsing/signaux.c
 
 OBJS	= ${SRCS:.c=.o}
 
