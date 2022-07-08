@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 13:35:21 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/08 12:09:14 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/08 16:18:41 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	init_data(t_data *data)
 	data->input = NULL;
 	data->trimmed =  NULL;
 	data->head = NULL;
+	data->i = 0;
 }
 
 void	init_token(t_token *token)
