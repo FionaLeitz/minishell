@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/02 13:35:21 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/08 12:09:14 by masamoil         ###   ########.fr       */
+/*   Created: 2022/07/08 13:43:02 by masamoil          #+#    #+#             */
+/*   Updated: 2022/07/08 15:04:58 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	init_data(t_data *data)
+t_token	*l_redirect(t_data *data, t_token *token_list)
 {
-	data->input = NULL;
-	data->trimmed =  NULL;
-	data->head = NULL;
+	if (ft_strncmp(data->trimmed + data->i, "<<", 2) != 0)
+		printf("euhmmm");
+	else
+		pushBack(data, "<", L_R);
+	return (token_list);
 }
 
-void	init_token(t_token *token)
+/*t_token	*r_redirect(t_data *data, )
 {
-	token->type = 0;
-	token->value = NULL;
-	token->next = NULL;
-	token->prev = NULL;
-}
+
+}*/
+

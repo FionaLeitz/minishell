@@ -1,31 +1,12 @@
 NAME  = minishell
 
-SRCS =	srcs/builtin/cd.c						\
-		srcs/builtin/pipes.c					\
-		srcs/builtin/echo.c						\
-		srcs/builtin/env.c						\
-		srcs/builtin/pwd.c						\
-		srcs/builtin/exit.c						\
-		srcs/builtin/export.c					\
-		srcs/builtin/export2.c					\
-		srcs/builtin/unset.c					\
-		srcs/builtin/get_env.c					\
-		srcs/builtin/table_utils.c				\
-		srcs/builtin/select_builtin.c			\
-		srcs/builtin/main_test.c				\
-		srcs/parsing/calls.c					\
-		srcs/parsing/check_elements.c			\
-		srcs/parsing/funnels.c					\
-		srcs/parsing/get_calls.c				\
-		srcs/parsing/get_elements.c				\
-		srcs/parsing/get_funnels.c				\
-		srcs/parsing/parsing_utils.c			\
-		srcs/parsing/parsing.c					\
-		srcs/parsing/str_utils.c				\
-		srcs/parsing/table_utils.c				\
-		srcs/parsing/prompt.c 					\
-		srcs/parsing/init.c					\
-		srcs/parsing/signaux.c
+SRCS =	srcs/parsing/main.c\
+	srcs/parsing/prompt.c\
+	srcs/parsing/init.c\
+	srcs/parsing/signaux.c\
+	srcs/parsing/parse.c\
+	srcs/parsing/fct_list.c\
+	srcs/parsing/redirect.c
 
 OBJS	= ${SRCS:.c=.o}
 

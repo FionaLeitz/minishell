@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/06 16:26:43 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/08 13:17:04 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 int	print_prompt(t_data *data)
 {
+	t_token *token_list;
+
+	token_list = NULL;
 	while (1)
 	{
+		//init_token(token_list);
+		init_data(data);
 		//ctrl-c		
 		signal(SIGINT, sig_manage);
 		//ctrl-backslash
@@ -28,6 +33,8 @@ int	print_prompt(t_data *data)
 		printf("trimmed = %s\n", data->trimmed);
 		if (data->input != NULL && ft_strlen(data->input) != 0)
 			add_history(data->input);
+		token_list = check_type(data, token_list);
+		preview(data);
 	}
 	return (0);
 }

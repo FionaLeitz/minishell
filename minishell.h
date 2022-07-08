@@ -16,20 +16,23 @@
 # include <readline/history.h>
 # include <signal.h>
 
-# define PROMPT "Minishell>"
+# define PROMPT "Minishell> "
+# define PIPE 1
+# define L_R 2
+# define R_R 3
 
 typedef struct s_export
 {
-	char			*name;
-	char			*value;
+	char		*name;
+	char		*value;
 	struct s_export	*next;	
-}					t_export;
+}t_export;
 
 typedef struct s_params
 {
 	char		**env;
 	t_export	*export;
-}				t_params;
+}t_params;
 
 // cd.c
 int			ft_cd(char **arg, char **env);
@@ -61,64 +64,44 @@ int			ft_unset(char **arg, char **env, t_export *export);
 
 // Parsing
 
-typedef struct s_funnel {
-	char	*type_funnel;
-	char	**file_names;
-}	t_funnel;
-
-typedef struct s_call {
-	char		*program;
-	char		**args;
-	t_funnel	**funnels;
-}	t_call;
+typedef struct s_token
+{	
+	char		*value;
+	size_t		type;
+	struct s_token	*next;
+	struct s_token	*prev;
+}t_token;
 
 typedef struct s_data
 {
 	char	*input;
 	char	*trimmed;
+	int	i;
+	struct s_token	*head;
 }t_data;
 
-typedef struct s_token
-{	
-	int		type;
-	struct s_list	*next;
-	struct s_list	*prev;
+/*typedef struct	s_builtin
+{
 
-}t_token;
+}t_builtin;*/
 
-//my fcts
+//init.c
 void		init_data(t_data *data);
-int			print_prompt(t_data *data);
+void		init_token(t_token *token);
+//prompt.c
+int		print_prompt(t_data *data);
 char		*readline(const char *prompt);
+//signaux.c
 void		sig_manage(int signal);
 void		ft_exit_d(t_data *data);
-
-int			command(t_call **calls, t_params *params);
-
-int			count_chars(char c, char *str);
-int			check_quotes(char *str);
-int			get_elements(char *input, int *n_elements, char ***table_elements);
-void		free_table(char **table, int size);
-void		print_table(char **table);
-int			is_in(char c, char *str);
-int			count_char_start(char c, char *str);
-void		free_call(t_call call);
-int			get_size_table(char **table);
-void		free_funnel(t_funnel *funnel);
-void		print_funnel(t_funnel funnel);
-void		print_call(t_call call);
-void		print_calls(t_call **calls);
-int			get_funnels(int *start, char **elements, t_call **call);
-int			table_dup(char **table, int size, char ***new_table);
-void		free_calls(t_call **calls, int size);
-int			check_calls(char **table);
-int			is_invalid(char *str);
-int			is_syntax(char *str);
-int			has_unquoted_syntax(char *str);
-int			get_calls(int n_elements, char **elements, t_call ***calls);
-int			get_next_call(int *start, char **elements, t_call **call);
-int			count_pipes(char **elements);
-int			len_portion(char **elements);
-int			parse(char *input, t_call ***calls, t_params *params);
+//parse.c
+t_token		*check_type(t_data *data, t_token *token_list);
+//fct_list.c
+t_token	*new_node(char *value, size_t type);
+void	pushFront(t_data *data, char *value, size_t type);
+void	pushBack(t_data *data, char *value, size_t type);
+void	preview(t_data	*data);
+//redirect.c
+t_token	*l_redirect(t_data *data, t_token *token_list);
 
 #endif

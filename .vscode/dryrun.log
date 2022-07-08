@@ -1,0 +1,12 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/sgoinfre/goinfre/Perso/masamoil/minishell'
+make -C libft
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/main.c -o srcs/parsing/main.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/prompt.c -o srcs/parsing/prompt.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/init.c -o srcs/parsing/init.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/signaux.c -o srcs/parsing/signaux.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/parse.c -o srcs/parsing/parse.o
+clang -Wall -Wextra -Werror -g3 -Iminishell.h -c srcs/parsing/fct_list.c -o srcs/parsing/fct_list.o
+clang -Wall -Wextra -Werror -g3 srcs/parsing/main.o srcs/parsing/prompt.o srcs/parsing/init.o srcs/parsing/signaux.o srcs/parsing/parse.o srcs/parsing/fct_list.o -L libft -lft -o minishell -l readline
+make: Leaving directory '/sgoinfre/goinfre/Perso/masamoil/minishell'
+ 

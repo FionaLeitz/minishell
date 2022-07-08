@@ -1,0 +1,73 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fct_list.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/06 18:19:53 by masamoil          #+#    #+#             */
+/*   Updated: 2022/07/08 13:22:28 by masamoil         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+t_token	*new_node(char *value, size_t type)
+{
+	t_token *new;
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->type = type;
+	new->value = value;
+	new->next = NULL;
+	new->prev = NULL;
+	return (new);	
+}
+
+void	pushFront(t_data *data, char *value, size_t type)
+{	
+	t_token	*new;
+
+	new = new_node(value, type);
+	if (data->head == NULL)
+	{
+		data->head = new;
+		return ;
+	}
+	data->head->prev = new;
+	new->next = data->head;
+	data->head = new;
+}
+
+void	pushBack(t_data *data, char *value, size_t type)
+{
+	t_token	*new;
+	t_token	*tmp;
+
+	new = new_node(value, type);
+	tmp = data->head;
+	if (data->head == NULL)
+	{
+		data->head = new;
+		return ;
+	}
+	while (tmp->next != NULL)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
+}
+
+void	preview(t_data *data)
+{
+	t_token *tmp = data->head;
+	if (tmp == NULL)
+		return ;
+	while (tmp != NULL)
+	{
+		printf("str value: %s\n", tmp->value);
+		printf("t_size type : %zu\n", tmp->type);
+		tmp = tmp->next;
+	}
+}
+
