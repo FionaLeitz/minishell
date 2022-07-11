@@ -7,7 +7,8 @@ SRCS =	srcs/parsing/main.c\
 	srcs/parsing/parse.c\
 	srcs/parsing/fct_list.c\
 	srcs/parsing/quotes.c\
-	srcs/parsing/args_start.c
+	srcs/parsing/args_start.c\
+	srcs/parsing/utils.c
 
 OBJS	= ${SRCS:.c=.o}
 

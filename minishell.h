@@ -107,5 +107,7 @@ int			check_quotes(t_data *data);
 //args_start.c
 int first_pipe_cut(t_data *data);
 int	ft_count_words(t_data *data, char *s, char c);
+//utils.c
+int	ft_check_whitespace(char c);
 
 #endif
