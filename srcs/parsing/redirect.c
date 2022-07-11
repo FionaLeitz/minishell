@@ -17,7 +17,7 @@ t_token	*l_redirect(t_data *data, t_token *token_list)
 	if (ft_strncmp(data->trimmed + data->i, "<<", 2) != 0)
 		printf("euhmmm");
 	else
-		pushBack(data, "<", L_R);
+		push_back(data, "<", L_R);
 	return (token_list);
 }
 

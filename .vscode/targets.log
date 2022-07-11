@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jul  8 12:12:16 2022
+# Make data base, printed on Mon Jul 11 15:54:36 2022
 
 # Variables
 
@@ -39,15 +39,14 @@ CURDIR := /sgoinfre/goinfre/Perso/masamoil/minishell
 # makefile
 SHELL = /bin/sh
 # environment
-GDM_LANG = en
-# environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
 _ = /usr/share/code/code
-# makefile (from 'Makefile', line 16)
+ 
+# makefile (from 'Makefile', line 19)
 CFLAGS = -Wall -Wextra -Werror -g3
 # environment
-JOURNAL_STREAM = 9:3984912
+JOURNAL_STREAM = 9:945661
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # makefile (from 'Makefile', line 1)
@@ -66,18 +65,18 @@ XDG_DATA_DIRS = /usr/share/gnome:/usr/share/ubuntu:/mnt/nfs/homes/masamoil/.loca
 DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/40328/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
-# makefile (from 'Makefile', line 10)
+# makefile (from 'Makefile', line 13)
 OBJS = ${SRCS:.c=.o}
 # environment
-MANAGERPID = 578298
+MANAGERPID = 209656
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/40328/vscode-ipc-651b66c1-8cdb-4f3a-982a-586a61ce5f41.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/40328/vscode-ipc-93013d33-7399-45e1-bfbf-b691b0252eaa.sock
 # environment
 VSCODE_CWD = /mnt/nfs/homes/masamoil
 # environment
-XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session7
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session9
 # environment
-KRB5CCNAME = FILE:/tmp/krb5cc_40328_5W0XM2
+KRB5CCNAME = FILE:/tmp/krb5cc_40328_wZMa5O
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
@@ -87,7 +86,7 @@ GPG_AGENT_INFO = /run/user/40328/gnupg/S.gpg-agent:0:1
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
-SESSION_MANAGER = local/e1r3p7.clusters.42paris.fr:@/tmp/.ICE-unix/578829,unix/e1r3p7.clusters.42paris.fr:/tmp/.ICE-unix/578829
+SESSION_MANAGER = local/e1r3p6.42.fr:@/tmp/.ICE-unix/210153,unix/e1r3p6.42.fr:/tmp/.ICE-unix/210153
 # environment
 XDG_RUNTIME_DIR = /run/user/40328
 # environment
@@ -97,7 +96,7 @@ VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 2a3e68362af7416f86fbb2d7b7fe4f5a
+INVOCATION_ID = 77112d04667741668cec6297db0532d0
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -109,7 +108,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/40328/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 600139
+GIO_LAUNCHED_DESKTOP_FILE_PID = 268489
 # automatic
 %F = $(notdir $%)
 # environment
@@ -121,7 +120,7 @@ PWD = /sgoinfre/goinfre/Perso/masamoil/minishell
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 578793
+SSH_AGENT_PID = 210117
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -136,7 +135,7 @@ VSCODE_CODE_CACHE_PATH = /mnt/nfs/homes/masamoil/.config/Code/CachedData/30d9c6c
 LOGNAME = masamoil
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
-# makefile (from 'Makefile', line 12)
+# makefile (from 'Makefile', line 15)
 HEADERS = minishell.h
 # environment
 ZSH = /mnt/nfs/homes/masamoil/.oh-my-zsh
@@ -155,12 +154,12 @@ MAKECMDGOALS := all
 # environment
 QT_IM_MODULE = ibus
 # makefile (from 'Makefile', line 3)
-SRCS = srcs/parsing/main.c srcs/parsing/prompt.c srcs/parsing/init.c srcs/parsing/signaux.c srcs/parsing/parse.c srcs/parsing/fct_list.c
+SRCS = srcs/parsing/main.c srcs/parsing/prompt.c srcs/parsing/init.c srcs/parsing/signaux.c srcs/parsing/parse.c srcs/parsing/fct_list.c srcs/parsing/redirect.c srcs/parsing/quotes.c srcs/parsing/args_start.c
 # environment
 SHLVL = 1
-# makefile (from 'Makefile', line 18)
+# makefile (from 'Makefile', line 21)
 LIBFT = -L libft -lft
-# makefile (from 'Makefile', line 14)
+# makefile (from 'Makefile', line 17)
 CC = clang
 # environment
 IM_CONFIG_PHASE = 1
@@ -186,8 +185,6 @@ OLDPWD = /mnt/nfs/homes/masamoil
 .VARIABLES := 
 # automatic
 *F = $(notdir $*)
-# environment
-LANGUAGE = en
 # environment
 XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
 # environment
@@ -237,9 +234,9 @@ LANG = C
 # environment
 DOCKER_HOST = unix:///run/user/40328/docker.sock
 # environment
-VSCODE_PID = 600139
+VSCODE_PID = 268489
 # variable set hash-table stats:
-# Load=114/1024=11%, Rehash=0, Collisions=15/146=10%
+# Load=112/1024=11%, Rehash=0, Collisions=15/144=10%
 
 # Pattern-specific Variable Values
 
@@ -247,9 +244,9 @@ VSCODE_PID = 600139
 
 # Directories
 
-# . (device 74, inode 26275150): 8 files, no impossibilities.
+# . (device 58, inode 26275150): 9 files, no impossibilities.
 
-# 8 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -279,7 +276,6 @@ srcs/parsing/parse.o:
 #  File has not been updated.
 
 # Not a target:
- 
 srcs/parsing/init.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -294,7 +290,7 @@ srcs/parsing/init.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-08 11:30:17.222965121
+#  Last modified 2022-07-11 15:50:56.921011603
 #  File has been updated.
 #  Successfully updated.
 
@@ -304,26 +300,33 @@ srcs/parsing/prompt.o:
 #  Modification time never checked.
 #  File has not been updated.
 
-minishell: srcs/parsing/main.o srcs/parsing/prompt.o srcs/parsing/init.o srcs/parsing/signaux.o srcs/parsing/parse.o srcs/parsing/fct_list.o
+minishell: srcs/parsing/main.o srcs/parsing/prompt.o srcs/parsing/init.o srcs/parsing/signaux.o srcs/parsing/parse.o srcs/parsing/fct_list.o srcs/parsing/redirect.o srcs/parsing/quotes.o srcs/parsing/args_start.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 23):
+#  recipe to execute (from 'Makefile', line 26):
 			${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME} -l readline
+
+# Not a target:
+srcs/parsing/args_start.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 .c.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 26):
+#  recipe to execute (from 'Makefile', line 29):
 			${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@
 
+ 
 fclean: clean
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 33):
+#  recipe to execute (from 'Makefile', line 36):
 			rm -f ${NAME}
 			make -C libft fclean
 
@@ -358,7 +361,7 @@ lib:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
-#  recipe to execute (from 'Makefile', line 39):
+#  recipe to execute (from 'Makefile', line 42):
 			make -C libft
 
 norm:
@@ -366,13 +369,19 @@ norm:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 42):
+#  recipe to execute (from 'Makefile', line 45):
 			norminette -R CheckSourceHeader ${SRCS}
 			norminette -R CheckDefine ${HEADERS}
 			make -C libft norm
 
 # Not a target:
 .DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/parsing/redirect.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -388,12 +397,18 @@ clean:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 29):
+#  recipe to execute (from 'Makefile', line 32):
 			rm -f ${OBJS} 
 			make -C libft clean
 
 # Not a target:
 srcs/parsing/main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/parsing/quotes.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -405,19 +420,19 @@ srcs/parsing/fct_list.o:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=18/1024=2%, Rehash=0, Collisions=0/49=0%
+# Load=21/1024=2%, Rehash=0, Collisions=0/55=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 27 / storage = 282 B / avg = 10 B
-# current buf: size = 8162 B / used = 282 B / count = 27 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 30 / storage = 354 B / avg = 11 B
+# current buf: size = 8162 B / used = 354 B / count = 30 / avg = 11 B
 
-# strcache performance: lookups = 53 / hit rate = 49%
+# strcache performance: lookups = 57 / hit rate = 47%
 # hash-table stats:
-# Load=27/8192=0%, Rehash=0, Collisions=1/53=2%
-# Finished Make data base on Fri Jul  8 12:12:16 2022
+# Load=30/8192=0%, Rehash=0, Collisions=1/57=2%
+# Finished Make data base on Mon Jul 11 15:54:36 2022
 
  

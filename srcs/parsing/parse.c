@@ -12,23 +12,20 @@
 
 #include "../../minishell.h"
 
-t_token	*check_type(t_data *data, t_token *token_list)
+int	check_string(t_data *data)
 {
+	data->i = 0;
 	while (data->trimmed[data->i])
 	{
-		if (data->trimmed[data->i] == ' ')
-			data->i++;
-		if (data->trimmed[data->i] == '<')
-			l_redirect(data, token_list);
-		//if (data->trimmed[data->i] == '>')
-		//	r_redirect(data, );
-		/*if (data->trimmed[i] == '"')
-			printf("double quotes");*/
 		if (data->trimmed[data->i] == '|')
-			pushBack(data, "|", PIPE);
+		{
+			data->i++;
+			while (data->trimmed[data->i] && data->trimmed[data->i] == ' ')
+				data->i++;
+			if (data->trimmed[data->i] == '|')
+				return (-1);
+		}
 		data->i++;
-	//	else
-	//		printf("no token found");
 	}
-	return (token_list);
+	return (0);
 }

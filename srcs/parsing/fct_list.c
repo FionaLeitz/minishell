@@ -14,7 +14,8 @@
 
 t_token	*new_node(char *value, size_t type)
 {
-	t_token *new;
+	t_token	*new;
+
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
@@ -22,10 +23,10 @@ t_token	*new_node(char *value, size_t type)
 	new->value = value;
 	new->next = NULL;
 	new->prev = NULL;
-	return (new);	
+	return (new);
 }
 
-void	pushFront(t_data *data, char *value, size_t type)
+void	push_front(t_data *data, char *value, size_t type)
 {	
 	t_token	*new;
 
@@ -40,7 +41,7 @@ void	pushFront(t_data *data, char *value, size_t type)
 	data->head = new;
 }
 
-void	pushBack(t_data *data, char *value, size_t type)
+void	push_back(t_data *data, char *value, size_t type)
 {
 	t_token	*new;
 	t_token	*tmp;
@@ -60,14 +61,15 @@ void	pushBack(t_data *data, char *value, size_t type)
 
 void	preview(t_data *data)
 {
-	t_token *tmp = data->head;
+	t_token	*tmp;
+
+	tmp = data->head;
 	if (tmp == NULL)
 		return ;
 	while (tmp != NULL)
 	{
 		printf("str value: %s\n", tmp->value);
-		printf("t_size type : %zu\n", tmp->type);
+		//printf("t_size type : %zu\n", tmp->type);
 		tmp = tmp->next;
 	}
 }
-

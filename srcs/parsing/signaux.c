@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/06 16:28:52 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/11 10:36:34 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	sig_manage(int signal)
 		rl_redisplay();		
 	}		
 	if (signal == SIGQUIT)
-		printf("\b");
+		printf("\b\b  \b\b");
 	return ;
 }
 
