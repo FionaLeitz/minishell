@@ -65,6 +65,7 @@ typedef struct s_token
 {	
 	char			*value;
 	size_t			type;
+	char			**args;
 	struct s_token	*next;
 	struct s_token	*prev;
 }t_token;
@@ -105,5 +106,6 @@ int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
 //args_start.c
 int first_pipe_cut(t_data *data);
+int	ft_count_words(t_data *data, char *s, char c);
 
 #endif

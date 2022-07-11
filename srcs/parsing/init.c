@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 13:35:21 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/08 16:18:41 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/11 16:40:46 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	init_token(t_token *token)
 {
 	token->type = 0;
 	token->value = NULL;
+	token->args = NULL;
 	token->next = NULL;
 	token->prev = NULL;
+	token->args = NULL;
 }

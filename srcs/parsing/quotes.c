@@ -39,12 +39,3 @@ int	check_quotes(t_data *data)
 	}
 	return (0);
 }
-
-
-/*char	*get_bw_quotes(char quote, t_data *data)
-{
-	while (data->trimmed[data->i] && data->trimmed[data->i] != quote)
-		data->i++;
-	if (data->trimmed[data->i] == quote)
-		return (data->trimmed[data->i + 1]);
-}*/

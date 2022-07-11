@@ -6,7 +6,6 @@ SRCS =	srcs/parsing/main.c\
 	srcs/parsing/signaux.c\
 	srcs/parsing/parse.c\
 	srcs/parsing/fct_list.c\
-	srcs/parsing/redirect.c\
 	srcs/parsing/quotes.c\
 	srcs/parsing/args_start.c
 

@@ -14,9 +14,8 @@
 
 int	print_prompt(t_data *data)
 {
-	t_token *token_list;
+	t_token *tmp;
 
-	token_list = NULL;
 	while (1)
 	{
 		//init_token(token_list);
@@ -43,6 +42,12 @@ int	print_prompt(t_data *data)
 			return (2);
 		}
 		first_pipe_cut(data);
+		tmp = data->head;
+		while (tmp)
+		{
+			printf("%s = %d\n", tmp->value, ft_count_words(data, tmp->value, ' '));
+			tmp = tmp->next;
+		}
 	}
 	return (0);
 }
