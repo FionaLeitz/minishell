@@ -69,11 +69,9 @@ int	second_cut(t_data *data, t_token *token)
 
 int	ft_count_words(t_data *data, char *s, char c)
 {
-//	int		i;
 	int		count;
 	char	quote;
 
-//	i = 0;
 	count = 0;
 	data->i = 0;
 	while (s[data->i] != '\0')
@@ -87,6 +85,7 @@ int	ft_count_words(t_data *data, char *s, char c)
 			data->i++;
 			while (s[data->i] && s[data->i] != quote)
 				data->i++;
+			data->i++;
 		}
 		else
 		{
@@ -96,4 +95,53 @@ int	ft_count_words(t_data *data, char *s, char c)
 		}
 	}
 	return (count);
+}
+
+int	create_tab(t_data *data, t_token *token)
+{
+	int		i;
+	int		count;
+	int		j;
+	int		k;
+	int		tmp;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	k = ft_count_words(data, token->value, ' ');
+	token->args = malloc(sizeof(char *) * (k + 1));
+	if (!token->args)
+		return (-1);
+	token->args[k] = NULL;
+	while (j < k)
+	{
+		tmp = i;
+		count = 0;
+		while (token->value[i] != '\0' && token->value[i] != ' ')
+		{
+			if (token->value[i] == '\'' || token->value[i] == '\"')
+			{
+				quote = token->value[i];
+				count++;
+				i++;
+				while (token->value[i] != quote)
+				{
+					count++;
+					i++;
+				}
+			}
+			i++;
+			count++;	
+		}
+		if (token->value[i] == ' ' || token->value[i] == '\0')
+		{
+			token->args[j] = ft_strndup(&token->value[tmp], count);
+			j++;
+		}
+		while (token->value[i] != '\0' && token->value[i] == ' ')
+			i++;
+		
+	}
+	return (0);
+
 }

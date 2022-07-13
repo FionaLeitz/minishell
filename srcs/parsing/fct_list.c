@@ -74,3 +74,15 @@ void	preview(t_data *data)
 	}
 }
 
+int	ft_size(t_token *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst != NULL)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}

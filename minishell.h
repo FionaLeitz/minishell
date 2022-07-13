@@ -99,6 +99,7 @@ t_token		*new_node(char *value, size_t type);
 void		push_front(t_data *data, char *value, size_t type);
 void		push_back(t_data *data, char *value, size_t type);
 void		preview(t_data	*data);
+int			ft_size(t_token *lst);
 //redirect.c
 t_token		*l_redirect(t_data *data, t_token *token_list);
 //quotes.c
@@ -107,7 +108,11 @@ int			check_quotes(t_data *data);
 //args_start.c
 int first_pipe_cut(t_data *data);
 int	ft_count_words(t_data *data, char *s, char c);
+int	create_tab(t_data *data, t_token *token);
 //utils.c
 int	ft_check_whitespace(char c);
 
 #endif
+
+
+// ech'o' bonjour "bla | bla" | cat -e
