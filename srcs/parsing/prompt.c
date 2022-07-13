@@ -61,7 +61,7 @@ int	print_prompt(t_data *data)
 		tmp = data->head;
 		while (tmp)
 		{
-			save = ft_strtrim(tmp->value, " ");
+			save = ft_strtrim(tmp->value, " \t\n\v\f\r");
 			free(tmp->value);
 			tmp->value = save;
 			tmp = tmp->next;
@@ -80,6 +80,8 @@ int	print_prompt(t_data *data)
 		}
 //		printf("%p\n", data->head->args);
 //		printf("%p\n", data->head->args[0]);
+		tmp = data->head;
+		del_quotes(tmp);
 		tmp = data->head;
 		while (tmp)
 		{

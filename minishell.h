@@ -64,8 +64,8 @@ int			ft_unset(char **arg, char **env, t_export *export);
 typedef struct s_token
 {	
 	char			*value;
-	size_t			type;
 	char			**args;
+	char			**red;
 	struct s_token	*next;
 	struct s_token	*prev;
 }t_token;
@@ -109,6 +109,7 @@ int			check_quotes(t_data *data);
 int first_pipe_cut(t_data *data);
 int	ft_count_words(t_data *data, char *s, char c);
 int	create_tab(t_data *data, t_token *token);
+int	del_quotes(t_token *token);
 //utils.c
 int	ft_check_whitespace(char c);
 

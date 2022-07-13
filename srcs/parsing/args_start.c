@@ -39,34 +39,6 @@ int first_pipe_cut(t_data *data)
 	return (0);
 }
 
-//erjf " fre | fe" | er
-/*
-int	second_cut(t_data *data, t_token *token)
-{
-	t_token	*tmp;
-	char	quote;
-	int		count;
-
-	tmp = token;
-	data->i = 0;
-	count = 0;
-	while (tmp->value[data->i])
-	{
-		if (tmp->value[data->i] == '\'' || tmp->value[data->i] == '\"')
-		{
-			quote = tmp->value[data->i];
-			data->i++;
-			while (tmp->value[data->i] && tmp->value[data->i] != quote)
-				data->i++;
-		}
-		else if (tmp->value[data->i] == ' ')
-		{
-
-		}
-		data->i++;
-	}
-}*/
-
 int	ft_count_words(t_data *data, char *s, char c)
 {
 	int		count;
@@ -144,4 +116,39 @@ int	create_tab(t_data *data, t_token *token)
 	}
 	return (0);
 
+}
+
+int	del_quotes(t_token *token)
+{
+	char	quote;
+	t_token *tmp;
+	int	i;
+	int	j;
+
+	tmp = token;
+	while (tmp)
+	{
+		i = 0;
+		while (tmp->args[i])
+		{
+			j = 0;
+			while (tmp->args[i][j] != '\0'/* && tmp->args[i][j] != '\'' && tmp->args[i][j] != '\"'*/)
+			{
+				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
+				{
+					quote = tmp->args[i][j];
+					ft_memcpy(&tmp->args[i][j], &tmp->args[i][j + 1], ft_strlen(&tmp->args[i][j]));
+					while (tmp->args[i][j] != quote)
+						j++;
+					ft_memcpy(&tmp->args[i][j], &tmp->args[i][j + 1], ft_strlen(&tmp->args[i][j]));
+				}
+				if (tmp->args[i][j] == '\0')
+					break ;
+				j++;
+			}
+			i++;
+		}
+		tmp = tmp->next;
+	}
+	return (0);
 }

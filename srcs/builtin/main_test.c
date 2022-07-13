@@ -1,5 +1,14 @@
 #include "../../minishell.h"
 
+
+
+int	main(int argc, char **argv)
+{
+	(void)argc;
+	ft_echo(&argv[1]);
+	return(0);
+}
+
 /*int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -67,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 
 	return (0);
 }*/
-
+/*
 int	main(int ac, char **av, char **envp)
 {
 	(void)av;
@@ -81,3 +90,4 @@ int	main(int ac, char **av, char **envp)
 	}	
 	return (EXIT_SUCCESS);
 }
+*/
