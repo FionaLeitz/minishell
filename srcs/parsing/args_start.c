@@ -55,8 +55,7 @@ int	ft_count_words(t_data *data, char *s, char c)
 			count++;
 			quote = s[data->i];
 			data->i++;
-			while (s[data->i] && s[data->i] != quote)
-				data->i++;
+			while (s[data->i++] && s[data->i++] != quote)
 			data->i++;
 		}
 		else
