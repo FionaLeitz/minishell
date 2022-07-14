@@ -82,7 +82,7 @@ char	**ft_select_builtin(char **arg, t_params *params)
 		execve(arg[0], arg, params->env);
 		write(2, "minishell: ", 11);
 		write(2, arg[0], ft_strlen(arg[0]));
-		write(2," : command not found\n", 21);
+		write(2, " : command not found\n", 21);
 	}
 //	free_export(params->export);
 //	free_table2(params->env);

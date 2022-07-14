@@ -12,25 +12,24 @@
 
 #include "../../minishell.h"
 
-t_token	*new_node(char *value, size_t type)
+t_token	*new_node(char *value)
 {
 	t_token	*new;
 
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	new->type = type;
 	new->value = value;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
 }
 
-void	push_front(t_data *data, char *value, size_t type)
+void	push_front(t_data *data, char *value)
 {	
 	t_token	*new;
 
-	new = new_node(value, type);
+	new = new_node(value);
 	if (data->head == NULL)
 	{
 		data->head = new;
@@ -41,12 +40,12 @@ void	push_front(t_data *data, char *value, size_t type)
 	data->head = new;
 }
 
-void	push_back(t_data *data, char *value, size_t type)
+void	push_back(t_data *data, char *value)
 {
 	t_token	*new;
 	t_token	*tmp;
 
-	new = new_node(value, type);
+	new = new_node(value);
 	tmp = data->head;
 	if (data->head == NULL)
 	{
@@ -69,7 +68,6 @@ void	preview(t_data *data)
 	while (tmp != NULL)
 	{
 		printf("str value: %s\n", tmp->value);
-		//printf("t_size type : %zu\n", tmp->type);
 		tmp = tmp->next;
 	}
 }

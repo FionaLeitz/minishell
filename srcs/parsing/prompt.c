@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 11:29:08 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/14 10:24:53 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@ void	print_table(char **table)
 
 int	print_prompt(t_data *data)
 {
-	t_token *tmp;
+	t_token	*tmp;
 	char	*save;
 
 	while (1)
 	{
-		//init_token(token_list);
 		init_data(data);
 		//ctrl-c		
 		signal(SIGINT, sig_manage);
@@ -47,6 +46,7 @@ int	print_prompt(t_data *data)
 		printf("trimmed = %s\n", data->trimmed);
 		if (data->input != NULL && ft_strlen(data->input) != 0)
 			add_history(data->input);
+		//rl_clear_history();
 		if (check_string(data) == -1)
 		{
 			printf("minishell: syntax error near unexpected token `|'\n");
@@ -78,8 +78,6 @@ int	print_prompt(t_data *data)
 			create_tab(data, tmp);
 			tmp = tmp->next;
 		}
-//		printf("%p\n", data->head->args);
-//		printf("%p\n", data->head->args[0]);
 		tmp = data->head;
 		del_quotes(tmp);
 		tmp = data->head;
@@ -88,8 +86,6 @@ int	print_prompt(t_data *data)
 			print_table(tmp->args);
 			tmp = tmp->next;
 		}
-//		printf("No of el = %d\n", ft_size(data->head));
 	}
 	return (0);
 }
-

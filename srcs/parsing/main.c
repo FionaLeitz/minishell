@@ -12,12 +12,12 @@
 
 #include "../../minishell.h"
 
-int     main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
+	t_data	data;
+
 	(void)av;
 	(void)envp;
-	t_data data;
-
 	init_data(&data);
 	if (ac == 1)
 	{
@@ -25,4 +25,3 @@ int     main(int ac, char **av, char **envp)
 	}
 	return (EXIT_SUCCESS);
 }
-

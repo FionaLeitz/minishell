@@ -20,7 +20,8 @@ int	check_string(t_data *data)
 		if (data->trimmed[data->i] == '|')
 		{
 			data->i++;
-			while (data->trimmed[data->i] && ft_check_whitespace(data->trimmed[data->i]) == 0)
+			while (data->trimmed[data->i]
+				&& ft_check_whitespace(data->trimmed[data->i]) == 0)
 				data->i++;
 			if (data->trimmed[data->i] == '|')
 				return (-1);

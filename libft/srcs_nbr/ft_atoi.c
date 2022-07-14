@@ -6,11 +6,12 @@
 /*   By: fleitz <fleitz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 10:06:09 by fleitz            #+#    #+#             */
-/*   Updated: 2022/03/22 13:22:52 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/07/14 12:56:59 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/libft.h"
+
 int	ft_atoi(const char *str)
 {
 	int			i;

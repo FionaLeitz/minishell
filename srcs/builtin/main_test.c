@@ -1,12 +1,11 @@
+
 #include "../../minishell.h"
-
-
 
 int	main(int argc, char **argv)
 {
 	(void)argc;
 	ft_echo(&argv[1]);
-	return(0);
+	return (0);
 }
 
 /*int	main(int argc, char **argv, char **envp)

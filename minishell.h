@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
+/*   Updated: 2022/07/14 10:28:05 by masamoil         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -20,15 +32,15 @@
 
 typedef struct s_export
 {
-	char		*name;
-	char		*value;
+	char			*name;
+	char			*value;
 	struct s_export	*next;	
 }t_export;
 
 typedef struct s_params
 {
-	char		**env;
-	t_export	*export;
+	char			**env;
+	t_export		*export;
 }t_params;
 
 // cd.c
@@ -95,9 +107,9 @@ void		ft_exit_d(t_data *data);
 //parse.c
 int			check_string(t_data *data);
 //fct_list.c
-t_token		*new_node(char *value, size_t type);
-void		push_front(t_data *data, char *value, size_t type);
-void		push_back(t_data *data, char *value, size_t type);
+t_token		*new_node(char *value);
+void		push_front(t_data *data, char *value);
+void		push_back(t_data *data, char *value);
 void		preview(t_data	*data);
 int			ft_size(t_token *lst);
 //redirect.c
@@ -106,14 +118,13 @@ t_token		*l_redirect(t_data *data, t_token *token_list);
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
 //args_start.c
-int first_pipe_cut(t_data *data);
-int	ft_count_words(t_data *data, char *s, char c);
-int	create_tab(t_data *data, t_token *token);
-int	del_quotes(t_token *token);
+int			first_pipe_cut(t_data *data);
+int			ft_count_words(t_data *data, char *s, char c);
+int			create_tab(t_data *data, t_token *token);
+int			del_quotes(t_token *token);
 //utils.c
-int	ft_check_whitespace(char c);
+int			ft_check_whitespace(char c);
 
 #endif
-
 
 // ech'o' bonjour "bla | bla" | cat -e

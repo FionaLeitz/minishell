@@ -31,6 +31,7 @@ static int	ft_error_cd(char **arg)
 	}
 	return (0);
 }
+
 // return 1 = stupid !
 static int	ft_find(char **env, char *str, int i)
 {

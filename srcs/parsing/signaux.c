@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 void	sig_manage(int signal)
 {
@@ -19,7 +19,7 @@ void	sig_manage(int signal)
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();		
+		rl_redisplay();
 	}		
 	if (signal == SIGQUIT)
 		printf("\b\b  \b\b");
@@ -29,7 +29,6 @@ void	sig_manage(int signal)
 void	ft_exit_d(t_data *data)
 {
 	printf("exit");
-//	free(data);
 	(void)data;
 	exit(0);
 }

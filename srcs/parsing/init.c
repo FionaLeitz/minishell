@@ -15,14 +15,13 @@
 void	init_data(t_data *data)
 {
 	data->input = NULL;
-	data->trimmed =  NULL;
+	data->trimmed = NULL;
 	data->head = NULL;
 	data->i = 0;
 }
 
 void	init_token(t_token *token)
 {
-	token->type = 0;
 	token->value = NULL;
 	token->args = NULL;
 	token->next = NULL;

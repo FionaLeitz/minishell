@@ -61,7 +61,7 @@ int	check_quotes(t_data *data)
 
 int	quotes_reduce(char *quotes)
 {
-	int count;
+	int	count;
 
 	count = ft_strlen(quotes) - 1;
 	if (count == 0)

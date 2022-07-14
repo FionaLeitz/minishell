@@ -12,9 +12,9 @@
 
 #include "../../minishell.h"
 
-int first_pipe_cut(t_data *data)
+int	first_pipe_cut(t_data *data)
 {
-	int	count;
+	int		count;
 	char	quote;
 
 	data->i = 0;
@@ -29,12 +29,12 @@ int first_pipe_cut(t_data *data)
 		}
 		else if (data->trimmed[data->i] == '|')
 		{
-			push_back(data, ft_strndup(&data->trimmed[count], data->i - count), 0);
+			push_back(data, ft_strndup(&data->trimmed[count], data->i - count));
 			count = data->i + 1;
 		}
 		data->i++;
 	}
-	push_back(data, ft_strdup(&data->trimmed[count]), 0);
+	push_back(data, ft_strdup(&data->trimmed[count]));
 	preview(data);
 	return (0);
 }
@@ -103,7 +103,7 @@ int	create_tab(t_data *data, t_token *token)
 				}
 			}
 			i++;
-			count++;	
+			count++;
 		}
 		if (token->value[i] == ' ' || token->value[i] == '\0')
 		{
@@ -112,18 +112,16 @@ int	create_tab(t_data *data, t_token *token)
 		}
 		while (token->value[i] != '\0' && token->value[i] == ' ')
 			i++;
-		
 	}
 	return (0);
-
 }
 
 int	del_quotes(t_token *token)
 {
 	char	quote;
-	t_token *tmp;
-	int	i;
-	int	j;
+	t_token	*tmp;
+	int		i;
+	int		j;
 
 	tmp = token;
 	while (tmp)
@@ -132,7 +130,7 @@ int	del_quotes(t_token *token)
 		while (tmp->args[i])
 		{
 			j = 0;
-			while (tmp->args[i][j] != '\0'/* && tmp->args[i][j] != '\'' && tmp->args[i][j] != '\"'*/)
+			while (tmp->args[i][j] != '\0')
 			{
 				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
 				{
