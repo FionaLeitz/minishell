@@ -48,6 +48,35 @@ int	ft_count_words(t_data *data, char *s, char c)
 	data->i = 0;
 	while (s[data->i] != '\0')
 	{
+		while (s[data->i] != '\0' && s[data->i] != c)
+		{
+			if (s[data->i] == '\'' || s[data->i] == '\"')
+			{
+				quote = s[data->i];
+				data->i++;
+				while (s[data->i] != quote)
+					data->i++;
+			}
+			data->i++;	
+		}
+		count++;
+		while (s[data->i] != '\0' && s[data->i] == c)
+			data->i++;
+	}
+	return (count);
+}
+
+/*
+int	ft_count_words(t_data *data, char *s, char c)
+{
+	int		count;
+	char	quote;
+
+	count = 0;
+	data->i = 0;
+	while (s[data->i] != '\0')
+	{
+	
 		if (s[data->i] == c)
 			data->i++;
 		else if (s[data->i] == '\'' || s[data->i] == '\"')
@@ -67,7 +96,7 @@ int	ft_count_words(t_data *data, char *s, char c)
 	}
 	return (count);
 }
-
+*/
 int	create_tab(t_data *data, t_token *token)
 {
 	int		i;

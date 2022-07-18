@@ -127,4 +127,4 @@ int			ft_check_whitespace(char c);
 
 #endif
 
-// ech'o' bonjour "bla | bla" | cat -e
+// ech' o' bonjour "bla | bla" | cat -e
