@@ -27,7 +27,7 @@ void	print_table(char **table)
 	}
 }
 */
-void	free_table2(char **table)
+void	free_table(char **table)
 {
 	int	i;
 

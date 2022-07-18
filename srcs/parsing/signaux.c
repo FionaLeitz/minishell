@@ -12,6 +12,26 @@
 
 #include "../../minishell.h"
 
+void	free_struct(t_data *data)
+{
+	t_token	*tmp;
+
+	if (data->input != NULL)
+		free(data->input);
+	if (data->trimmed != NULL)
+		free(data->trimmed);
+	while (data->head != NULL)
+	{
+		tmp = data->head;
+		free(tmp->value);
+		free_table(tmp->args);
+		free_table(tmp->red);
+		data->head = data->head->next;
+		free(tmp);
+	}
+	init_data(data);
+}
+
 void	sig_manage(int signal)
 {
 	if (signal == SIGINT)
@@ -30,5 +50,6 @@ void	ft_exit_d(t_data *data)
 {
 	printf("exit\n");
 	(void)data;
+//	free_struct(data);
 	exit(0);
 }

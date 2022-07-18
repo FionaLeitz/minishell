@@ -20,8 +20,6 @@ int	main(int ac, char **av, char **envp)
 	(void)envp;
 	init_data(&data);
 	if (ac == 1)
-	{
 		print_prompt(&data);
-	}
 	return (EXIT_SUCCESS);
 }

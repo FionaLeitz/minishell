@@ -171,7 +171,6 @@ int	get_red(t_data *data, t_token *token, int count)
 			data->i++;
 		}
 		save = data->i;
-		printf("save : %s\n", &token->value[save]);
 		data->i++;
 		while (ft_check_whitespace(token->value[data->i]) == 0)
 			data->i++;
@@ -221,7 +220,6 @@ int	count_red(t_data *data, t_token *token)
 		}
 		data->i++;
 	}
-//	printf("count redirection = %d\n", count);
 	token->red = malloc(sizeof(char *) * (count + 1));
 	if (token->red == NULL)
 		return (-1);

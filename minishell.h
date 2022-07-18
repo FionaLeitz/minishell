@@ -66,8 +66,8 @@ int			ft_pwd(char **arg);
 // select_builtin.c
 char		**ft_select_builtin(char **arg, t_params *params);
 // table_utils.c
-void		print_table(char **table);
-void		free_table2(char **table);
+//void		print_table(char **table);
+void		free_table(char **table);
 // unset.c
 int			ft_unset(char **arg, char **env, t_export *export);
 
@@ -102,6 +102,7 @@ void		init_token(t_token *token);
 int			print_prompt(t_data *data);
 char		*readline(const char *prompt);
 //signaux.c
+void		free_struct(t_data *data);
 void		sig_manage(int signal);
 void		ft_exit_d(t_data *data);
 //parse.c
@@ -126,6 +127,7 @@ int			del_quotes(t_token *token);
 int			count_red(t_data *data, t_token *token);
 //utils.c
 int			ft_check_whitespace(char c);
+void		free_table(char **table);
 
 #endif
 
