@@ -84,6 +84,13 @@ int	print_prompt(t_data *data)
 //			printf("Word number --- %s = %d\n", tmp->value, ft_count_words(data, tmp->value));
 			tmp = tmp->next;
 		}
+
+
+// gerer ici le remplacement des $
+// si $ seul
+
+
+
 		tmp = data->head;
 		while (tmp)
 		{
