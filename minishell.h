@@ -106,6 +106,7 @@ void		sig_manage(int signal);
 void		ft_exit_d(t_data *data);
 //parse.c
 int			check_string(t_data *data);
+int			check_redir(t_data *data);
 //fct_list.c
 t_token		*new_node(char *value);
 void		push_front(t_data *data, char *value);
@@ -119,12 +120,15 @@ int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
 //args_start.c
 int			first_pipe_cut(t_data *data);
-int			ft_count_words(t_data *data, char *s, char c);
+int			ft_count_words(t_data *data, char *s);
 int			create_tab(t_data *data, t_token *token);
 int			del_quotes(t_token *token);
+int			count_red(t_data *data, t_token *token);
 //utils.c
 int			ft_check_whitespace(char c);
 
 #endif
 
 // ech' o' bonjour "bla | bla" | cat -e
+// echo bla > test > test2
+// echo bla > test2

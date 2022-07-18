@@ -67,7 +67,7 @@ void	preview(t_data *data)
 		return ;
 	while (tmp != NULL)
 	{
-		printf("str value: %s\n", tmp->value);
+//		printf("str value: %s\n", tmp->value);
 		tmp = tmp->next;
 	}
 }

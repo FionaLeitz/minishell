@@ -28,7 +28,7 @@ void	sig_manage(int signal)
 
 void	ft_exit_d(t_data *data)
 {
-	printf("exit");
+	printf("exit\n");
 	(void)data;
 	exit(0);
 }

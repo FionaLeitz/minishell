@@ -43,15 +43,17 @@ int	print_prompt(t_data *data)
 		if (!data->input)
 			ft_exit_d(data);
 		data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
-		printf("trimmed = %s\n", data->trimmed);
+//		printf("trimmed = %s\n", data->trimmed);
+		if (data->trimmed[0] == '|')
+		{
+			printf("minishell: syntax error near unexpected token `|'\n");
+			return (-1);
+		}
 		if (data->input != NULL && ft_strlen(data->input) != 0)
 			add_history(data->input);
 		//rl_clear_history();
 		if (check_string(data) == -1)
-		{
-			printf("minishell: syntax error near unexpected token `|'\n");
 			return (2);
-		}
 		if (check_quotes(data) == -1)
 		{
 			printf("minishell: quotes are unclosed\n");
@@ -66,10 +68,20 @@ int	print_prompt(t_data *data)
 			tmp->value = save;
 			tmp = tmp->next;
 		}
+
+
 		tmp = data->head;
 		while (tmp)
 		{
-			printf("%s = %d\n", tmp->value, ft_count_words(data, tmp->value, ' '));
+			count_red(data, tmp);
+			tmp = tmp->next;
+		}
+
+
+		tmp = data->head;
+		while (tmp)
+		{
+//			printf("Word number --- %s = %d\n", tmp->value, ft_count_words(data, tmp->value));
 			tmp = tmp->next;
 		}
 		tmp = data->head;
@@ -84,6 +96,7 @@ int	print_prompt(t_data *data)
 		while (tmp)
 		{
 			print_table(tmp->args);
+			print_table(tmp->red);
 			tmp = tmp->next;
 		}
 	}

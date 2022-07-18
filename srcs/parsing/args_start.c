@@ -39,7 +39,7 @@ int	first_pipe_cut(t_data *data)
 	return (0);
 }
 
-int	ft_count_words(t_data *data, char *s, char c)
+int	ft_count_words(t_data *data, char *s/*, char c*/)
 {
 	int		count;
 	char	quote;
@@ -48,7 +48,7 @@ int	ft_count_words(t_data *data, char *s, char c)
 	data->i = 0;
 	while (s[data->i] != '\0')
 	{
-		while (s[data->i] != '\0' && s[data->i] != c)
+		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) != 0/*s[data->i] != c*/)
 		{
 			if (s[data->i] == '\'' || s[data->i] == '\"')
 			{
@@ -60,43 +60,12 @@ int	ft_count_words(t_data *data, char *s, char c)
 			data->i++;	
 		}
 		count++;
-		while (s[data->i] != '\0' && s[data->i] == c)
+		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) == 0)
 			data->i++;
 	}
 	return (count);
 }
 
-/*
-int	ft_count_words(t_data *data, char *s, char c)
-{
-	int		count;
-	char	quote;
-
-	count = 0;
-	data->i = 0;
-	while (s[data->i] != '\0')
-	{
-	
-		if (s[data->i] == c)
-			data->i++;
-		else if (s[data->i] == '\'' || s[data->i] == '\"')
-		{
-			count++;
-			quote = s[data->i];
-			data->i++;
-			while (s[data->i++] && s[data->i++] != quote)
-			data->i++;
-		}
-		else
-		{
-			count++;
-			while (s[data->i] != '\0' && s[data->i] != c)
-				data->i++;
-		}
-	}
-	return (count);
-}
-*/
 int	create_tab(t_data *data, t_token *token)
 {
 	int		i;
@@ -108,7 +77,7 @@ int	create_tab(t_data *data, t_token *token)
 
 	i = 0;
 	j = 0;
-	k = ft_count_words(data, token->value, ' ');
+	k = ft_count_words(data, token->value);
 	token->args = malloc(sizeof(char *) * (k + 1));
 	if (!token->args)
 		return (-1);
@@ -117,7 +86,7 @@ int	create_tab(t_data *data, t_token *token)
 	{
 		tmp = i;
 		count = 0;
-		while (token->value[i] != '\0' && token->value[i] != ' ')
+		while (token->value[i] != '\0' && ft_check_whitespace(token->value[i]) != 0/*token->value[i] != ' '*/)
 		{
 			if (token->value[i] == '\'' || token->value[i] == '\"')
 			{
@@ -133,12 +102,12 @@ int	create_tab(t_data *data, t_token *token)
 			i++;
 			count++;
 		}
-		if (token->value[i] == ' ' || token->value[i] == '\0')
+		if (/*token->value[i] == ' ' */ft_check_whitespace(token->value[i]) == 0|| token->value[i] == '\0')
 		{
 			token->args[j] = ft_strndup(&token->value[tmp], count);
 			j++;
 		}
-		while (token->value[i] != '\0' && token->value[i] == ' ')
+		while (token->value[i] != '\0' && ft_check_whitespace(token->value[i]) == 0/*token->value[i] == ' '*/)
 			i++;
 	}
 	return (0);
@@ -176,5 +145,87 @@ int	del_quotes(t_token *token)
 		}
 		tmp = tmp->next;
 	}
+	return (0);
+}
+
+int	get_red(t_data *data, t_token *token, int count)
+{
+	int		j;
+	int		save;
+	char	quote;
+
+	j = 0;
+	data->i = 0;
+	token->red[count] = NULL;
+	while (j < count)
+	{
+		while (token->value[data->i] != '>' && token->value[data->i] != '<')
+		{
+			if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
+			{
+				quote = token->value[data->i];
+				data->i++;
+				while (token->value[data->i] != quote)
+					data->i++;
+			}
+			data->i++;
+		}
+		save = data->i;
+		printf("save : %s\n", &token->value[save]);
+		data->i++;
+		while (ft_check_whitespace(token->value[data->i]) == 0)
+			data->i++;
+		while (token->value[data->i] != '\0' &&
+			ft_check_whitespace(token->value[data->i]) != 0 &&
+			token->value[data->i] != '>' && token->value[data->i] != '<')
+		{
+			if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
+			{
+				quote = token->value[data->i];
+				data->i++;
+				while (token->value[data->i] != quote)
+					data->i++;
+			}
+			else
+				data->i++;	
+		}
+		token->red[j] = ft_strndup(&token->value[save], data->i - save + 1);
+		ft_memcpy(&token->value[save], &token->value[data->i], ft_strlen(&token->value[save]));
+		data->i = save;
+		j++;
+	}
+	return (0);
+}
+
+int	count_red(t_data *data, t_token *token)
+{
+	int		count;
+	char	quote;
+	
+	count = 0;
+	data->i = 0;
+	while (token->value[data->i] != '\0')
+	{
+		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
+		{
+			quote = token->value[data->i];
+			data->i++;
+			while (token->value[data->i] != quote)
+				data->i++;
+		}
+		else if (token->value[data->i] == '>' || token->value[data->i] == '<')
+		{
+			if (token->value[data->i] == token->value[data->i + 1])
+				data->i++;
+			count++;
+		}
+		data->i++;
+	}
+//	printf("count redirection = %d\n", count);
+	token->red = malloc(sizeof(char *) * (count + 1));
+	if (token->red == NULL)
+		return (-1);
+ 	if (get_red(data, token, count) != 0)
+		return (-1);
 	return (0);
 }
