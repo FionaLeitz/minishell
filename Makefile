@@ -1,3 +1,9 @@
+
+_END=$'\033[0m
+_GREEN=$'\033[1;32m
+_YELLOW=$'\033[1;33m
+_ORANGE=$'\033[38;2;255;165;0m
+
 NAME  = minishell
 
 SRCS =	srcs/parsing/main.c				\
@@ -32,12 +38,15 @@ CFLAGS	= -Wall -Wextra -Werror -g3
 LIBFT	= -L libft -lft
 
 all: 		lib ${NAME}
+			@echo "${_GREEN}----------------\nMINISHELL\n----------------${_END}"
+			@echo "${_ORANGE}Objects MINISHELL created${_END}"
+			@echo "${_GREEN}MINISHELL compiled succesfully !${_END}"
 
 ${NAME}: 	${OBJS}
-			${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME} -l readline
+			@${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME} -l readline
 
 .c.o:		
-			${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@
+			@${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@
 
 clean:		
 			rm -f ${OBJS} 

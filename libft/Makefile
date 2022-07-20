@@ -92,11 +92,11 @@ all:		$(NAME)
 $(NAME):	${OBJS}
 			@echo "${_GREEN}----------------\nLIBFT\n----------------${_END}"
 			@echo "${_ORANGE}Objects libft created${_END}"
-			ar -rcs ${NAME} ${OBJS}
+			@ar -rcs ${NAME} ${OBJS}
 			@echo "${_GREEN}LIBFT compiled succesfully !${_END}"
 
 %.o: %.c
-			${CC} ${CFLAGS} -c $< -o $@
+			@${CC} ${CFLAGS} -c $< -o $@
 
 clean:
 			rm -f ${OBJS}
