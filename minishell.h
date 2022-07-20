@@ -6,13 +6,14 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/14 10:28:05 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/20 10:46:44 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define PROMPT "MInishel> "
 # include "libft/headers/ft_printf.h"
 # include "libft/headers/get_next_line.h"
 # include "libft/headers/libft.h"
@@ -25,18 +26,15 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <fcntl.h>
 
 typedef struct	s_end
 {
 	char	*str;
 	struct s_end	*next;
 }			t_end;
-
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <signal.h>
-
-# define PROMPT "Minishell> "
 
 typedef struct s_export
 {
@@ -131,6 +129,9 @@ int			count_red(t_data *data, t_token *token);
 //utils.c
 int			ft_check_whitespace(char c);
 void		free_table(char **table);
+
+//redirect.c
+void		get_red_fd(char *pathname, char *red);
 
 #endif
 

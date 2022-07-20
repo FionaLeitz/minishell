@@ -109,6 +109,7 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		while (tmp)
 		{
+			get_red_fd(tmp->red, );
 			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
