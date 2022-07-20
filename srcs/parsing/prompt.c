@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-void	print_table(char **table, int j)
+void	print_table2(char **table, int j)
 {
 	int	i;
 
@@ -90,10 +90,9 @@ void	ft_cut(t_data *data)
 	del_quotes(tmp);
 }
 
-int	print_prompt(t_data *data)
+int	print_prompt(t_data *data, t_params *params)
 {
-//	t_token	*tmp;
-//	char	*save;
+	t_token	*tmp;
 
 	while (1)
 	{
@@ -107,6 +106,12 @@ int	print_prompt(t_data *data)
 			ft_exit_d(data);
 		if (syntax_check(data) == 0)
 			ft_cut(data);
+		tmp = data->head;
+		while (tmp)
+		{
+			params->env = ft_select_builtin(tmp, params);
+			tmp = tmp->next;
+		}
 //			printf("Error parsing\n");
 //////////////////////////////
 /*		tmp = data->head;

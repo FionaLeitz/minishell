@@ -18,16 +18,3 @@ int	ft_check_whitespace(char c)
 		return (0);
 	return (-1);
 }
-
-void	free_table(char **table)
-{
-	int	i;
-
-	i = 0;
-	while (table[i])
-	{
-		free(table[i]);
-		i++;
-	}
-	free(table);
-}

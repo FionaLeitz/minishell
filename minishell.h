@@ -43,6 +43,23 @@ typedef struct s_params
 	t_export		*export;
 }t_params;
 
+typedef struct s_token
+{	
+	char			*value;
+	char			**args;
+	char			**red;
+	struct s_token	*next;
+	struct s_token	*prev;
+}t_token;
+
+typedef struct s_data
+{
+	char			*input;
+	char			*trimmed;
+	int				i;
+	struct s_token	*head;
+}t_data;
+
 // cd.c
 int			ft_cd(char **arg, char **env);
 // echo.c
@@ -64,42 +81,20 @@ char		**ft_get_env(char **envp);
 // pwd.c
 int			ft_pwd(char **arg);
 // select_builtin.c
-char		**ft_select_builtin(char **arg, t_params *params);
+char		**ft_select_builtin(t_token *token, t_params *params);
 // table_utils.c
-//void		print_table(char **table);
+void		print_table(char **table);
 void		free_table(char **table);
 // unset.c
 int			ft_unset(char **arg, char **env, t_export *export);
 
 // Parsing
 
-typedef struct s_token
-{	
-	char			*value;
-	char			**args;
-	char			**red;
-	struct s_token	*next;
-	struct s_token	*prev;
-}t_token;
-
-typedef struct s_data
-{
-	char			*input;
-	char			*trimmed;
-	int				i;
-	struct s_token	*head;
-}t_data;
-
-/*typedef struct	s_builtin
-{
-
-}t_builtin;*/
-
 //init.c
 void		init_data(t_data *data);
 void		init_token(t_token *token);
 //prompt.c
-int			print_prompt(t_data *data);
+int			print_prompt(t_data *data, t_params *params);
 char		*readline(const char *prompt);
 //signaux.c
 void		free_struct(t_data *data);
