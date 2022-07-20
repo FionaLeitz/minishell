@@ -35,7 +35,7 @@ static char	**make_new_env(int count, int l, char **env, char *arg)
 	new_env = malloc(sizeof(char *) * (count + 2));
 	if (new_env == NULL)
 	{
-		free_table2(env);
+		free_table(env);
 		return (NULL);
 	}
 	count = -1;
@@ -44,7 +44,7 @@ static char	**make_new_env(int count, int l, char **env, char *arg)
 	new_env[count] = ft_strdup(arg);
 	if (new_env[count] == NULL)
 	{
-		free_table2(env);
+		free_table(env);
 		return (NULL);
 	}
 	if (new_env[count][l - 2] == '+')
@@ -62,7 +62,7 @@ static char	**if_concat(char *arg, char **env, int count)
 	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(env[count])));
 	if (tmp == NULL)
 	{
-		free_table2(env);
+		free_table(env);
 		return (NULL);
 	}
 	tmp[0] = '\0';
@@ -79,7 +79,7 @@ static char	**if_replace(char *arg, char **env, int count)
 	env[count] = ft_strdup(arg);
 	if (env[count] == NULL)
 	{
-		free_table2(env);
+		free_table(env);
 		return (NULL);
 	}
 	return (env);

@@ -14,14 +14,16 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	t_data	data;
+	t_data		data;
+	t_params	params;
 
 	(void)av;
-	(void)envp;
+	params.env = ft_get_env(envp);
+	params.export = create_export(params.env);
 	init_data(&data);
 	if (ac == 1)
-	{
-		print_prompt(&data);
-	}
+		print_prompt(&data, &params);
+	free_export(params.export);
+	free_table(params.env);
 	return (EXIT_SUCCESS);
 }

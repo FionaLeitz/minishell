@@ -12,25 +12,87 @@
 
 #include "../../minishell.h"
 
-void	print_table(char **table)
+void	print_table2(char **table, int j)
 {
 	int	i;
 
 	i = 0;
+	if (j == 2)
+		printf("red :\n");
+	if (j == 1)
+		printf("args :\n");
 	while (table[i])
 	{
 		if (table[i] == NULL)
 			printf("C'est vide\n");
-		ft_printf(table[i]);
-		ft_printf("\n");
+		printf("%s", table[i]);
+		printf("\n");
 		i++;
 	}
+	printf("------\n");
 }
 
-int	print_prompt(t_data *data)
+int	syntax_check(t_data *data)
+{
+	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
+	if (data->trimmed[0] == '|')
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		free_struct(data);
+		return (-1);
+	}
+	if (data->input != NULL && ft_strlen(data->input) != 0)
+		add_history(data->input);
+	//rl_clear_history();
+	if (check_string(data) == -1)
+	{
+		free_struct(data);
+		return (-1);
+	}
+	if (check_quotes(data) == -1)
+	{
+		printf("minishell: quotes are unclosed\n");
+		free_struct(data);
+		return (-1);
+	}
+	return (0);
+}
+
+void	ft_cut(t_data *data)
 {
 	t_token	*tmp;
 	char	*save;
+
+	first_pipe_cut(data);
+	tmp = data->head;
+	while (tmp)
+	{
+		save = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		free(tmp->value);
+		tmp->value = save;
+		tmp = tmp->next;
+	}
+	tmp = data->head;
+	while (tmp)
+	{
+		count_red(data, tmp);
+		tmp = tmp->next;
+	}
+// gerer ici le remplacement des $
+// COMPLIQUE !
+	tmp = data->head;
+	while (tmp)
+	{
+		create_tab(data, tmp);
+		tmp = tmp->next;
+	}
+	tmp = data->head;
+	del_quotes(tmp);
+}
+
+int	print_prompt(t_data *data, t_params *params)
+{
+	t_token	*tmp;
 
 	while (1)
 	{
@@ -42,70 +104,26 @@ int	print_prompt(t_data *data)
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data);
-		data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
-//		printf("trimmed = %s\n", data->trimmed);
-		if (data->trimmed[0] == '|')
-		{
-			printf("minishell: syntax error near unexpected token `|'\n");
-			return (-1);
-		}
-		if (data->input != NULL && ft_strlen(data->input) != 0)
-			add_history(data->input);
-		//rl_clear_history();
-		if (check_string(data) == -1)
-			return (2);
-		if (check_quotes(data) == -1)
-		{
-			printf("minishell: quotes are unclosed\n");
-			return (2);
-		}
-		first_pipe_cut(data);
+		if (syntax_check(data) == 0)
+			ft_cut(data);
 		tmp = data->head;
 		while (tmp)
 		{
-			save = ft_strtrim(tmp->value, " \t\n\v\f\r");
-			free(tmp->value);
-			tmp->value = save;
+			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
-
-
-		tmp = data->head;
+//			printf("Error parsing\n");
+//////////////////////////////
+/*		tmp = data->head;
 		while (tmp)
 		{
-			count_red(data, tmp);
+			print_table(tmp->args, 1);
+			print_table(tmp->red, 2);
 			tmp = tmp->next;
-		}
-
-
-		tmp = data->head;
-		while (tmp)
-		{
-//			printf("Word number --- %s = %d\n", tmp->value, ft_count_words(data, tmp->value));
-			tmp = tmp->next;
-		}
-
-
-// gerer ici le remplacement des $
-// si $ seul
-
-
-
-		tmp = data->head;
-		while (tmp)
-		{
-			create_tab(data, tmp);
-			tmp = tmp->next;
-		}
-		tmp = data->head;
-		del_quotes(tmp);
-		tmp = data->head;
-		while (tmp)
-		{
-			print_table(tmp->args);
-			print_table(tmp->red);
-			tmp = tmp->next;
-		}
+		}*/
+/////////////////////////////
+		free_struct(data);
 	}
+	rl_clear_history();
 	return (0);
 }

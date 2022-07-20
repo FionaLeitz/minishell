@@ -29,7 +29,7 @@ char	**ft_get_env(char **envp)
 		env[count] = ft_strdup(envp[count]);
 		if (env[count] == NULL)
 		{
-			free_table2(env);
+			free_table(env);
 			ft_printf("Error malloc\n");
 		}
 		count++;

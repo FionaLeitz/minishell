@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-/*
+
 // Print string table
 void	print_table(char **table)
 {
@@ -26,8 +26,8 @@ void	print_table(char **table)
 		i++;
 	}
 }
-*/
-void	free_table2(char **table)
+
+void	free_table(char **table)
 {
 	int	i;
 

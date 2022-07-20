@@ -25,7 +25,6 @@ int	get_path(char **arg, t_params *params)
 		i++;
 	if (params->env[i] == NULL)
 		return (1);
-//	ft_printf("--- %s ---\n", params->env[i]);
 	path = ft_split(&params->env[i][5], ':');
 	if (path == NULL)
 		return (1);
@@ -35,7 +34,7 @@ int	get_path(char **arg, t_params *params)
 		tmp = ft_strcat_malloc(path[i], "/");
 		if (tmp == NULL)
 		{
-			free_table2(path);
+			free_table(path);
 			return (1);
 		}
 		free(path[i]);
@@ -43,48 +42,46 @@ int	get_path(char **arg, t_params *params)
 		free(tmp);
 		if (path[i] == NULL)
 		{
-			free_table2(path);
-			free_table2(&path[i + 1]);
+			free_table(path);
+			free_table(&path[i + 1]);
 			return (1);
 		}
 		if (access(path[i], F_OK | X_OK) != -1)
 		{
 			free(arg[0]);
 			arg[0] = ft_strdup(path[i]);
-			free_table2(path);
+			free_table(path);
 			break ;
 		}
 	}
 	return (0);
 }
 
-char	**ft_select_builtin(char **arg, t_params *params)
+char	**ft_select_builtin(t_token *token, t_params *params)
 {
 	if (params->env == NULL)
 		ft_printf("Error malloc...\n");
-	if (ft_strncmp(arg[0], "cd", 3) == 0)
-		ft_cd(arg, params->env);
-	else if (ft_strncmp(arg[0], "echo", 5) == 0)
-		ft_echo(arg);
-	else if (ft_strncmp(arg[0], "env", 4) == 0)
-		ft_env(arg, params->env);
-	else if (ft_strncmp(arg[0], "pwd", 4) == 0)
-		ft_pwd(arg);
-	else if (ft_strncmp(arg[0], "exit", 5) == 0)
-		ft_exit(arg);
-	else if (ft_strncmp(arg[0], "export", 7) == 0)
-		params->env = ft_export(arg, params->env, params->export);
-	else if (ft_strncmp(arg[0], "unset", 6) == 0)
-		ft_unset(arg, params->env, params->export);
+	if (ft_strncmp(token->args[0], "cd", 3) == 0)
+		ft_cd(token->args, params->env);
+	else if (ft_strncmp(token->args[0], "echo", 5) == 0)
+		ft_echo(token->args);
+	else if (ft_strncmp(token->args[0], "env", 4) == 0)
+		ft_env(token->args, params->env);
+	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
+		ft_pwd(token->args);
+	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
+		ft_exit(token->args);
+	else if (ft_strncmp(token->args[0], "export", 7) == 0)
+		params->env = ft_export(token->args, params->env, params->export);
+	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
+		ft_unset(token->args, params->env, params->export);
 	else
 	{
-		get_path(arg, params);
-		execve(arg[0], arg, params->env);
+		get_path(token->args, params);
+		execve(token->args[0], token->args, params->env);
 		write(2, "minishell: ", 11);
-		write(2, arg[0], ft_strlen(arg[0]));
+		write(2, token->args[0], ft_strlen(token->args[0]));
 		write(2, " : command not found\n", 21);
 	}
-//	free_export(params->export);
-//	free_table2(params->env);
 	return (params->env);
 }
