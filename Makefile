@@ -27,6 +27,7 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/builtin/table_utils.c			\
 	srcs/builtin/unset.c				\
 
+
 OBJS	= ${SRCS:.c=.o}
 
 HEADERS	= minishell.h

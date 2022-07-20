@@ -23,6 +23,14 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+
+typedef struct	s_end
+{
+	char	*str;
+	struct s_end	*next;
+}			t_end;
 
 # include <readline/readline.h>
 # include <readline/history.h>
