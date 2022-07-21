@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fleitz <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/07/20 09:33:04 by fleitz            #+#    #+#              #
+#    Updated: 2022/07/20 09:53:54 by fleitz           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 _END=$'\033[0m
 _GREEN=$'\033[1;32m
@@ -26,7 +37,6 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/builtin/select_builtin.c		\
 	srcs/builtin/table_utils.c			\
 	srcs/builtin/unset.c				\
-
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -61,10 +71,5 @@ re:			fclean all
 
 lib:		
 			make -C libft
-
-norm:	
-			norminette -R CheckSourceHeader ${SRCS}
-			norminette -R CheckDefine ${HEADERS}
-			make -C libft norm
 
 .PHONY :	all clean fclean re norm lib

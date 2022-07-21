@@ -23,14 +23,6 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-typedef struct	s_end
-{
-	char	*str;
-	struct s_end	*next;
-}			t_end;
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -42,14 +34,14 @@ typedef struct s_export
 {
 	char			*name;
 	char			*value;
-	struct s_export	*next;	
-}t_export;
+	struct s_export	*next;
+}					t_export;
 
 typedef struct s_params
 {
 	char			**env;
 	t_export		*export;
-}t_params;
+}					t_params;
 
 typedef struct s_token
 {	
@@ -58,7 +50,7 @@ typedef struct s_token
 	char			**red;
 	struct s_token	*next;
 	struct s_token	*prev;
-}t_token;
+}					t_token;
 
 typedef struct s_data
 {
@@ -66,8 +58,9 @@ typedef struct s_data
 	char			*trimmed;
 	int				i;
 	struct s_token	*head;
-}t_data;
+}					t_data;
 
+// BUILT-IN
 // cd.c
 int			ft_cd(char **arg, char **env);
 // echo.c
@@ -96,8 +89,7 @@ void		free_table(char **table);
 // unset.c
 int			ft_unset(char **arg, char **env, t_export *export);
 
-// Parsing
-
+// PARSING
 //init.c
 void		init_data(t_data *data);
 void		init_token(t_token *token);
@@ -109,6 +101,7 @@ void		free_struct(t_data *data);
 void		sig_manage(int signal);
 void		ft_exit_d(t_data *data);
 //parse.c
+void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
 int			check_redir(t_data *data);
 //fct_list.c
@@ -136,4 +129,4 @@ void		free_table(char **table);
 
 // ech' o' bonjour "bla | bla" | cat -e
 // echo bla > test > test2
-// echo bla > test2
+// echo bla > > test2

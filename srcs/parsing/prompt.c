@@ -57,11 +57,33 @@ int	syntax_check(t_data *data)
 	}
 	return (0);
 }
+/*
+int	replace_var(t_data *data, t_params *params)
+{
+	int	save;
+	(void)params;
+	data->i = 0;
+	while (data->trimmed[data->i])
+	{
+		if (data->trimmed[data->i] == '\'')
+			jump_quotes(data->trimmed, data);
+		if (data->trimmed[data->i] == '$')
+		{
+			save = data->i;
+			while (data->trimmed[data->i] && ft_check_whitespace(data->trimmed[data->i]) != 0)
+				data->i++;
+		}
+		data->i++;
+	}
+	return (0);
+}*/
 
-void	ft_cut(t_data *data)
+void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 	char	*save;
+
+	(void)params;
 
 	first_pipe_cut(data);
 	tmp = data->head;
@@ -72,14 +94,15 @@ void	ft_cut(t_data *data)
 		tmp->value = save;
 		tmp = tmp->next;
 	}
+//	replace_var(data, params);
+//	if (replace_var() == -1)
+//		return (-1);
 	tmp = data->head;
 	while (tmp)
 	{
 		count_red(data, tmp);
 		tmp = tmp->next;
 	}
-// gerer ici le remplacement des $
-// COMPLIQUE !
 	tmp = data->head;
 	while (tmp)
 	{
@@ -97,31 +120,23 @@ int	print_prompt(t_data *data, t_params *params)
 	while (1)
 	{
 		init_data(data);
-		//ctrl-c		
 		signal(SIGINT, sig_manage);
-		//ctrl-backslash
 		signal(SIGQUIT, sig_manage);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data);
 		if (syntax_check(data) == 0)
-			ft_cut(data);
+			ft_cut(data, params);
 		tmp = data->head;
-		while (tmp)
+		while (tmp && tmp->args[0])
 		{
-			params->env = ft_select_builtin(tmp, params);
+			printf("At the end :\n");
+			print_table(tmp->args);
+			printf("----------\n");
+			print_table(tmp->red);
+//			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
-//			printf("Error parsing\n");
-//////////////////////////////
-/*		tmp = data->head;
-		while (tmp)
-		{
-			print_table(tmp->args, 1);
-			print_table(tmp->red, 2);
-			tmp = tmp->next;
-		}*/
-/////////////////////////////
 		free_struct(data);
 	}
 	rl_clear_history();
