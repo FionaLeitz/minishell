@@ -130,3 +130,4 @@ void		free_table(char **table);
 // ech' o' bonjour "bla | bla" | cat -e
 // echo bla > test > test2
 // echo bla > > test2
+// bla $test $te test > $test
