@@ -26,6 +26,7 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/builtin/select_builtin.c		\
 	srcs/builtin/table_utils.c			\
 	srcs/builtin/unset.c				\
+	srcs/redirect/redirect.c
 
 
 OBJS	= ${SRCS:.c=.o}

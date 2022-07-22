@@ -13,7 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define PROMPT "MInishel> "
+# define PROMPT "Minishel> "
 # include "libft/headers/ft_printf.h"
 # include "libft/headers/get_next_line.h"
 # include "libft/headers/libft.h"
@@ -30,9 +30,9 @@
 # include <sys/types.h>
 # include <fcntl.h>
 
-typedef struct	s_end
+typedef struct s_end
 {
-	char	*str;
+	char			*str;
 	struct s_end	*next;
 }			t_end;
 
@@ -54,6 +54,7 @@ typedef struct s_token
 	char			*value;
 	char			**args;
 	char			**red;
+	char			**red_tab;
 	struct s_token	*next;
 	struct s_token	*prev;
 }t_token;
@@ -115,8 +116,6 @@ void		push_front(t_data *data, char *value);
 void		push_back(t_data *data, char *value);
 void		preview(t_data	*data);
 int			ft_size(t_token *lst);
-//redirect.c
-t_token		*l_redirect(t_data *data, t_token *token_list);
 //quotes.c
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
@@ -129,9 +128,10 @@ int			count_red(t_data *data, t_token *token);
 //utils.c
 int			ft_check_whitespace(char c);
 void		free_table(char **table);
-
 //redirect.c
-void		get_red_fd(char *pathname, char *red);
+int	get_fd_read(char *pathname, char *red);
+int	get_fd_open(char*pathname, char *red);
+char **red_tab(t_token *token, t_data *data);
 
 #endif
 

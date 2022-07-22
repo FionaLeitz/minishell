@@ -93,6 +93,8 @@ void	ft_cut(t_data *data)
 int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
+	(void)params;
+	char **tabs;
 
 	while (1)
 	{
@@ -106,22 +108,28 @@ int	print_prompt(t_data *data, t_params *params)
 			ft_exit_d(data);
 		if (syntax_check(data) == 0)
 			ft_cut(data);
-		tmp = data->head;
+		/*tmp = data->head;
 		while (tmp)
 		{
-			get_red_fd(tmp->red, );
 			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
-		}
+		}*/
 //			printf("Error parsing\n");
 //////////////////////////////
-/*		tmp = data->head;
+		tmp = data->head;
+		tabs = red_tab(tmp, data);
 		while (tmp)
 		{
-			print_table(tmp->args, 1);
-			print_table(tmp->red, 2);
+			printf("args: \n");
+			print_table(tmp->args);
+			printf("-----------\n");
+			printf("red: \n");
+			print_table(tmp->red);
+			printf("-----------\n");
+			printf("red_tab: \n");
+			print_table(tabs);
 			tmp = tmp->next;
-		}*/
+		}
 /////////////////////////////
 		free_struct(data);
 	}

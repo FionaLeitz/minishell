@@ -172,6 +172,12 @@ int	get_red(t_data *data, t_token *token, int count)
 		}
 		save = data->i;
 		data->i++;
+
+		while (ft_check_whitespace(token->value[data->i]) == 0)	
+			data->i++;
+		if (token->value[data->i] == '>' || token->value[data->i] == '<')
+				data->i++;
+
 		while (ft_check_whitespace(token->value[data->i]) == 0)
 			data->i++;
 		while (token->value[data->i] != '\0' &&
@@ -185,7 +191,7 @@ int	get_red(t_data *data, t_token *token, int count)
 				while (token->value[data->i] != quote)
 					data->i++;
 			}
-			else
+		//	else
 				data->i++;	
 		}
 		token->red[j] = ft_strndup(&token->value[save], data->i - save + 1);
