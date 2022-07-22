@@ -93,7 +93,7 @@ static int	count_redir(char *value)
 	return(count);
 }
 
-char **red_tab(t_token *token, t_data *data)
+char **red_tab(t_data *data, t_token *token)
 {
 	data->i = 0;
 	int j;
@@ -116,6 +116,7 @@ char **red_tab(t_token *token, t_data *data)
 			{
 				redi = token->red[data->i][j];
 				tmp = ftt_strchr(&token->red[data->i][j], redi);
+				printf("tmp = %s\n", tmp);
 				token->red_tab[k] = ft_strdup(tmp);
 			}
 			j++;

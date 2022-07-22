@@ -41,8 +41,8 @@ int	syntax_check(t_data *data)
 		free_struct(data);
 		return (-1);
 	}
-	if (data->input != NULL && ft_strlen(data->input) != 0)
-		add_history(data->input);
+	// if (data->input != NULL && ft_strlen(data->input) != 0)
+	// 	add_history(data->input);
 	//rl_clear_history();
 	if (check_string(data) == -1)
 	{
@@ -160,20 +160,25 @@ void	ft_cut(t_data *data, t_params *params)
 		tmp->value = save;
 		tmp = tmp->next;
 	}
-
 	tmp = data->head;
 	while (tmp)
 	{
 		count_red(data, tmp);
 		tmp = tmp->next;
 	}
-	tmp = data->head;
+//	tmp = data->head;
 //	if (replace_var(tmp, data, params) == -1)
 //		return (-1);
 	tmp = data->head;
 	while (tmp)
 	{
 		create_tab(data, tmp);
+		tmp = tmp->next;
+	}
+	tmp = data->head;
+	while (tmp)
+	{
+		red_tab(data, tmp);
 		tmp = tmp->next;
 	}
 	tmp = data->head;
@@ -192,16 +197,23 @@ int	print_prompt(t_data *data, t_params *params)
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data);
+		if (data->input != NULL && ft_strlen(data->input) != 0)
+			add_history(data->input);
 		if (syntax_check(data) == 0)
 			ft_cut(data, params);
 		tmp = data->head;
 		while (tmp && tmp->args[0])
 		{
-			printf("At the end :\n");
+			printf("----------\n");
+			printf("cmd :\n");
 			print_table(tmp->args);
 			printf("----------\n");
 			printf("red: \n");
 			print_table(tmp->red);
+			printf("red_tab :\n");
+			printf("----------\n");
+			print_table(tmp->red_tab);
+			printf("----------\n");
 //			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}

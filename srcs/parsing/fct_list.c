@@ -66,7 +66,10 @@ void	preview(t_data *data)
 	if (tmp == NULL)
 		return ;
 	while (tmp != NULL)
+	{
+		printf("%s\n", tmp->value);
 		tmp = tmp->next;
+	}
 }
 
 int	ft_size(t_token *lst)

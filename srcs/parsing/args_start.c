@@ -35,7 +35,7 @@ int	first_pipe_cut(t_data *data)
 		data->i++;
 	}
 	push_back(data, ft_strdup(&data->trimmed[count]));
-	preview(data);
+	//preview(data);
 	return (0);
 }
 
