@@ -36,7 +36,6 @@ int	ft_exit(char **arg)
 	if (arg[1] != NULL && arg[2] != NULL)
 	{
 		ft_printf("minisehll: exit: too many arguments\n");
-		// should not exit if too many arguments
 		return (1);
 	}
 	return (n);

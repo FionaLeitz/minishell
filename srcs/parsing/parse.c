@@ -12,20 +12,23 @@
 
 #include "../../minishell.h"
 
-int	check_string(t_data *data)
+void	jump_quotes(char *str, t_data *data)
 {
 	char	quote;
 
-	data->i = 0;
-	while (data->trimmed[data->i])
+	quote = str[data->i];
+	data->i++;
+	while (str[data->i] != quote)
+		data->i++;
+}
+
+int	check_string(t_data *data)
+{
+	data->i = -1;
+	while (data->trimmed[++data->i])
 	{
 		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
-		{
-			quote = data->trimmed[data->i];
-			data->i++;
-			while (data->trimmed[data->i] != quote)
-				data->i++;
-		}
+			jump_quotes(data->trimmed, data);
 		else if (data->trimmed[data->i] == '|')
 		{
 			data->i++;
@@ -40,9 +43,41 @@ int	check_string(t_data *data)
 		}
 		if (check_redir(data) == -1)
 			return (-1);
-		data->i++;
 	}
 	return (0);
+}
+
+static int	print_error_redir(char *str, char c)
+{
+	printf("minishell: syntax error near unexpected token `%s%c'\n", str, c);
+	return (-1);
+}
+
+char	first_redir(char *str, t_data *data)
+{
+	char	redir;
+
+	redir = str[data->i];
+	data->i++;
+	while (str[data->i]
+		&& ft_check_whitespace(str[data->i]) == 0)
+		data->i++;
+	if (str[data->i] == '\0')
+	{
+		print_error_redir("newline", '\0');
+		return (-1);
+	}
+	if (str[data->i] == '<' || str[data->i] == '>')
+	{
+		if (str[data->i] != redir)
+		{
+			print_error_redir("\0", str[data->i]);
+			return (-1);
+		}
+		redir = str[data->i];
+		data->i++;
+	}
+	return (redir);
 }
 
 int	check_redir(t_data *data)
@@ -51,39 +86,16 @@ int	check_redir(t_data *data)
 
 	if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
 	{
-		redir = data->trimmed[data->i];
-		data->i++;
+		redir = first_redir(data->trimmed, data);
+		if (redir == -1)
+			return (-1);
 		while (data->trimmed[data->i]
 			&& ft_check_whitespace(data->trimmed[data->i]) == 0)
 			data->i++;
 		if (data->trimmed[data->i] == '\0')
-		{
-			printf("minishell: syntax error near unexpected token `newline'\n");
-			return (-1);
-		}
+			return (print_error_redir("newline", '\0'));
 		if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
-		{
-			if (data->trimmed[data->i] != redir)
-			{
-				printf("minishell: syntax error near unexpected token `%c'\n", data->trimmed[data->i]);
-				return (-1);
-			}
-			redir = data->trimmed[data->i];
-			data->i++;
-		}
-		while (data->trimmed[data->i]
-			&& ft_check_whitespace(data->trimmed[data->i]) == 0)
-			data->i++;
-		if (data->trimmed[data->i] == '\0')
-		{
-			printf("minishell: syntax error near unexpected token `newline'\n");
-			return (-1);
-		}
-		if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
-		{
-			printf("minishell: syntax error near unexpected token `%c'\n", redir);
-			return (-1);
-		}
+			return (print_error_redir("\0", redir));
 	}
 	return (0);
 }

@@ -39,7 +39,7 @@ int	first_pipe_cut(t_data *data)
 	return (0);
 }
 
-int	ft_count_words(t_data *data, char *s/*, char c*/)
+int	ft_count_words(t_data *data, char *s)
 {
 	int		count;
 	char	quote;
@@ -48,7 +48,7 @@ int	ft_count_words(t_data *data, char *s/*, char c*/)
 	data->i = 0;
 	while (s[data->i] != '\0')
 	{
-		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) != 0/*s[data->i] != c*/)
+		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) != 0)
 		{
 			if (s[data->i] == '\'' || s[data->i] == '\"')
 			{
@@ -57,11 +57,37 @@ int	ft_count_words(t_data *data, char *s/*, char c*/)
 				while (s[data->i] != quote)
 					data->i++;
 			}
-			data->i++;	
+			data->i++;
 		}
 		count++;
 		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) == 0)
 			data->i++;
+	}
+	return (count);
+}
+
+int	in_create_tab(char *str, int *i)
+{
+	char	quote;
+	int		count;
+
+	count = 0;
+	while (str[i[0]] != '\0' && ft_check_whitespace(
+			str[i[0]]) != 0)
+	{
+		if (str[i[0]] == '\'' || str[i[0]] == '\"')
+		{
+			quote = str[i[0]];
+			count++;
+			i[0]++;
+			while (str[i[0]] != quote)
+			{
+				count++;
+				i[0]++;
+			}
+		}
+		i[0]++;
+		count++;
 	}
 	return (count);
 }
@@ -73,7 +99,6 @@ int	create_tab(t_data *data, t_token *token)
 	int		j;
 	int		k;
 	int		tmp;
-	char	quote;
 
 	i = 0;
 	j = 0;
@@ -85,37 +110,31 @@ int	create_tab(t_data *data, t_token *token)
 	while (j < k)
 	{
 		tmp = i;
-		count = 0;
-		while (token->value[i] != '\0' && ft_check_whitespace(token->value[i]) != 0/*token->value[i] != ' '*/)
-		{
-			if (token->value[i] == '\'' || token->value[i] == '\"')
-			{
-				quote = token->value[i];
-				count++;
-				i++;
-				while (token->value[i] != quote)
-				{
-					count++;
-					i++;
-				}
-			}
-			i++;
-			count++;
-		}
-		if (/*token->value[i] == ' ' */ft_check_whitespace(token->value[i]) == 0|| token->value[i] == '\0')
-		{
-			token->args[j] = ft_strndup(&token->value[tmp], count);
-			j++;
-		}
-		while (token->value[i] != '\0' && ft_check_whitespace(token->value[i]) == 0/*token->value[i] == ' '*/)
+		count = in_create_tab(token->value, &i);
+		if (ft_check_whitespace(token->value[i]) == 0
+			|| token->value[i] == '\0')
+			token->args[j++] = ft_strndup(&token->value[tmp], count);
+		while (token->value[i] != '\0' && ft_check_whitespace(
+				token->value[i]) == 0)
 			i++;
 	}
 	return (0);
 }
 
-int	del_quotes(t_token *token)
+int	in_del_quote(char *str, int j)
 {
 	char	quote;
+
+	quote = str[j];
+	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j]));
+	while (str[j] != quote)
+		j++;
+	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j]));
+	return (j);
+}
+
+int	del_quotes(t_token *token)
+{
 	t_token	*tmp;
 	int		i;
 	int		j;
@@ -123,25 +142,17 @@ int	del_quotes(t_token *token)
 	tmp = token;
 	while (tmp)
 	{
-		i = 0;
-		while (tmp->args[i])
+		i = -1;
+		while (tmp->args[++i])
 		{
-			j = 0;
-			while (tmp->args[i][j] != '\0')
+			j = -1;
+			while (tmp->args[i][++j] != '\0')
 			{
 				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
-				{
-					quote = tmp->args[i][j];
-					ft_memcpy(&tmp->args[i][j], &tmp->args[i][j + 1], ft_strlen(&tmp->args[i][j]));
-					while (tmp->args[i][j] != quote)
-						j++;
-					ft_memcpy(&tmp->args[i][j], &tmp->args[i][j + 1], ft_strlen(&tmp->args[i][j]));
-				}
+					j = in_del_quote(tmp->args[i], j);
 				if (tmp->args[i][j] == '\0')
 					break ;
-				j++;
 			}
-			i++;
 		}
 		tmp = tmp->next;
 	}
@@ -172,17 +183,17 @@ int	get_red(t_data *data, t_token *token, int count)
 		}
 		save = data->i;
 		data->i++;
-
-		while (ft_check_whitespace(token->value[data->i]) == 0)	
-			data->i++;
-		if (token->value[data->i] == '>' || token->value[data->i] == '<')
-				data->i++;
-
+///////////////////////////////
 		while (ft_check_whitespace(token->value[data->i]) == 0)
 			data->i++;
-		while (token->value[data->i] != '\0' &&
-			ft_check_whitespace(token->value[data->i]) != 0 &&
-			token->value[data->i] != '>' && token->value[data->i] != '<')
+		if (token->value[data->i] == '>' || token->value[data->i] == '<')
+			data->i++;
+//////////////////////////////
+		while (ft_check_whitespace(token->value[data->i]) == 0)
+			data->i++;
+		while (token->value[data->i] != '\0' && ft_check_whitespace(
+				token->value[data->i]) != 0 && token->value[data->i] != '>'
+			&& token->value[data->i] != '<')
 		{
 			if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
 			{
@@ -191,11 +202,11 @@ int	get_red(t_data *data, t_token *token, int count)
 				while (token->value[data->i] != quote)
 					data->i++;
 			}
-		//	else
-				data->i++;	
+			data->i++;
 		}
 		token->red[j] = ft_strndup(&token->value[save], data->i - save + 1);
-		ft_memcpy(&token->value[save], &token->value[data->i], ft_strlen(&token->value[save]));
+		ft_memcpy(&token->value[save], &token->value[data->i],
+			ft_strlen(&token->value[save]));
 		data->i = save;
 		j++;
 	}
@@ -206,7 +217,7 @@ int	count_red(t_data *data, t_token *token)
 {
 	int		count;
 	char	quote;
-	
+
 	count = 0;
 	data->i = 0;
 	while (token->value[data->i] != '\0')
@@ -229,7 +240,7 @@ int	count_red(t_data *data, t_token *token)
 	token->red = malloc(sizeof(char *) * (count + 1));
 	if (token->red == NULL)
 		return (-1);
- 	if (get_red(data, token, count) != 0)
+	if (get_red(data, token, count) != 0)
 		return (-1);
 	return (0);
 }

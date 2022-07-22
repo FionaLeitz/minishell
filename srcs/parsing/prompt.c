@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/14 10:24:53 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/07/22 13:44:27 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,98 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
-void	ft_cut(t_data *data)
+// ca avait l'air de bien fonctionner, mais en faut pas trop
+
+/*
+char	*replace(char **env, char *str, int size)
+{
+	int	count;
+
+	if (size == 0)
+		return (NULL);
+	count = -1;
+	while (env[++count])
+	{
+		if (ft_strncmp(env[count], str, size) == 0 && env[count][size] == '=')
+			return (&env[count][size + 1]);
+	}
+	return (NULL);
+}
+
+int	replace_var(t_token *token, t_data *data, t_params *params)
+{
+	int		save;
+	int		quote;
+//	int		i;
+	char	*str;
+	char	*tmp;
+
+	str = NULL;
+	while (token)
+	{
+		data->i = 0;
+		quote = 0;
+		while (token->value[data->i])
+		{
+			if (token->value[data->i] == '\'')
+				jump_quotes(token->value, data);
+			if (token->value[data->i] == '\"')
+			{
+				if (quote == 0)
+					quote = 1;
+				else
+					quote = 0;
+			}
+			if (token->value[data->i] == '$')
+			{
+				save = data->i;
+				while (token->value[data->i] && ft_check_whitespace(token->value[data->i]) != 0 && token->value[data->i] != '\'' && token->value[data->i] != '\'')
+					data->i++;
+				if (quote == 1 && token->value[data->i - 1] == '\"')
+				{
+					printf("With quote : %s\n", &token->value[data->i]);
+					data->i--;
+				}
+//				printf("$ ici : %s\n", &data->trimmed[save]);
+				// write(1, &token->value[save], data->i - save);
+				// printf("\n");
+				str = replace(params->env, &token->value[save + 1], data->i - save - 1);
+				if (str == NULL)
+				{
+					ft_memmove(&token->value[save], &token->value[data->i], ft_strlen(&token->value[data->i - save]));
+					data->i = save;
+				}
+				else
+				{
+					tmp = malloc(sizeof(char) * (save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 2));
+					if (tmp == NULL)
+						return (-1);
+					tmp = ft_memmove(tmp, token->value, save);
+					tmp = ft_strcat(tmp, str);
+					tmp = ft_strcat(tmp, &token->value[data->i]);
+					free(token->value);
+					token->value = tmp;
+					data->i = save + ft_strlen(str) - 1; 
+				}
+				if (quote == 1 && token->value[data->i] == '\"')
+				{
+					data->i++;
+				}
+			}
+			data->i++;
+		}
+		printf("After replace : %s\n", token->value);
+		token = token->next;
+	}
+	return (0);
+}
+*/
+void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 	char	*save;
+
+	(void)params;
 
 	first_pipe_cut(data);
 	tmp = data->head;
@@ -72,14 +160,16 @@ void	ft_cut(t_data *data)
 		tmp->value = save;
 		tmp = tmp->next;
 	}
+
 	tmp = data->head;
 	while (tmp)
 	{
 		count_red(data, tmp);
 		tmp = tmp->next;
 	}
-// gerer ici le remplacement des $
-// COMPLIQUE !
+	tmp = data->head;
+//	if (replace_var(tmp, data, params) == -1)
+//		return (-1);
 	tmp = data->head;
 	while (tmp)
 	{
@@ -93,44 +183,28 @@ void	ft_cut(t_data *data)
 int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
-	(void)params;
-	char **tabs;
 
 	while (1)
 	{
 		init_data(data);
-		//ctrl-c		
 		signal(SIGINT, sig_manage);
-		//ctrl-backslash
 		signal(SIGQUIT, sig_manage);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data);
 		if (syntax_check(data) == 0)
-			ft_cut(data);
-		/*tmp = data->head;
-		while (tmp)
-		{
-			params->env = ft_select_builtin(tmp, params);
-			tmp = tmp->next;
-		}*/
-//			printf("Error parsing\n");
-//////////////////////////////
+			ft_cut(data, params);
 		tmp = data->head;
-		tabs = red_tab(tmp, data);
-		while (tmp)
+		while (tmp && tmp->args[0])
 		{
-			printf("args: \n");
+			printf("At the end :\n");
 			print_table(tmp->args);
-			printf("-----------\n");
+			printf("----------\n");
 			printf("red: \n");
 			print_table(tmp->red);
-			printf("-----------\n");
-			printf("red_tab: \n");
-			print_table(tabs);
+//			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
-/////////////////////////////
 		free_struct(data);
 	}
 	rl_clear_history();

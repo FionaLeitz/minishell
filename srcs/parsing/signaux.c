@@ -50,6 +50,5 @@ void	ft_exit_d(t_data *data)
 {
 	printf("exit\n");
 	(void)data;
-//	free_struct(data);
 	exit(0);
 }

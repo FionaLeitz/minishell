@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/11 17:57:57 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 18:08:02 by masamoil         ###   ########.fr       */
+/*   Created: 2022/07/08 13:43:02 by masamoil          #+#    #+#             */
+/*   Updated: 2022/07/08 15:04:58 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_check_whitespace(char c)
+t_token	*l_redirect(t_data *data, t_token *token_list)
 {
-	if (c == '\f' || c == '\n' || c == '\r' || c == '\t'
-		|| c == '\v' || c == ' ')
-		return (0);
-	return (-1);
+	if (ft_strncmp(data->trimmed + data->i, "<<", 2) != 0)
+		printf("euhmmm");
+	else
+		push_back(data, "<");
+	return (token_list);
 }

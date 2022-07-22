@@ -32,7 +32,6 @@ static int	ft_error_cd(char **arg)
 	return (0);
 }
 
-// return 1 = stupid !
 static int	ft_find(char **env, char *str, int i)
 {
 	int	count;
@@ -41,7 +40,7 @@ static int	ft_find(char **env, char *str, int i)
 	while (env[count] && ft_strncmp(env[count], str, i))
 		count++;
 	if (env[count] == NULL)
-		return (1); ////////fais!un truc ICI
+		return (-1);
 	return (count);
 }
 
