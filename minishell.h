@@ -14,6 +14,11 @@
 # define MINISHELL_H
 
 # define PROMPT "Minishel> "
+# define L_RED 
+# define R_RED 
+# define DL_RED 
+# define DR_RED 
+
 # include "libft/headers/ft_printf.h"
 # include "libft/headers/get_next_line.h"
 # include "libft/headers/libft.h"
@@ -103,6 +108,10 @@ void		init_token(t_token *token);
 //prompt.c
 int			print_prompt(t_data *data, t_params *params);
 char		*readline(const char *prompt);
+char		*replace(char **env, char *str, int size);
+int			replace_var(t_token *token, t_data *data, t_params *params);
+int			syntax_check(t_data *data);
+void		ft_cut(t_data *data, t_params *params);
 //signaux.c
 void		free_struct(t_data *data);
 void		sig_manage(int signal);
@@ -143,3 +152,4 @@ int 		red_tab(t_data *data, t_token *token);
 // echo bla > test2
 
 //cat > file >> file2 |ls >file3
+//ls -la > file>fillll | cat -e >>file2>file3

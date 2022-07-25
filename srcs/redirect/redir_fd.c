@@ -56,12 +56,11 @@ int	get_fd_open(char*pathname, char *red)
 void	ft_redirection(t_data *data)
 {
 	if (>)
-		
+		output
 	else if (>>)
-
+		output_append
 	else if (<)
-	
+		read
 	else if(<<)
 		heredoc
-
 }

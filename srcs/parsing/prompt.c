@@ -12,25 +12,25 @@
 
 #include "../../minishell.h"
 
-void	print_table2(char **table, int j)
-{
-	int	i;
+// void	print_table2(char **table, int j)
+// {
+// 	int	i;
 
-	i = 0;
-	if (j == 2)
-		printf("red :\n");
-	if (j == 1)
-		printf("args :\n");
-	while (table[i])
-	{
-		if (table[i] == NULL)
-			printf("C'est vide\n");
-		printf("%s", table[i]);
-		printf("\n");
-		i++;
-	}
-	printf("------\n");
-}
+// 	i = 0;
+// 	if (j == 2)
+// 		printf("red :\n");
+// 	if (j == 1)
+// 		printf("args :\n");
+// 	while (table[i])
+// 	{
+// 		if (table[i] == NULL)
+// 			printf("C'est vide\n");
+// 		printf("%s", table[i]);
+// 		printf("\n");
+// 		i++;
+// 	}
+// 	printf("------\n");
+// }
 
 int	syntax_check(t_data *data)
 {
@@ -58,76 +58,78 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
-char	*replace(char **env, char *str, int size)
-{
-	int	count;
+// char	*replace(char **env, char *str, int size)
+// {
+// 	int	count;
 
-	if (size == 0)
-		return (NULL);
-	count = -1;
-	while (env[++count])
-	{
-		if (ft_strncmp(env[count], str, size) == 0 && env[count][size] == '=')
-			return (&env[count][size + 1]);
-	}
-	return (NULL);
-}
+// 	if (size == 0)
+// 		return (NULL);
+// 	count = -1;
+// 	while (env[++count])
+// 	{
+// 		if (ft_strncmp(env[count], str, size) == 0 && env[count][size] == '=')
+// 			return (&env[count][size + 1]);
+// 	}
+// 	return (NULL);
+// }
 
-int	replace_var(t_token *token, t_data *data, t_params *params)
-{
-	int		save;
-	char	*str;
-	char	*tmp;
+// int	replace_var(t_token *token, t_data *data, t_params *params)
+// {
+// 	int		save;
+// 	char	*str;
+// 	char	*tmp;
 
-	(void)params;
-	int	i = 1;
-	str = NULL;
-	while (token)
-	{
-		data->i = 0;
-		while (token->value[data->i])
-		{
-			if (token->value[data->i] == '\'')
-				jump_quotes(token->value, data);
-			if (token->value[data->i] == '$')
-			{
-				save = data->i++;
-				while (token->value[data->i] && ft_check_whitespace(token->value[data->i]) != 0
-					&& token->value[data->i] != '\'' && token->value[data->i] != '\"' && token->value[data->i] != '$')
-					data->i++;
-				str = replace(params->env, &token->value[save + 1], data->i - save - 1);
-				if (str == NULL)
-				{
-					ft_memmove(&token->value[save], &token->value[data->i], ft_strlen(&token->value[data->i]) + 1);
-					data->i = save;
-				}
-				else
-				{
-					tmp = malloc(sizeof(char) * (save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 1));
-					if (tmp == NULL)
-						return (-1);
-					ft_bzero(tmp, save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 1);
-					tmp = ft_memmove(tmp, token->value, save);
-					tmp = ft_strcat(tmp, str);
-					tmp = ft_strcat(tmp, &token->value[data->i]);
-					free(token->value);
-					token->value = tmp;
-					data->i = save + ft_strlen(str) - 1;
-				}
-				i++;
-			}
-			data->i++;
-		}
-		printf("After replace : %s\n", token->value);
-		token = token->next;
-	}
-	return (0);
-}
+// 	(void)params;
+// 	int	i = 1;
+// 	str = NULL;
+// 	while (token)
+// 	{
+// 		data->i = 0;
+// 		while (token->value[data->i])
+// 		{
+// 			if (token->value[data->i] == '\'')
+// 				jump_quotes(token->value, data);
+// 			if (token->value[data->i] == '$')
+// 			{
+// 				save = data->i++;
+// 				while (token->value[data->i] && ft_check_whitespace(token->value[data->i]) != 0
+// 					&& token->value[data->i] != '\'' && token->value[data->i] != '\"' && token->value[data->i] != '$')
+// 					data->i++;
+// 				str = replace(params->env, &token->value[save + 1], data->i - save - 1);
+// 				if (str == NULL)
+// 				{
+// 					ft_memmove(&token->value[save], &token->value[data->i], ft_strlen(&token->value[data->i]) + 1);
+// 					data->i = save;
+// 				}
+// 				else
+// 				{
+// 					tmp = malloc(sizeof(char) * (save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 1));
+// 					if (tmp == NULL)
+// 						return (-1);
+// 					ft_bzero(tmp, save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 1);
+// 					tmp = ft_memmove(tmp, token->value, save);
+// 					tmp = ft_strcat(tmp, str);
+// 					tmp = ft_strcat(tmp, &token->value[data->i]);
+// 					free(token->value);
+// 					token->value = tmp;
+// 					data->i = save + ft_strlen(str) - 1;
+// 				}
+// 				i++;
+// 			}
+// 			data->i++;
+// 		}
+// 		printf("After replace : %s\n", token->value);
+// 		token = token->next;
+// 	}
+// 	return (0);
+// }
 
 void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 	char	*save;
+	(void)params;
+
 
 	first_pipe_cut(data);
 	tmp = data->head;
@@ -145,12 +147,12 @@ void	ft_cut(t_data *data, t_params *params)
 		count_red(data, tmp);
 		tmp = tmp->next;
 	}
-	tmp = data->head;
-	if (replace_var(tmp, data, params) == -1)
-	{
-		printf("ERROR REPLACE_VAR\n");
-		return ;
-	}
+	// tmp = data->head;
+	// if (replace_var(tmp, data, params) == -1)
+	// {
+	// 	printf("ERROR REPLACE_VAR\n");
+	// 	return ;
+	// }
 	tmp = data->head;
 	while (tmp)
 	{
@@ -171,9 +173,11 @@ int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
+	tmp = NULL;
 	while (1)
 	{
 		init_data(data);
+		//init_token(tmp);
 		signal(SIGINT, sig_manage);
 		signal(SIGQUIT, sig_manage);
 		data->input = readline(PROMPT);
