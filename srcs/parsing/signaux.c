@@ -12,9 +12,10 @@
 
 #include "../../minishell.h"
 
-void	free_struct(t_data *data)
+void	free_struct(t_data *data, t_params *params)
 {
-	t_token	*tmp;
+	t_token		*tmp;
+	t_export	*exp;
 
 	if (data->input != NULL)
 		free(data->input);
@@ -28,6 +29,15 @@ void	free_struct(t_data *data)
 		free_table(tmp->red);
 		data->head = data->head->next;
 		free(tmp);
+	}
+	free_table(params->env);
+	while (params->export)
+	{
+		exp = params->export;
+		free(exp->name);
+		free(exp->value);
+		params->export = params->export->next;
+		free(exp);
 	}
 	init_data(data);
 }

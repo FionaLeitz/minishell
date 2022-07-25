@@ -32,13 +32,13 @@ void	print_table2(char **table, int j)
 	printf("------\n");
 }
 
-int	syntax_check(t_data *data)
+int	syntax_check(t_data *data, t_params *params)
 {
 	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
 	if (data->trimmed[0] == '|')
 	{
 		printf("minishell: syntax error near unexpected token `|'\n");
-		free_struct(data);
+		free_struct(data, params);
 		return (-1);
 	}
 	if (data->input != NULL && ft_strlen(data->input) != 0)
@@ -46,13 +46,13 @@ int	syntax_check(t_data *data)
 	//rl_clear_history();
 	if (check_string(data) == -1)
 	{
-		free_struct(data);
+		free_struct(data, params);
 		return (-1);
 	}
 	if (check_quotes(data) == -1)
 	{
 		printf("minishell: quotes are unclosed\n");
-		free_struct(data);
+		free_struct(data, params);
 		return (-1);
 	}
 	return (0);
@@ -179,19 +179,19 @@ int	print_prompt(t_data *data, t_params *params)
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data);
-		if (syntax_check(data) == 0)
+		if (syntax_check(data, params) == 0)
 			ft_cut(data, params);
 		tmp = data->head;
 		while (tmp && tmp->args[0])
 		{
-			printf("At the end :\n");
-			print_table(tmp->args);
-			printf("----------\n");
-			print_table(tmp->red);
-//			params->env = ft_select_builtin(tmp, params);
+//			printf("At the end :\n");
+//			print_table(tmp->args);
+//			printf("----------\n");
+//			print_table(tmp->red);
+			params->env = ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
-		free_struct(data);
+		free_struct(data, params);
 	}
 	rl_clear_history();
 	return (0);
