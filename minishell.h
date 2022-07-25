@@ -130,9 +130,8 @@ int			ft_check_whitespace(char c);
 void		free_table(char **table);
 //redirect.c
 int	get_fd_read(char *pathname, char *red);
-int	get_fd_open(char*pathname, char *red);
+int	get_fd_open(char *pathname, char *red);
 int	count_redir(char *value);
-//char **red_tab(t_data *data, t_token *token);
 int red_tab(t_data *data, t_token *token);
 
 #endif
@@ -140,3 +139,5 @@ int red_tab(t_data *data, t_token *token);
 // ech' o' bonjour "bla | bla" | cat -e
 // echo bla > test > test2
 // echo bla > test2
+
+//cat > file >> file2 |ls >file3

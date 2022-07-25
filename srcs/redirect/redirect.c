@@ -93,52 +93,18 @@ int	count_redir(char *value)
 	return(count);
 }
 
-// char **red_tab(t_data *data, t_token *token)
-// {
-// 	data->i = 0;
-// 	int j;
-// 	int k;
-// 	char *tmp;
-// 	char redi;
-
-// 	k = count_redir(data->trimmed);
-// 	token->red_tab = malloc(sizeof(char *) * (k + 1));
-// 	if (!token->red_tab)
-// 		return(NULL);
-// 	token->red_tab[k]= NULL;
-// 	while (token->red[data->i])
-// 	{
-// 		j = 0;
-// 		while (token->red[data->i][j])
-// 		{
-// 			if (token->red[data->i][j] == '>' || token->red[data->i][j] == '<')
-// 			{
-// 				redi = token->red[data->i][j];
-// 				if (token->red[data->i][j] == redi && token->red[data->i][j + 1] == redi)
-// 					tmp = ftt_strchr(&token->red[data->i][j + 1], redi);
-// 				else if (token->red[data->i][j] == redi && token->red[data->i][j + 1] != redi)
-// 					tmp = ftt_strchr(&token->red[data->i][j], redi);
-// 				token->red_tab[k] = ft_strdup(tmp);
-// 			}
-// 			j++;
-// 			k++;
-// 		}
-// 		data->i++;
-
-// 	}
-// 	return(token->red_tab);
-// }
-
 int	red_tab(t_data *data, t_token *token)
 {
 	data->i = 0;
 	int j;
 	int k;
+	int count;
 	char *tmp;
 	char redi;
 
-	k = count_redir(data->trimmed);
-	token->red_tab = malloc(sizeof(char *) * (k + 1));
+	k = 0;
+	count = count_redir(data->trimmed);
+	token->red_tab = malloc(sizeof(char *) * (count + 1));
 	if (!token->red_tab)
 		return(-1);
 	token->red_tab[k]= NULL;
@@ -151,13 +117,21 @@ int	red_tab(t_data *data, t_token *token)
 			{
 				redi = token->red[data->i][j];
 				if (token->red[data->i][j] == redi && token->red[data->i][j + 1] == redi)
+				{	
 					tmp = ftt_strchr(&token->red[data->i][j + 1], redi);
+					j++;
+				}
 				else if (token->red[data->i][j] == redi && token->red[data->i][j + 1] != redi)
 					tmp = ftt_strchr(&token->red[data->i][j], redi);
 				token->red_tab[k] = ft_strdup(tmp);
+				tmp = ft_strtrim(token->red_tab[k], " \t\n\v\f\r");
+				token->red_tab[k] = ft_strdup(tmp);
+				printf("k = %d\nred_tab [%d] = %s\n", k, k, token->red_tab[k]);
+				
 			}
 			j++;
 			k++;
+
 		}
 		data->i++;
 
