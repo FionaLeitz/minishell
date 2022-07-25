@@ -131,8 +131,9 @@ void		free_table(char **table);
 //redirect.c
 int	get_fd_read(char *pathname, char *red);
 int	get_fd_open(char*pathname, char *red);
-char **red_tab(t_data *data, t_token *token);
-//int red_tab(t_data *data, t_token *token);
+int	count_redir(char *value);
+//char **red_tab(t_data *data, t_token *token);
+int red_tab(t_data *data, t_token *token);
 
 #endif
 

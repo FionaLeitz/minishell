@@ -66,7 +66,7 @@ static char	*ftt_strchr(const char *s, int c)
 	return (NULL);
 }
 
-static int	count_redir(char *value)
+int	count_redir(char *value)
 {
 	int		count;
 	char	quote;
@@ -93,7 +93,43 @@ static int	count_redir(char *value)
 	return(count);
 }
 
-char **red_tab(t_data *data, t_token *token)
+// char **red_tab(t_data *data, t_token *token)
+// {
+// 	data->i = 0;
+// 	int j;
+// 	int k;
+// 	char *tmp;
+// 	char redi;
+
+// 	k = count_redir(data->trimmed);
+// 	token->red_tab = malloc(sizeof(char *) * (k + 1));
+// 	if (!token->red_tab)
+// 		return(NULL);
+// 	token->red_tab[k]= NULL;
+// 	while (token->red[data->i])
+// 	{
+// 		j = 0;
+// 		while (token->red[data->i][j])
+// 		{
+// 			if (token->red[data->i][j] == '>' || token->red[data->i][j] == '<')
+// 			{
+// 				redi = token->red[data->i][j];
+// 				if (token->red[data->i][j] == redi && token->red[data->i][j + 1] == redi)
+// 					tmp = ftt_strchr(&token->red[data->i][j + 1], redi);
+// 				else if (token->red[data->i][j] == redi && token->red[data->i][j + 1] != redi)
+// 					tmp = ftt_strchr(&token->red[data->i][j], redi);
+// 				token->red_tab[k] = ft_strdup(tmp);
+// 			}
+// 			j++;
+// 			k++;
+// 		}
+// 		data->i++;
+
+// 	}
+// 	return(token->red_tab);
+// }
+
+int	red_tab(t_data *data, t_token *token)
 {
 	data->i = 0;
 	int j;
@@ -101,11 +137,10 @@ char **red_tab(t_data *data, t_token *token)
 	char *tmp;
 	char redi;
 
-	k = count_redir(token->value);
+	k = count_redir(data->trimmed);
 	token->red_tab = malloc(sizeof(char *) * (k + 1));
 	if (!token->red_tab)
-		return(NULL);
-	//printf("k = %d\n", k);
+		return(-1);
 	token->red_tab[k]= NULL;
 	while (token->red[data->i])
 	{
@@ -115,8 +150,10 @@ char **red_tab(t_data *data, t_token *token)
 			if (token->red[data->i][j] == '>' || token->red[data->i][j] == '<')
 			{
 				redi = token->red[data->i][j];
-				tmp = ftt_strchr(&token->red[data->i][j], redi);
-				printf("tmp = %s\n", tmp);
+				if (token->red[data->i][j] == redi && token->red[data->i][j + 1] == redi)
+					tmp = ftt_strchr(&token->red[data->i][j + 1], redi);
+				else if (token->red[data->i][j] == redi && token->red[data->i][j + 1] != redi)
+					tmp = ftt_strchr(&token->red[data->i][j], redi);
 				token->red_tab[k] = ft_strdup(tmp);
 			}
 			j++;
@@ -125,5 +162,5 @@ char **red_tab(t_data *data, t_token *token)
 		data->i++;
 
 	}
-	return(token->red_tab);
+	return(0);
 }

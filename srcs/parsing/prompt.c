@@ -175,20 +175,22 @@ void	ft_cut(t_data *data, t_params *params)
 		create_tab(data, tmp);
 		tmp = tmp->next;
 	}
+	
+	tmp = data->head;
+	del_quotes(tmp);
 	tmp = data->head;
 	while (tmp)
 	{
 		red_tab(data, tmp);
 		tmp = tmp->next;
 	}
-	tmp = data->head;
-	del_quotes(tmp);
 }
 
 int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
+	tmp = NULL;
 	while (1)
 	{
 		init_data(data);
