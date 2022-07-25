@@ -48,7 +48,7 @@ int	ft_count_words(t_data *data, char *s)
 	data->i = 0;
 	while (s[data->i] != '\0')
 	{
-		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) != 0)
+		while (s[data->i] != '\0' && ft_space(s[data->i]) != 0)
 		{
 			if (s[data->i] == '\'' || s[data->i] == '\"')
 			{
@@ -60,7 +60,7 @@ int	ft_count_words(t_data *data, char *s)
 			data->i++;
 		}
 		count++;
-		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) == 0)
+		while (s[data->i] != '\0' && ft_space(s[data->i]) == 0)
 			data->i++;
 	}
 	return (count);
@@ -72,7 +72,7 @@ int	in_create_tab(char *str, int *i)
 	int		count;
 
 	count = 0;
-	while (str[i[0]] != '\0' && ft_check_whitespace(
+	while (str[i[0]] != '\0' && ft_space(
 			str[i[0]]) != 0)
 	{
 		if (str[i[0]] == '\'' || str[i[0]] == '\"')
@@ -111,10 +111,10 @@ int	create_tab(t_data *data, t_token *token)
 	{
 		tmp = i;
 		count = in_create_tab(token->value, &i);
-		if (ft_check_whitespace(token->value[i]) == 0
+		if (ft_space(token->value[i]) == 0
 			|| token->value[i] == '\0')
 			token->args[j++] = ft_strndup(&token->value[tmp], count);
-		while (token->value[i] != '\0' && ft_check_whitespace(
+		while (token->value[i] != '\0' && ft_space(
 				token->value[i]) == 0)
 			i++;
 	}
@@ -133,11 +133,33 @@ int	in_del_quote(char *str, int j)
 	return (j);
 }
 
-int	del_quotes(t_token *token)
+void	del_quotes_redir(t_token *token)
+{
+	int	i;
+	int	j;
+
+	while (token)
+	{
+		i = -1;
+		while (token->red[++i])
+		{
+			j = -1;
+			while (token->red[i][++j] != '\0')
+			{
+				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
+					j = in_del_quote(token->red[i], j);
+				if (token->red[i][j] == '\0')
+					break ;
+			}
+		}
+		token = token->next;
+	}
+}
+
+void	del_quotes(t_token *token)
 {
 	t_token	*tmp;
 	int		i;
-	int		i2;
 	int		j;
 
 	tmp = token;
@@ -155,21 +177,11 @@ int	del_quotes(t_token *token)
 					break ;
 			}
 		}
-		i2 = -1;
-		while (tmp->red[++i2])
-		{
-			j = -1;
-			while (tmp->red[i2][++j] != '\0')
-			{
-				if (tmp->red[i2][j] == '\'' || tmp->red[i2][j] == '\"')
-					j = in_del_quote(tmp->red[i2], j);
-				if (tmp->red[i2][j] == '\0')
-					break ;
-			}
-		}
 		tmp = tmp->next;
 	}
-	return (0);
+	tmp = token;
+	del_quotes_redir(tmp);
+	return ;
 }
 
 int	get_red(t_data *data, t_token *token, int count)
@@ -196,13 +208,13 @@ int	get_red(t_data *data, t_token *token, int count)
 		}
 		save = data->i;
 		data->i++;
-		while (ft_check_whitespace(token->value[data->i]) == 0)
+		while (ft_space(token->value[data->i]) == 0)
 			data->i++;
 		if (token->value[data->i] == '>' || token->value[data->i] == '<')
 			data->i++;
-		while (ft_check_whitespace(token->value[data->i]) == 0)
+		while (ft_space(token->value[data->i]) == 0)
 			data->i++;
-		while (token->value[data->i] != '\0' && ft_check_whitespace(
+		while (token->value[data->i] != '\0' && ft_space(
 				token->value[data->i]) != 0 && token->value[data->i] != '>'
 			&& token->value[data->i] != '<')
 		{

@@ -58,7 +58,7 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
-char	*replace(char **env, char *str, int size)
+char	*rep(char **env, char *str, int size)
 {
 	int	count;
 
@@ -73,51 +73,59 @@ char	*replace(char **env, char *str, int size)
 	return (NULL);
 }
 
-int	replace_var(t_token *token, t_data *data, t_params *params)
+int	in_replace(char *str, int s, t_token *token, t_data *data)
 {
-	int		save;
-	char	*str;
 	char	*tmp;
 
-	(void)params;
-	int	i = 1;
-	str = NULL;
+	if (str == NULL)
+	{
+		ft_memmove(&token->value[s], &token->value[data->i],
+			ft_strlen(&token->value[data->i]) + 1);
+		data->i = s - 1;
+	}
+	else
+	{
+		tmp = malloc(sizeof(char) * (s + ft_strlen(str)
+					+ ft_strlen(&token->value[data->i]) + 1));
+		if (tmp == NULL)
+			return (-1);
+		ft_bzero(tmp, s + ft_strlen(str)
+			+ ft_strlen(&token->value[data->i]) + 1);
+		tmp = ft_memmove(tmp, token->value, s);
+		tmp = ft_strcat(tmp, str);
+		tmp = ft_strcat(tmp, &token->value[data->i]);
+		free(token->value);
+		token->value = tmp;
+		data->i = s + ft_strlen(str) - 1;
+	}
+	return (0);
+}
+
+int	replace_var(t_token *token, t_data *data, t_params *params)
+{
+	int		s;
+	char	*str;
+
 	while (token)
 	{
-		data->i = 0;
-		while (token->value[data->i])
+		data->i = -1;
+		while (token->value[++data->i])
 		{
 			if (token->value[data->i] == '\'')
 				jump_quotes(token->value, data);
 			if (token->value[data->i] == '$')
 			{
-				save = data->i++;
-				while (token->value[data->i] && ft_check_whitespace(token->value[data->i]) != 0 && token->value[data->i] != '\'' && token->value[data->i] != '\"' && token->value[data->i] != '$')
+				s = data->i++;
+				while (token->value[data->i] && ft_space(token->value[data->i])
+					!= 0 && token->value[data->i] != '\'' && token->value[
+						data->i] != '\"' && token->value[data->i] != '$')
 					data->i++;
-				str = replace(params->env, &token->value[save + 1], data->i - save - 1);
-				if (str == NULL)
-				{
-					ft_memmove(&token->value[save], &token->value[data->i], ft_strlen(&token->value[data->i]) + 1);
-					data->i = save;
-				}
-				else
-				{
-					tmp = malloc(sizeof(char) * (save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 1));
-					if (tmp == NULL)
-						return (-1);
-					ft_bzero(tmp, save + ft_strlen(str) + ft_strlen(&token->value[data->i]) + 1);
-					tmp = ft_memmove(tmp, token->value, save);
-					tmp = ft_strcat(tmp, str);
-					tmp = ft_strcat(tmp, &token->value[data->i]);
-					free(token->value);
-					token->value = tmp;
-					data->i = save + ft_strlen(str) - 1;
-				}
-				i++;
+				str = rep(params->env, &token->value[s + 1], data->i - s - 1);
+				if (in_replace(str, s, token, data) == -1)
+					return (-1);
 			}
-			data->i++;
 		}
-		printf("After replace : %s\n", token->value);
+//		printf("After replace : %s\n", token->value);
 		token = token->next;
 	}
 	return (0);
@@ -126,18 +134,17 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
-	char	*save;
+	char	*s;
 
 	first_pipe_cut(data);
 	tmp = data->head;
 	while (tmp)
 	{
-		save = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
 		free(tmp->value);
-		tmp->value = save;
+		tmp->value = s;
 		tmp = tmp->next;
 	}
-
 	tmp = data->head;
 	while (tmp)
 	{

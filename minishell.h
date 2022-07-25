@@ -119,10 +119,10 @@ int			check_quotes(t_data *data);
 int			first_pipe_cut(t_data *data);
 int			ft_count_words(t_data *data, char *s);
 int			create_tab(t_data *data, t_token *token);
-int			del_quotes(t_token *token);
+void		del_quotes(t_token *token);
 int			count_red(t_data *data, t_token *token);
 //utils.c
-int			ft_check_whitespace(char c);
+int			ft_space(char c);
 void		free_table(char **table);
 
 #endif

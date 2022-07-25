@@ -33,7 +33,7 @@ int	check_string(t_data *data)
 		{
 			data->i++;
 			while (data->trimmed[data->i]
-				&& ft_check_whitespace(data->trimmed[data->i]) == 0)
+				&& ft_space(data->trimmed[data->i]) == 0)
 				data->i++;
 			if (data->trimmed[data->i] == '|' || data->trimmed[data->i] == '\0')
 			{
@@ -60,7 +60,7 @@ char	first_redir(char *str, t_data *data)
 	redir = str[data->i];
 	data->i++;
 	while (str[data->i]
-		&& ft_check_whitespace(str[data->i]) == 0)
+		&& ft_space(str[data->i]) == 0)
 		data->i++;
 	if (str[data->i] == '\0')
 	{
@@ -90,7 +90,7 @@ int	check_redir(t_data *data)
 		if (redir == -1)
 			return (-1);
 		while (data->trimmed[data->i]
-			&& ft_check_whitespace(data->trimmed[data->i]) == 0)
+			&& ft_space(data->trimmed[data->i]) == 0)
 			data->i++;
 		if (data->trimmed[data->i] == '\0')
 			return (print_error_redir("newline", '\0'));

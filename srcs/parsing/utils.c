@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-int	ft_check_whitespace(char c)
+int	ft_space(char c)
 {
 	if (c == '\f' || c == '\n' || c == '\r' || c == '\t'
 		|| c == '\v' || c == ' ')
