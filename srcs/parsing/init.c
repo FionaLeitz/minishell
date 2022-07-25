@@ -24,7 +24,7 @@ void	init_token(t_token *token)
 {
 	token->value = NULL;
 	token->args = NULL;
-	token->red_tab = NULL;
 	token->next = NULL;
 	token->prev = NULL;
+	token->args = NULL;
 }

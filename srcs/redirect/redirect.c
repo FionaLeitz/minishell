@@ -12,47 +12,6 @@
 
 #include "../../minishell.h"
 
-int	get_fd_read(char *pathname, char *red)
-{
-	int	fd;
-
-	fd = 0;
-
-	if (ft_strcmp(red, "<") == 0)
-	{
-		fd = open(pathname, O_RDONLY);
-		if (fd == -1)
-			perror("Error:");
-		else
-		{
-			if (dup2(fd, STDIN_FILENO) == -1)
-				perror("Error:");
-			close(fd);
-		}
-	}
-	return(fd);
-}
-
-int	get_fd_open(char*pathname, char *red)
-{
-	int	fd;
-
-	fd = 0;//(-1 ?!)
-	if (ft_strcmp(red, ">") == 0)
-		fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	else if (ft_strcmp (red, ">>") == 0)
-		fd = open(pathname, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (fd == -1)
-		perror("Error:");
-	else
-	{
-		if (dup2(fd, STDOUT_FILENO) == -1)
-			perror("Error:");
-		close(fd);
-	}
-	return (fd);
-}
-
 static char	*ftt_strchr(const char *s, int c)
 {
 	while (*s != '\0' && *s != (char)c)
@@ -69,10 +28,11 @@ static char	*ftt_strchr(const char *s, int c)
 int	count_redir(char *value)
 {
 	int		count;
+	int		i;
 	char	quote;
 
 	count = 0;
-	int i = 0;
+	i = 0;
 	while (value[i] != '\0')
 	{
 		if (value[i] == '\'' || value[i] == '\"')
@@ -126,15 +86,11 @@ int	red_tab(t_data *data, t_token *token)
 				token->red_tab[k] = ft_strdup(tmp);
 				tmp = ft_strtrim(token->red_tab[k], " \t\n\v\f\r");
 				token->red_tab[k] = ft_strdup(tmp);
-				printf("k = %d\nred_tab [%d] = %s\n", k, k, token->red_tab[k]);
-				
+				k++;
 			}
 			j++;
-			k++;
-
 		}
 		data->i++;
-
 	}
 	return(0);
 }
