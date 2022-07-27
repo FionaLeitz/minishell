@@ -126,10 +126,10 @@ int	in_del_quote(char *str, int j)
 	char	quote;
 
 	quote = str[j];
-	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j]));
+	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
 	while (str[j] != quote)
 		j++;
-	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j]));
+	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
 	return (j);
 }
 
@@ -150,6 +150,8 @@ void	del_quotes_redir(t_token *token)
 					j = in_del_quote(token->red[i], j);
 				if (token->red[i][j] == '\0')
 					break ;
+				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
+					j--;
 			}
 		}
 		token = token->next;
@@ -175,6 +177,8 @@ void	del_quotes(t_token *token)
 					j = in_del_quote(tmp->args[i], j);
 				if (tmp->args[i][j] == '\0')
 					break ;
+				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
+					j--;
 			}
 		}
 		tmp = tmp->next;

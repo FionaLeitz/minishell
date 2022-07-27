@@ -98,6 +98,7 @@ int			print_prompt(t_data *data, t_params *params);
 char		*readline(const char *prompt);
 //signaux.c
 void		free_struct(t_data *data);
+void		free_params(t_params *params);
 void		sig_manage(int signal);
 void		ft_exit_d(t_data *data);
 //parse.c
@@ -127,7 +128,12 @@ void		free_table(char **table);
 
 #endif
 
-// ech' o' bonjour "bla | bla" | cat -e
-// echo bla > test > test2
-// echo bla > > test2
-// bla $test $te test > $test
+// ""''echo hola""'''' que""'' tal""''
+
+// alias minishell_leaks='valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --suppressions=.ignore_readline -q ./minishell'
+// {
+// ignore_libreadline_conditional_jump_errors
+// Memcheck:Leak
+// ...
+// obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
+// }
