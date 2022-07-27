@@ -39,6 +39,12 @@ t_export	*new_element(char *str)
 		return (NULL);
 	ft_bzero(element, sizeof(t_export));
 	count = 0;
+	if (str == NULL)
+	{
+		element->name = strdup("\0");
+		element->value = strdup("\0");
+		return (element);
+	}
 	while (str[count] && str[count] != '=')
 		count++;
 	element->name = ft_strndup(str, count);

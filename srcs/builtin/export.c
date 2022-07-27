@@ -39,11 +39,11 @@ t_export	*create_export(char **env)
 	t_export	*tmp;
 	int			count;
 
-	if (env == NULL)
-		return (NULL);
 	export = new_element(env[0]);
 	if (export == NULL)
 		return (NULL);
+	if (env[0] == NULL)
+		return (export);
 	tmp = export;
 	count = 0;
 	while (env[++count])
@@ -104,6 +104,7 @@ static void	new_export(char *arg, t_export *export)
 			return ;
 		else if (ft_strncmp(arg, tmp->name, limit) < 0)
 		{
+
 			tmp2 = tmp->next;
 			tmp->next = new_element(arg);
 			tmp->next->next = tmp2;
