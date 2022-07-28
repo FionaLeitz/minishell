@@ -12,28 +12,12 @@
 
 #include "../../minishell.h"
 
-void	print_table2(char **table, int j)
-{
-	int	i;
-
-	i = 0;
-	if (j == 2)
-		printf("red :\n");
-	if (j == 1)
-		printf("args :\n");
-	while (table[i])
-	{
-		if (table[i] == NULL)
-			printf("C'est vide\n");
-		printf("%s", table[i]);
-		printf("\n");
-		i++;
-	}
-	printf("------\n");
-}
-
+// parse errors
 int	syntax_check(t_data *data)
 {
+	if (data->input != NULL && ft_strlen(data->input) != 0)
+		add_history(data->input);
+	//rl_clear_history();
 	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
 	if (data->trimmed[0] == '|')
 	{
@@ -41,9 +25,6 @@ int	syntax_check(t_data *data)
 		free_struct(data);
 		return (-1);
 	}
-	if (data->input != NULL && ft_strlen(data->input) != 0)
-		add_history(data->input);
-	//rl_clear_history();
 	if (check_string(data) == -1)
 	{
 		free_struct(data);
@@ -58,6 +39,7 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
+// find variable to replace $
 char	*rep(char **env, char *str, int size, int quote)
 {
 	int	count;
@@ -73,6 +55,7 @@ char	*rep(char **env, char *str, int size, int quote)
 	return (NULL);
 }
 
+// replace $
 int	in_replace(char *str, int s, t_token *token, t_data *data)
 {
 	char	*tmp;
@@ -101,6 +84,7 @@ int	in_replace(char *str, int s, t_token *token, t_data *data)
 	return (0);
 }
 
+// find $
 int	replace_var(t_token *token, t_data *data, t_params *params)
 {
 	int		s;
@@ -129,12 +113,12 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 					return (-1);
 			}
 		}
-//		printf("After replace : %s\n", token->value);
 		token = token->next;
 	}
 	return (0);
 }
 
+// start separating pipes
 void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
@@ -171,6 +155,7 @@ void	ft_cut(t_data *data, t_params *params)
 	del_quotes(tmp);
 }
 
+// give the prompt, get readline, parses and execution's fonctions
 int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;

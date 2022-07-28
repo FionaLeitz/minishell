@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// create new token element
 t_token	*new_node(char *value)
 {
 	t_token	*new;
@@ -25,6 +26,7 @@ t_token	*new_node(char *value)
 	return (new);
 }
 
+// create new element and place in first position on the list
 void	push_front(t_data *data, char *value)
 {	
 	t_token	*new;
@@ -40,6 +42,7 @@ void	push_front(t_data *data, char *value)
 	data->head = new;
 }
 
+// create new element and place in last position on the list
 void	push_back(t_data *data, char *value)
 {
 	t_token	*new;
@@ -58,6 +61,7 @@ void	push_back(t_data *data, char *value)
 	new->prev = tmp;
 }
 
+// ???
 void	preview(t_data *data)
 {
 	t_token	*tmp;
@@ -69,6 +73,7 @@ void	preview(t_data *data)
 		tmp = tmp->next;
 }
 
+// get the number of element
 int	ft_size(t_token *lst)
 {
 	int	i;

@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// put every variable in data to NULL
 void	init_data(t_data *data)
 {
 	data->input = NULL;
@@ -20,6 +21,7 @@ void	init_data(t_data *data)
 	data->i = 0;
 }
 
+// put every variable in token to NULL
 void	init_token(t_token *token)
 {
 	token->value = NULL;

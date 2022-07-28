@@ -93,17 +93,17 @@ $(NAME):	${OBJS}
 			@echo "${_GREEN}----------------\nLIBFT\n----------------${_END}"
 			@echo "${_ORANGE}Objects libft created${_END}"
 			@ar -rcs ${NAME} ${OBJS}
-			@echo "${_GREEN}LIBFT compiled succesfully !${_END}"
+			@echo "${_GREEN}Libft compiled succesfully !${_END}"
 
 %.o: %.c
 			@${CC} ${CFLAGS} -c $< -o $@
 
 clean:
-			rm -f ${OBJS}
-			@echo "${_YELLOW}Objects cleaned !${_END}"
+			@rm -f ${OBJS}
+			@echo "${_YELLOW}Objects libft cleaned !${_END}"
 
 fclean:		clean
-			rm -f ${NAME}
+			@rm -f ${NAME}
 			@echo "${_YELLOW}${NAME} cleaned !${_END}"
 
 re:			fclean all

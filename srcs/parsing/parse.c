@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// jump quotes
 void	jump_quotes(char *str, t_data *data)
 {
 	char	quote;
@@ -22,6 +23,7 @@ void	jump_quotes(char *str, t_data *data)
 		data->i++;
 }
 
+// check error with pipes
 int	check_string(t_data *data)
 {
 	data->i = -1;
@@ -47,12 +49,14 @@ int	check_string(t_data *data)
 	return (0);
 }
 
+// print different redirection error
 static int	print_error_redir(char *str, char c)
 {
 	printf("minishell: syntax error near unexpected token `%s%c'\n", str, c);
 	return (-1);
 }
 
+// in check_redir
 char	first_redir(char *str, t_data *data)
 {
 	char	redir;
@@ -80,6 +84,7 @@ char	first_redir(char *str, t_data *data)
 	return (redir);
 }
 
+// check error with redirection's characteres
 int	check_redir(t_data *data)
 {
 	char	redir;

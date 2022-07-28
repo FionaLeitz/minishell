@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// check if next quote exist
 int	get_next_quote(char quote, t_data *data)
 {
 	while (data->trimmed[data->i] && data->trimmed[data->i] != quote)
@@ -21,6 +22,7 @@ int	get_next_quote(char quote, t_data *data)
 	return (-1);
 }
 
+// check if quotes opened are clsoed correctly
 int	check_quotes(t_data *data)
 {
 	char	quote;

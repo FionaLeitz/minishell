@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// create first element, which is the first command and argument before pipe
 int	first_pipe_cut(t_data *data)
 {
 	int		count;
@@ -35,10 +36,11 @@ int	first_pipe_cut(t_data *data)
 		data->i++;
 	}
 	push_back(data, ft_strdup(&data->trimmed[count]));
-	preview(data);
+//	preview(data);
 	return (0);
 }
 
+// count words
 int	ft_count_words(t_data *data, char *s)
 {
 	int		count;
@@ -66,6 +68,7 @@ int	ft_count_words(t_data *data, char *s)
 	return (count);
 }
 
+// count characters in word
 int	in_create_tab(char *str, int *i)
 {
 	char	quote;
@@ -92,6 +95,7 @@ int	in_create_tab(char *str, int *i)
 	return (count);
 }
 
+// create char **args for every token, separating every "word"
 int	create_tab(t_data *data, t_token *token)
 {
 	int		i;
@@ -121,6 +125,7 @@ int	create_tab(t_data *data, t_token *token)
 	return (0);
 }
 
+// suppress quotes
 int	in_del_quote(char *str, int j)
 {
 	char	quote;
@@ -133,6 +138,7 @@ int	in_del_quote(char *str, int j)
 	return (j);
 }
 
+// find suppressable quotes in redirections
 void	del_quotes_redir(t_token *token)
 {
 	int	i;
@@ -158,6 +164,7 @@ void	del_quotes_redir(t_token *token)
 	}
 }
 
+// find suppressable quotes
 void	del_quotes(t_token *token)
 {
 	t_token	*tmp;
@@ -188,6 +195,7 @@ void	del_quotes(t_token *token)
 	return ;
 }
 
+// in count_red, create char **red (redirection's list)
 int	get_red(t_data *data, t_token *token, int count)
 {
 	int		j;
@@ -240,6 +248,7 @@ int	get_red(t_data *data, t_token *token, int count)
 	return (0);
 }
 
+// count redirection's number and create char **red (redirection's list)
 int	count_red(t_data *data, t_token *token)
 {
 	int		count;

@@ -49,27 +49,29 @@ CFLAGS	= -Wall -Wextra -Werror -g3
 LIBFT	= -L libft -lft
 
 all: 		lib ${NAME}
-			@echo "${_GREEN}----------------\nMINISHELL\n----------------${_END}"
-			@echo "${_ORANGE}Objects MINISHELL created${_END}"
-			@echo "${_GREEN}MINISHELL compiled succesfully !${_END}"
 
 ${NAME}: 	${OBJS}
+			@echo "${_GREEN}----------------\nMINISHELL\n----------------${_END}"
+			@echo "${_ORANGE}Objects MINISHELL created${_END}"
 			@${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME} -l readline
+			@echo "${_GREEN}MINISHELL compiled succesfully !${_END}"
 
 .c.o:		
 			@${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@
 
 clean:		
-			rm -f ${OBJS} 
-			make -C libft clean
+			@rm -f ${OBJS}
+			@make -C libft clean
+			@echo "${_YELLOW}Objects minishell cleaned !${_END}"
 
 fclean:		clean
-			rm -f ${NAME}
-			make -C libft fclean
+			@rm -f ${NAME}
+			@make -C libft fclean
+			@echo "${_YELLOW}${NAME} cleaned !${_END}"
 
 re:			fclean all
 
 lib:		
-			make -C libft
+			@make -C libft
 
 .PHONY :	all clean fclean re norm lib
