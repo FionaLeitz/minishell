@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// get path of command if not built-in
 int	get_path(char **arg, t_params *params)
 {
 	int		i;
@@ -57,24 +58,25 @@ int	get_path(char **arg, t_params *params)
 	return (0);
 }
 
-char	**ft_select_builtin(t_token *token, t_params *params)
+// select if built-in or execve
+void	ft_select_builtin(t_token *token, t_params *params)
 {
 	if (params->env == NULL)
 		ft_printf("Error malloc...\n");
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
-		ft_cd(token->args, params->env);
+		ft_cd(token->args, params);
 	else if (ft_strncmp(token->args[0], "echo", 5) == 0)
 		ft_echo(token->args);
 	else if (ft_strncmp(token->args[0], "env", 4) == 0)
-		ft_env(token->args, params->env);
+		ft_env(token->args, params);
 	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
 		ft_pwd(token->args);
 	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
 		ft_exit(token->args);
 	else if (ft_strncmp(token->args[0], "export", 7) == 0)
-		params->env = ft_export(token->args, params->env, params->export);
+		ft_export(token->args, params);
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
-		ft_unset(token->args, params->env, params->export);
+		ft_unset(token->args, params);
 	else
 	{
 		get_path(token->args, params);
@@ -83,5 +85,5 @@ char	**ft_select_builtin(t_token *token, t_params *params)
 		write(2, token->args[0], ft_strlen(token->args[0]));
 		write(2, " : command not found\n", 21);
 	}
-	return (params->env);
+	return ;
 }

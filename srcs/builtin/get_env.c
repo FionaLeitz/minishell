@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// create environment at the beggining of minishell
 char	**ft_get_env(char **envp)
 {
 	char	**env;

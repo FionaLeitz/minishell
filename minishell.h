@@ -62,32 +62,32 @@ typedef struct s_data
 
 // BUILT-IN
 // cd.c
-int			ft_cd(char **arg, char **env);
+int			ft_cd(char **arg, t_params *params);
 // echo.c
 int			ft_echo(char **arg);
 // env.c
-int			ft_env(char **arg, char **env);
-char		**new_env(char *arg, char **env);
+int			ft_env(char **arg, t_params *params);
+int			new_env(char *arg, t_params *params);
 // exit.c
 int			ft_exit(char **arg);
 // export.c
-char		**ft_export(char **arg, char **env, t_export *export);
+int			ft_export(char **arg, t_params *params);
 t_export	*create_export(char **env);
 // export2.c
 void		*free_export(t_export *export);
 t_export	*new_element(char *str);
-void		print_export(t_export *export);
+void		print_export(t_params *params);
 // get_env.c
 char		**ft_get_env(char **envp);
 // pwd.c
 int			ft_pwd(char **arg);
 // select_builtin.c
-char		**ft_select_builtin(t_token *token, t_params *params);
+void		ft_select_builtin(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);
 void		free_table(char **table);
 // unset.c
-int			ft_unset(char **arg, char **env, t_export *export);
+int			ft_unset(char **arg, t_params *params);
 
 // PARSING
 //init.c
@@ -100,7 +100,7 @@ char		*readline(const char *prompt);
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
 void		sig_manage(int signal);
-void		ft_exit_d(t_data *data);
+void		ft_exit_d(t_data *data, t_params *params);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
@@ -130,7 +130,7 @@ void		free_table(char **table);
 
 // ""''echo hola""'''' que""'' tal""''
 
-// alias minishell_leaks='valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --suppressions=.ignore_readline -q ./minishell'
+// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline ./minishell'
 // {
 // ignore_libreadline_conditional_jump_errors
 // Memcheck:Leak

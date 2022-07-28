@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// print curent working directory
 int	ft_pwd(char **arg)
 {
 	char	path[4096];

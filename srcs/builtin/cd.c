@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// check arguments and chdir changethe curant working directory
 static int	ft_error_cd(char **arg)
 {
 	if (arg[1] == NULL)
@@ -32,6 +33,7 @@ static int	ft_error_cd(char **arg)
 	return (0);
 }
 
+// get variable  in env
 static int	ft_find(char **env, char *str, int i)
 {
 	int	count;
@@ -44,6 +46,7 @@ static int	ft_find(char **env, char *str, int i)
 	return (count);
 }
 
+// end cd correctly
 static int	ft_if_cd(int i, int j, char **env)
 {
 	if (i == -1)
@@ -67,6 +70,7 @@ static int	ft_if_cd(int i, int j, char **env)
 	return (0);
 }
 
+// replace variables in env
 static int	ft_end_cd(int i, int j, char **env, char *path)
 {
 	char	*oldpath;
@@ -88,7 +92,8 @@ static int	ft_end_cd(int i, int j, char **env, char *path)
 	return (ft_if_cd(i, j, env));
 }
 
-int	ft_cd(char **arg, char **env)
+// change directory
+int	ft_cd(char **arg, t_params *params)
 {
 	int		i;
 	int		j;
@@ -96,10 +101,10 @@ int	ft_cd(char **arg, char **env)
 
 	if (ft_error_cd(arg) == -1)
 		return (1);
-	i = ft_find(env, "PWD=", 4);
-	j = ft_find(env, "OLDPWD=", 7);
+	i = ft_find(params->env, "PWD=", 4);
+	j = ft_find(params->env, "OLDPWD=", 7);
 	getcwd(path, 4095);
 	if (i == -1 && j == -1)
 		return (0);
-	return (ft_end_cd(i, j, env, path));
+	return (ft_end_cd(i, j, params->env, path));
 }

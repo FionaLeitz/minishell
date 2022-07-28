@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// free export
 void	*free_export(t_export *export)
 {
 	t_export	*tmp;
@@ -29,6 +30,7 @@ void	*free_export(t_export *export)
 	return (NULL);
 }
 
+// create new t_export element
 t_export	*new_element(char *str)
 {
 	t_export	*element;
@@ -64,19 +66,20 @@ t_export	*new_element(char *str)
 	return (element);
 }
 
-void	print_export(t_export *export)
+// print export if no argument
+void	print_export(t_params *params)
 {
 	t_export	*tmp;
 
-	tmp = export;
-	while (export)
+	tmp = params->export;
+	while (params->export)
 	{
-		ft_printf("%s", export->name);
-		if (export->value[0] != '\0')
-			ft_printf("=\"%s\"", &export->value[1]);
-		if (export->name[0] != '\0')
+		ft_printf("%s", params->export->name);
+		if (params->export->value[0] != '\0')
+			ft_printf("=\"%s\"", &params->export->value[1]);
+		if (params->export->name[0] != '\0')
 			ft_printf("\n");
-		export = export->next;
+		params->export = params->export->next;
 	}
-	export = tmp;
+	params->export = tmp;
 }

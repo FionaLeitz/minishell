@@ -19,9 +19,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void)av;
 	params.env = ft_get_env(envp);
-	printf("Tout va bien 1\n");
 	params.export = create_export(params.env);
-	printf("Tout va bien 2\n");
 	init_data(&data);
 	if (ac == 1)
 		print_prompt(&data, &params);

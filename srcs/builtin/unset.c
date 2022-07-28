@@ -12,7 +12,8 @@
 
 #include "../../minishell.h"
 
-static void	ft_unset_export(char **arg, t_export *export)
+// unset variable in exxport
+static void	ft_unset_export(char **arg, t_params *params)
 {
 	int			i;
 	int			j;
@@ -21,7 +22,7 @@ static void	ft_unset_export(char **arg, t_export *export)
 	i = 1;
 	while (arg[i])
 	{
-		tmp = export;
+		tmp = params->export;
 		while (tmp)
 		{
 			j = 0;
@@ -39,7 +40,8 @@ static void	ft_unset_export(char **arg, t_export *export)
 	}
 }
 
-int	ft_unset(char **arg, char **env, t_export *export)
+// unset variable in env
+int	ft_unset(char **arg, t_params *params)
 {
 	int			i;
 	int			j;
@@ -50,19 +52,19 @@ int	ft_unset(char **arg, char **env, t_export *export)
 	while (arg[++i])
 	{
 		count = -1;
-		while (env[++count])
+		while (params->env[++count])
 		{
 			j = -1;
 			while (arg[i][++j])
-				if (arg[i][j] != env[count][j])
+				if (arg[i][j] != params->env[count][j])
 					break ;
-			if (arg[i][j] == '\0' && env[count][j] == '=')
+			if (arg[i][j] == '\0' && params->env[count][j] == '=')
 			{
-				env[count][0] = '\0';
+				params->env[count][0] = '\0';
 				break ;
 			}
 		}
 	}
-	ft_unset_export(arg, export);
+	ft_unset_export(arg, params);
 	return (0);
 }

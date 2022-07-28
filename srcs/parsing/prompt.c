@@ -58,11 +58,11 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
-char	*rep(char **env, char *str, int size)
+char	*rep(char **env, char *str, int size, int quote)
 {
 	int	count;
 
-	if (size == 0 && (ft_space(str[1]) == 0|| str[1] == '\0'))
+	if ((size == 0 && (ft_space(str[1]) == 0|| str[1] == '\0')) || (quote % 2 != 0 && str[0] == '\"'))
 		return ("$");
 	count = -1;
 	while (env[++count])
@@ -124,7 +124,7 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 					!= 0 && token->value[data->i] != '\'' && token->value[
 						data->i] != '\"' && token->value[data->i] != '$')
 					data->i++;
-				str = rep(params->env, &token->value[s + 1], data->i - s - 1);
+				str = rep(params->env, &token->value[s + 1], data->i - s - 1, quote);
 				if (in_replace(str, s, token, data) == -1)
 					return (-1);
 			}
@@ -182,7 +182,7 @@ int	print_prompt(t_data *data, t_params *params)
 		signal(SIGQUIT, sig_manage);
 		data->input = readline(PROMPT);
 		if (!data->input)
-			ft_exit_d(data);
+			ft_exit_d(data, params);
 		if (syntax_check(data) == 0)
 			ft_cut(data, params);
 		tmp = data->head;
@@ -192,7 +192,7 @@ int	print_prompt(t_data *data, t_params *params)
 			// print_table(tmp->args);
 			// printf("---------------\n");
 			// print_table(tmp->red);
-			params->env = ft_select_builtin(tmp, params);
+			ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
 		free_struct(data);

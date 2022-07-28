@@ -61,9 +61,11 @@ void	sig_manage(int signal)
 	return ;
 }
 
-void	ft_exit_d(t_data *data)
+void	ft_exit_d(t_data *data, t_params *params)
 {
 	printf("exit\n");
-	(void)data;
+	free_params(params);
+	free_struct(data);
+//	(void)data;
 	exit(0);
 }
