@@ -138,8 +138,10 @@ int	ft_export(char **arg, t_params *params)
 	count = 0;
 	while (arg[++count])
 	{
-		if (arg[count][0] == '=' || arg[count][0] == '-' || arg[count][0] == '\0')
-			printf("minishell: export: `%s': not a valid identifier\n", arg[count]);
+		if (arg[count][0] == '=' || arg[count][0] == '-'
+			|| arg[count][0] == '\0')
+			printf("minishell: export: `%s': not a valid identifier\n",
+				arg[count]);
 		else
 		{
 			new_env(arg[count], params);

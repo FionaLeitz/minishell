@@ -30,6 +30,23 @@ void	*free_export(t_export *export)
 	return (NULL);
 }
 
+// create empty string if no env
+static int	empty_str(char *str, t_export *element)
+{
+	int	count;
+
+	count = 0;
+	if (str == NULL)
+	{
+		element->name = strdup("\0");
+		element->value = strdup("\0");
+		return (-1);
+	}
+	while (str[count] && str[count] != '=')
+		count++;
+	return (count);
+}
+
 // create new t_export element
 t_export	*new_element(char *str)
 {
@@ -40,15 +57,9 @@ t_export	*new_element(char *str)
 	if (element == NULL)
 		return (NULL);
 	ft_bzero(element, sizeof(t_export));
-	count = 0;
-	if (str == NULL)
-	{
-		element->name = strdup("\0");
-		element->value = strdup("\0");
+	count = empty_str(str, element);
+	if (count == -1)
 		return (element);
-	}
-	while (str[count] && str[count] != '=')
-		count++;
 	element->name = ft_strndup(str, count);
 	if (element->name == NULL)
 	{

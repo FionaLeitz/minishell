@@ -57,21 +57,21 @@ static int	make_new_env(int count, int l, t_params *params, char *arg)
 }
 
 // if += variable, concat
-static int	if_concat(char *arg, t_params *params, int count)
+static int	if_concat(char *arg, t_params *params, int n)
 {
 	char	*tmp;
 
-	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[count])));
+	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[n])));
 	if (tmp == NULL)
 	{
 		free_table(params->env);
 		return (1);
 	}
 	tmp[0] = '\0';
-	ft_strcat(tmp, params->env[count]);
+	ft_strcat(tmp, params->env[n]);
 	ft_strcat(tmp, arg);
-	free(params->env[count]);
-	params->env[count] = tmp;
+	free(params->env[n]);
+	params->env[n] = tmp;
 	return (0);
 }
 

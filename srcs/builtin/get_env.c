@@ -18,7 +18,6 @@ char	**ft_get_env(char **envp)
 	char	**env;
 	int		count;
 
-
 	count = 0;
 	while (envp[count])
 		count++;
