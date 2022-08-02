@@ -12,80 +12,84 @@
 
 #include "../../minishell.h"
 
-// TO DO retour en cas d'arguments ? On ne doit pas gerer d'argument
-// TO DO ordre d'affichage de env ? Je ne le comprends pas
-int	ft_env(char **arg, char **env)
+// if env, print the environment unless arguments
+int	ft_env(char **arg, t_params *params)
 {
 	if (arg[1] != NULL)
 	{
 		ft_printf("env: ‘%s’ too many arguments\n", arg[1]);
 		return (1);
 	}
-	if (env == NULL)
+	if (params->env == NULL)
 		ft_printf("\n");
 	else
-		print_table(env);
+		print_table(params->env);
 	return (0);
 }
 
-static char	**make_new_env(int count, int l, char **env, char *arg)
+// if new variable, recreate environment plus new variable
+static int	make_new_env(int count, int l, t_params *params, char *arg)
 {
 	char	**new_env;
 
 	new_env = malloc(sizeof(char *) * (count + 2));
 	if (new_env == NULL)
 	{
-		free_table(env);
-		return (NULL);
+		free_table(params->env);
+		return (1);
 	}
 	count = -1;
-	while (env[++count])
-		new_env[count] = env[count];
+	while (params->env[++count])
+		new_env[count] = params->env[count];
 	new_env[count] = ft_strdup(arg);
 	if (new_env[count] == NULL)
 	{
-		free_table(env);
-		return (NULL);
+		free_table(params->env);
+		return (1);
 	}
 	if (new_env[count][l - 2] == '+')
 		ft_memmove(&new_env[count][l - 2], &new_env[count][l - 1],
 			ft_strlen(&new_env[count][l - 1]) + 1);
-	free(env);
+	free(params->env);
 	new_env[count + 1] = NULL;
-	return (new_env);
+	params->env = new_env;
+	return (0);
 }
 
-static char	**if_concat(char *arg, char **env, int count)
+// if += variable, concat
+static int	if_concat(char *arg, t_params *params, int n)
 {
 	char	*tmp;
 
-	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(env[count])));
+	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[n])));
 	if (tmp == NULL)
 	{
-		free_table(env);
-		return (NULL);
+		free_table(params->env);
+		return (1);
 	}
 	tmp[0] = '\0';
-	ft_strcat(tmp, env[count]);
+	ft_strcat(tmp, params->env[n]);
 	ft_strcat(tmp, arg);
-	free(env[count]);
-	env[count] = tmp;
-	return (env);
+	free(params->env[n]);
+	params->env[n] = tmp;
+	return (0);
 }
 
-static char	**if_replace(char *arg, char **env, int count)
+// if variable already exist, replace it
+static int	if_replace(char *arg, t_params *params, int count)
 {
-	free(env[count]);
-	env[count] = ft_strdup(arg);
-	if (env[count] == NULL)
+	free(params->env[count]);
+	params->env[count] = ft_strdup(arg);
+	if (params->env[count] == NULL)
 	{
-		free_table(env);
-		return (NULL);
+		free_table(params->env);
+		return (1);
 	}
-	return (env);
+	return (0);
 }
 
-char	**new_env(char *arg, char **env)
+// if export, make new environment
+int	new_env(char *arg, t_params *params)
 {
 	int		count;
 	int		l;
@@ -94,16 +98,16 @@ char	**new_env(char *arg, char **env)
 	while (arg[l] != '\0' && arg[l] != '=')
 		l++;
 	if (arg[l] == '\0')
-		return (env);
+		return (0);
 	l++;
 	count = -1;
-	while (env[++count])
+	while (params->env[++count])
 	{
-		if (ft_strncmp(arg, env[count], l - 2) == 0 && env[count][l - 2] == '='
-			&& arg[l - 2] == '+')
-			return (if_concat(&arg[l], env, count));
-		if (ft_strncmp(arg, env[count], l) == 0)
-			return (if_replace(arg, env, count));
+		if (ft_strncmp(arg, params->env[count], l - 2) == 0
+			&& params->env[count][l - 2] == '=' && arg[l - 2] == '+')
+			return (if_concat(&arg[l], params, count));
+		if (ft_strncmp(arg, params->env[count], l) == 0)
+			return (if_replace(arg, params, count));
 	}
-	return (make_new_env(count, l, env, arg));
+	return (make_new_env(count, l, params, arg));
 }

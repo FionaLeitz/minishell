@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// exit with error messages
 int	ft_exit(char **arg)
 {
 	long int	n;

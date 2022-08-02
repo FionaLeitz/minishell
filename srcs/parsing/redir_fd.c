@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-int	get_fd_read(char *pathname, char *red)
+int	get_fd_input(char *pathname, char *red)
 {
 	int	fd;
 
@@ -33,7 +33,7 @@ int	get_fd_read(char *pathname, char *red)
 	return(fd);
 }
 
-int	get_fd_open(char*pathname, char *red)
+int	get_fd_output(char*pathname, char *red)
 {
 	int	fd;
 
@@ -53,14 +53,21 @@ int	get_fd_open(char*pathname, char *red)
 	return (fd);
 }
 
-void	ft_redirection(t_data *data)
+void	ft_redirection(char **str)
 {
-	if (>)
-		output
-	else if (>>)
-		output_append
-	else if (<)
-		read
-	else if(<<)
-		heredoc
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_strcmp(str[i], ">") == 0)
+			output_create
+		else if (ft_strcmp(str[i], ">>") == 0)
+			output_append
+		else if (ft_strcmp(str[i], "<") == 0)
+			read
+		else if(ft_strcmp(str[i], "<<") == 0)
+			heredoc
+	}
+	i++;
 }

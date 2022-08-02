@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// free export
 void	*free_export(t_export *export)
 {
 	t_export	*tmp;
@@ -29,6 +30,24 @@ void	*free_export(t_export *export)
 	return (NULL);
 }
 
+// create empty string if no env
+static int	empty_str(char *str, t_export *element)
+{
+	int	count;
+
+	count = 0;
+	if (str == NULL)
+	{
+		element->name = strdup("\0");
+		element->value = strdup("\0");
+		return (-1);
+	}
+	while (str[count] && str[count] != '=')
+		count++;
+	return (count);
+}
+
+// create new t_export element
 t_export	*new_element(char *str)
 {
 	t_export	*element;
@@ -38,9 +57,9 @@ t_export	*new_element(char *str)
 	if (element == NULL)
 		return (NULL);
 	ft_bzero(element, sizeof(t_export));
-	count = 0;
-	while (str[count] && str[count] != '=')
-		count++;
+	count = empty_str(str, element);
+	if (count == -1)
+		return (element);
 	element->name = ft_strndup(str, count);
 	if (element->name == NULL)
 	{
@@ -58,19 +77,20 @@ t_export	*new_element(char *str)
 	return (element);
 }
 
-void	print_export(t_export *export)
+// print export if no argument
+void	print_export(t_params *params)
 {
 	t_export	*tmp;
 
-	tmp = export;
-	while (export)
+	tmp = params->export;
+	while (params->export)
 	{
-		ft_printf("%s", export->name);
-		if (export->value[0] != '\0')
-			ft_printf("=\"%s\"", &export->value[1]);
-		if (export->name[0] != '\0')
+		ft_printf("%s", params->export->name);
+		if (params->export->value[0] != '\0')
+			ft_printf("=\"%s\"", &params->export->value[1]);
+		if (params->export->name[0] != '\0')
 			ft_printf("\n");
-		export = export->next;
+		params->export = params->export->next;
 	}
-	export = tmp;
+	params->export = tmp;
 }

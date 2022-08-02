@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// create first element, which is the first command and argument before pipe
 int	first_pipe_cut(t_data *data)
 {
 	int		count;
@@ -35,10 +36,11 @@ int	first_pipe_cut(t_data *data)
 		data->i++;
 	}
 	push_back(data, ft_strdup(&data->trimmed[count]));
-	preview(data);
+//	preview(data);
 	return (0);
 }
 
+// count words
 int	ft_count_words(t_data *data, char *s)
 {
 	int		count;
@@ -48,7 +50,7 @@ int	ft_count_words(t_data *data, char *s)
 	data->i = 0;
 	while (s[data->i] != '\0')
 	{
-		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) != 0)
+		while (s[data->i] != '\0' && ft_space(s[data->i]) != 0)
 		{
 			if (s[data->i] == '\'' || s[data->i] == '\"')
 			{
@@ -60,19 +62,20 @@ int	ft_count_words(t_data *data, char *s)
 			data->i++;
 		}
 		count++;
-		while (s[data->i] != '\0' && ft_check_whitespace(s[data->i]) == 0)
+		while (s[data->i] != '\0' && ft_space(s[data->i]) == 0)
 			data->i++;
 	}
 	return (count);
 }
 
+// count characters in word
 int	in_create_tab(char *str, int *i)
 {
 	char	quote;
 	int		count;
 
 	count = 0;
-	while (str[i[0]] != '\0' && ft_check_whitespace(
+	while (str[i[0]] != '\0' && ft_space(
 			str[i[0]]) != 0)
 	{
 		if (str[i[0]] == '\'' || str[i[0]] == '\"')
@@ -92,6 +95,7 @@ int	in_create_tab(char *str, int *i)
 	return (count);
 }
 
+// create char **args for every token, separating every "word"
 int	create_tab(t_data *data, t_token *token)
 {
 	int		i;
@@ -111,33 +115,60 @@ int	create_tab(t_data *data, t_token *token)
 	{
 		tmp = i;
 		count = in_create_tab(token->value, &i);
-		if (ft_check_whitespace(token->value[i]) == 0
+		if (ft_space(token->value[i]) == 0
 			|| token->value[i] == '\0')
 			token->args[j++] = ft_strndup(&token->value[tmp], count);
-		while (token->value[i] != '\0' && ft_check_whitespace(
+		while (token->value[i] != '\0' && ft_space(
 				token->value[i]) == 0)
 			i++;
 	}
 	return (0);
 }
 
+// suppress quotes
 int	in_del_quote(char *str, int j)
 {
 	char	quote;
 
 	quote = str[j];
-	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j]));
+	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
 	while (str[j] != quote)
 		j++;
-	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j]));
+	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
 	return (j);
 }
 
-int	del_quotes(t_token *token)
+// find suppressable quotes in redirections
+void	del_quotes_redir(t_token *token)
+{
+	int	i;
+	int	j;
+
+	while (token)
+	{
+		i = -1;
+		while (token->red[++i])
+		{
+			j = -1;
+			while (token->red[i][++j] != '\0')
+			{
+				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
+					j = in_del_quote(token->red[i], j);
+				if (token->red[i][j] == '\0')
+					break ;
+				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
+					j--;
+			}
+		}
+		token = token->next;
+	}
+}
+
+// find suppressable quotes
+void	del_quotes(t_token *token)
 {
 	t_token	*tmp;
 	int		i;
-	int		i2;
 	int		j;
 
 	tmp = token;
@@ -153,25 +184,18 @@ int	del_quotes(t_token *token)
 					j = in_del_quote(tmp->args[i], j);
 				if (tmp->args[i][j] == '\0')
 					break ;
-			}
-		}
-		i2 = -1;
-		while (tmp->red[++i2])
-		{
-			j = -1;
-			while (tmp->red[i2][++j] != '\0')
-			{
-				if (tmp->red[i2][j] == '\'' || tmp->red[i2][j] == '\"')
-					j = in_del_quote(tmp->red[i2], j);
-				if (tmp->red[i2][j] == '\0')
-					break ;
+				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
+					j--;
 			}
 		}
 		tmp = tmp->next;
 	}
-	return (0);
+	tmp = token;
+	del_quotes_redir(tmp);
+	return ;
 }
 
+// in count_red, create char **red (redirection's list)
 int	get_red(t_data *data, t_token *token, int count)
 {
 	int		j;
@@ -196,13 +220,13 @@ int	get_red(t_data *data, t_token *token, int count)
 		}
 		save = data->i;
 		data->i++;
-		while (ft_check_whitespace(token->value[data->i]) == 0)
+		while (ft_space(token->value[data->i]) == 0)
 			data->i++;
 		if (token->value[data->i] == '>' || token->value[data->i] == '<')
 			data->i++;
-		while (ft_check_whitespace(token->value[data->i]) == 0)
+		while (ft_space(token->value[data->i]) == 0)
 			data->i++;
-		while (token->value[data->i] != '\0' && ft_check_whitespace(
+		while (token->value[data->i] != '\0' && ft_space(
 				token->value[data->i]) != 0 && token->value[data->i] != '>'
 			&& token->value[data->i] != '<')
 		{
@@ -224,6 +248,7 @@ int	get_red(t_data *data, t_token *token, int count)
 	return (0);
 }
 
+// count redirection's number and create char **red (redirection's list)
 int	count_red(t_data *data, t_token *token)
 {
 	int		count;

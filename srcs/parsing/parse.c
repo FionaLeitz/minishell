@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// jump quotes
 void	jump_quotes(char *str, t_data *data)
 {
 	char	quote;
@@ -22,6 +23,7 @@ void	jump_quotes(char *str, t_data *data)
 		data->i++;
 }
 
+// check error with pipes
 int	check_string(t_data *data)
 {
 	data->i = -1;
@@ -33,7 +35,7 @@ int	check_string(t_data *data)
 		{
 			data->i++;
 			while (data->trimmed[data->i]
-				&& ft_check_whitespace(data->trimmed[data->i]) == 0)
+				&& ft_space(data->trimmed[data->i]) == 0)
 				data->i++;
 			if (data->trimmed[data->i] == '|' || data->trimmed[data->i] == '\0')
 			{
@@ -47,12 +49,14 @@ int	check_string(t_data *data)
 	return (0);
 }
 
+// print different redirection error
 static int	print_error_redir(char *str, char c)
 {
 	printf("minishell: syntax error near unexpected token `%s%c'\n", str, c);
 	return (-1);
 }
 
+// in check_redir
 char	first_redir(char *str, t_data *data)
 {
 	char	redir;
@@ -60,7 +64,7 @@ char	first_redir(char *str, t_data *data)
 	redir = str[data->i];
 	data->i++;
 	while (str[data->i]
-		&& ft_check_whitespace(str[data->i]) == 0)
+		&& ft_space(str[data->i]) == 0)
 		data->i++;
 	if (str[data->i] == '\0')
 	{
@@ -80,6 +84,7 @@ char	first_redir(char *str, t_data *data)
 	return (redir);
 }
 
+// check error with redirection's characteres
 int	check_redir(t_data *data)
 {
 	char	redir;
@@ -90,7 +95,7 @@ int	check_redir(t_data *data)
 		if (redir == -1)
 			return (-1);
 		while (data->trimmed[data->i]
-			&& ft_check_whitespace(data->trimmed[data->i]) == 0)
+			&& ft_space(data->trimmed[data->i]) == 0)
 			data->i++;
 		if (data->trimmed[data->i] == '\0')
 			return (print_error_redir("newline", '\0'));

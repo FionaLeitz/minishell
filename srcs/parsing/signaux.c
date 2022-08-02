@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// free data
 void	free_struct(t_data *data)
 {
 	t_token	*tmp;
@@ -32,6 +33,23 @@ void	free_struct(t_data *data)
 	init_data(data);
 }
 
+// free params
+void	free_params(t_params *params)
+{
+	t_export	*tmp;
+
+	free_table(params->env);
+	while (params->export)
+	{
+		tmp = params->export;
+		free(tmp->name);
+		free(tmp->value);
+		params->export = params->export->next;
+		free(tmp);
+	}
+}
+
+// handle ctrl-\ and ctrl-c
 void	sig_manage(int signal)
 {
 	if (signal == SIGINT)
@@ -46,9 +64,11 @@ void	sig_manage(int signal)
 	return ;
 }
 
-void	ft_exit_d(t_data *data)
+// handle ctrl-d
+void	ft_exit_d(t_data *data, t_params *params)
 {
 	printf("exit\n");
-	(void)data;
+	free_params(params);
+	free_struct(data);
 	exit(0);
 }

@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fleitz <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/07/20 09:33:04 by fleitz            #+#    #+#              #
+#    Updated: 2022/07/20 09:53:54 by fleitz           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 _END=$'\033[0m
 _GREEN=$'\033[1;32m
@@ -26,8 +37,6 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/builtin/select_builtin.c		\
 	srcs/builtin/table_utils.c			\
 	srcs/builtin/unset.c				\
-	srcs/redirect/redirect.c
-
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -40,32 +49,29 @@ CFLAGS	= -Wall -Wextra -Werror -g3
 LIBFT	= -L libft -lft
 
 all: 		lib ${NAME}
-			@echo "${_GREEN}----------------\nMINISHELL\n----------------${_END}"
-			@echo "${_ORANGE}Objects MINISHELL created${_END}"
-			@echo "${_GREEN}MINISHELL compiled succesfully !${_END}"
 
 ${NAME}: 	${OBJS}
+			@echo "${_GREEN}----------------\nMINISHELL\n----------------${_END}"
+			@echo "${_ORANGE}Objects MINISHELL created${_END}"
 			@${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME} -l readline
+			@echo "${_GREEN}MINISHELL compiled succesfully !${_END}"
 
 .c.o:		
 			@${CC} ${CFLAGS} -I${HEADERS} -c $< -o $@
 
 clean:		
-			rm -f ${OBJS} 
-			make -C libft clean
+			@rm -f ${OBJS}
+			@make -C libft clean
+			@echo "${_YELLOW}Objects minishell cleaned !${_END}"
 
 fclean:		clean
-			rm -f ${NAME}
-			make -C libft fclean
+			@rm -f ${NAME}
+			@make -C libft fclean
+			@echo "${_YELLOW}${NAME} cleaned !${_END}"
 
 re:			fclean all
 
 lib:		
-			make -C libft
-
-norm:	
-			norminette -R CheckSourceHeader ${SRCS}
-			norminette -R CheckDefine ${HEADERS}
-			make -C libft norm
+			@make -C libft
 
 .PHONY :	all clean fclean re norm lib

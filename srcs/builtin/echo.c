@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// check if -n applies
 static int	ft_checkn(char **arg)
 {
 	int	i;
@@ -35,6 +36,7 @@ static int	ft_checkn(char **arg)
 	return (count);
 }
 
+// write in stdout the arguments
 int	ft_echo(char **arg)
 {
 	int	count;

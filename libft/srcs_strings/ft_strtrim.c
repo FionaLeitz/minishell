@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include "../headers/libft.h"
 
-static char	*ft_empty(void)
+/*static char	*ft_empty(void)
 {
 	char	*str;
 
@@ -61,9 +61,9 @@ char	*ft_strtrim(char const *s1, char const *set)
 	ft_memcpy(str, &s1[i], len);
 	str[len] = '\0';
 	return (str);
-}
+}*/
 
-/*static int	ft_get_position(char const *set, char c)
+static int	ft_get_position(char const *set, char c)
 {
 	int	i;
 
@@ -102,4 +102,4 @@ char	*ft_strtrim(char const *s1, char const *set)
 	}
 	dest[j] = '\0';
 	return (dest);
-}*/
+}

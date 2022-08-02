@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// main
 int	main(int ac, char **av, char **envp)
 {
 	t_data		data;
