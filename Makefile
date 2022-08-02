@@ -6,7 +6,7 @@
 #    By: fleitz <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/20 09:33:04 by fleitz            #+#    #+#              #
-#    Updated: 2022/07/20 09:53:54 by fleitz           ###   ########.fr        #
+#    Updated: 2022/08/02 13:10:11 by masamoil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/parsing/quotes.c				\
 	srcs/parsing/args_start.c			\
 	srcs/parsing/utils.c				\
+	srcs/parsing/redir_fd.c				\
 	srcs/builtin/cd.c					\
 	srcs/builtin/echo.c					\
 	srcs/builtin/env.c					\
