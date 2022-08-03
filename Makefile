@@ -6,7 +6,7 @@
 #    By: fleitz <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/20 09:33:04 by fleitz            #+#    #+#              #
-#    Updated: 2022/08/02 13:10:11 by masamoil         ###   ########.fr        #
+#    Updated: 2022/08/03 15:53:08 by masamoil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/parsing/redirection.c			\
 	srcs/parsing/redir_fd.c				\
 	srcs/parsing/dollar_fct.c			\
+	srcs/parsing/here_doc.c				\
+	srcs/parsing/free.c					\
 	srcs/builtin/cd.c					\
 	srcs/builtin/echo.c					\
 	srcs/builtin/env.c					\

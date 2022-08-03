@@ -12,43 +12,6 @@
 
 #include "../../minishell.h"
 
-// free data
-void	free_struct(t_data *data)
-{
-	t_token	*tmp;
-
-	if (data->input != NULL)
-		free(data->input);
-	if (data->trimmed != NULL)
-		free(data->trimmed);
-	while (data->head != NULL)
-	{
-		tmp = data->head;
-		free(tmp->value);
-		free_table(tmp->args);
-		free_table(tmp->red);
-		data->head = data->head->next;
-		free(tmp);
-	}
-	init_data(data);
-}
-
-// free params
-void	free_params(t_params *params)
-{
-	t_export	*tmp;
-
-	free_table(params->env);
-	while (params->export)
-	{
-		tmp = params->export;
-		free(tmp->name);
-		free(tmp->value);
-		params->export = params->export->next;
-		free(tmp);
-	}
-}
-
 // handle ctrl-\ and ctrl-c
 void	sig_manage(int signal)
 {
@@ -72,3 +35,8 @@ void	ft_exit_d(t_data *data, t_params *params)
 	free_struct(data);
 	exit(0);
 }
+
+/*void	ft_sig_heredoc()
+{
+
+}*/

@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/02 17:36:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/03 15:14:04 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int	print_prompt(t_data *data, t_params *params)
 		signal(SIGINT, sig_manage);
 		signal(SIGQUIT, sig_manage);
 		//re initialize the fd's
+		dup2(data->fd_in, STDIN_FILENO);
+		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);

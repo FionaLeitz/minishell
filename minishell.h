@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/02 17:34:44 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/03 16:15:07 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,22 @@ int			ft_unset(char **arg, t_params *params);
 void		init_data(t_data *data);
 void		init_token(t_token *token);
 //prompt.c
+int			syntax_check(t_data *data);
+void		ft_cut(t_data *data, t_params *params);
 int			print_prompt(t_data *data, t_params *params);
-char		*readline(const char *prompt);
-//signaux.c
+//free.c
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
+//signaux.c
 void		sig_manage(int signal);
 void		ft_exit_d(t_data *data, t_params *params);
+//here_doc.c
+char		*here_doc(char *str);
+void		get_hd_line(char *del);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
-int			check_redir(t_data *data);
+int			first_pipe_cut(t_data *data);
 //fct_list.c
 t_token		*new_node(char *value);
 void		push_front(t_data *data, char *value);
@@ -116,24 +121,27 @@ int			ft_size(t_token *lst);
 char		*rep(char **env, char *str, int size, int quote);
 int			in_replace(char *str, int s, t_token *token, t_data *data);
 int			replace_var(t_token *token, t_data *data, t_params *params);
-//redirect.c
-
 //redir_fd.c
 void		get_fd_input(char *pathname, char *red);
 void		get_fd_output(char *pathname, char *red);
 void		ft_redirection(char **str);
+//redirection.c
+char		first_redir(char *str, t_data *data);
+int			check_redir(t_data *data);
+int			get_red(t_data *data, t_token *token, int count);
+int			count_red(t_data *data, t_token *token);
 //quotes.c
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
-//args_start.c
-int			first_pipe_cut(t_data *data);
-int			ft_count_words(t_data *data, char *s);
-int			create_tab(t_data *data, t_token *token);
+int			in_del_quote(char *str, int j);
+void		del_quotes_redir(t_token *token);
 void		del_quotes(t_token *token);
-int			count_red(t_data *data, t_token *token);
+//args_start.c
+int			ft_count_words(t_data *data, char *s);
+int			in_create_tab(char *str, int *i);
+int			create_tab(t_data *data, t_token *token);
 //utils.c
 int			ft_space(char c);
-void		free_table(char **table);
 
 #endif
 

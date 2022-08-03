@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 14:20:51 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/02 16:07:32 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/03 17:56:29 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ void	ft_redirection(char **str)
 		if (str[i][0] == '<')
 		{
 			if (str[i][1] == '<')
-				printf("heredoc\n");
+			{
+				printf("delimiter is = %s\n", here_doc(&str[i][2]));
+			}
 			else
 				get_fd_input(ft_strtrim(&str[i][1], " \t\n\v\f\r"), "<");
 		}
