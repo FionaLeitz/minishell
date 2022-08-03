@@ -61,18 +61,6 @@ void	push_back(t_data *data, char *value)
 	new->prev = tmp;
 }
 
-// ???
-void	preview(t_data *data)
-{
-	t_token	*tmp;
-
-	tmp = data->head;
-	if (tmp == NULL)
-		return ;
-	while (tmp != NULL)
-		tmp = tmp->next;
-}
-
 // get the number of element
 int	ft_size(t_token *lst)
 {

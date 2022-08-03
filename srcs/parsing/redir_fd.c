@@ -17,7 +17,6 @@ void	get_fd_input(char *pathname, char *red)
 	int	fd;
 
 	fd = 0;
-
 	if (ft_strcmp(red, "<") == 0)
 	{
 		fd = open(pathname, O_RDONLY);
@@ -36,7 +35,7 @@ void	get_fd_output(char *pathname, char *red)
 {
 	int	fd;
 
-	fd = -1;//(-1 ?!)
+	fd = -1;
 	if (ft_strcmp(red, ">") == 0)
 		fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	else if (ft_strcmp (red, ">>") == 0)
@@ -45,7 +44,7 @@ void	get_fd_output(char *pathname, char *red)
 		perror("Error:");
 	else
 	{
-		if(dup2(fd, STDOUT_FILENO) == -1)
+		if (dup2(fd, STDOUT_FILENO) == -1)
 			perror("Error:");
 		close(fd);
 	}
@@ -58,14 +57,14 @@ void	ft_redirection(char **str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i][0] == '>') 
+		if (str[i][0] == '>')
 		{
 			if (str[i][1] == '>')
 				get_fd_output(ft_strtrim(&str[i][2], " \t\n\v\f\r"), ">>");
 			else
 				get_fd_output(ft_strtrim(&str[i][1], " \t\n\v\f\r"), ">");
 		}
-		if (str[i][0] == '<') 
+		if (str[i][0] == '<')
 		{
 			if (str[i][1] == '<')
 				printf("heredoc\n");
@@ -75,5 +74,3 @@ void	ft_redirection(char **str)
 		i++;
 	}
 }
-
-

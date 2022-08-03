@@ -56,9 +56,9 @@ typedef struct s_data
 {
 	char			*input;
 	char			*trimmed;
-	int			i;
-	int			fd_in;
-	int			fd_out;
+	int				i;
+	int				fd_in;
+	int				fd_out;
 	struct s_token	*head;
 }					t_data;
 
@@ -111,14 +111,17 @@ int			check_redir(t_data *data);
 t_token		*new_node(char *value);
 void		push_front(t_data *data, char *value);
 void		push_back(t_data *data, char *value);
-void		preview(t_data	*data);
 int			ft_size(t_token *lst);
+//dollar_fct.c
+char		*rep(char **env, char *str, int size, int quote);
+int			in_replace(char *str, int s, t_token *token, t_data *data);
+int			replace_var(t_token *token, t_data *data, t_params *params);
 //redirect.c
 
 //redir_fd.c
-void	get_fd_input(char *pathname, char *red);
-void	get_fd_output(char *pathname, char *red);
-void	ft_redirection(char **str);
+void		get_fd_input(char *pathname, char *red);
+void		get_fd_output(char *pathname, char *red);
+void		ft_redirection(char **str);
 //quotes.c
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);

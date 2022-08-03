@@ -26,7 +26,9 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/parsing/quotes.c				\
 	srcs/parsing/args_start.c			\
 	srcs/parsing/utils.c				\
+	srcs/parsing/redirection.c			\
 	srcs/parsing/redir_fd.c				\
+	srcs/parsing/dollar_fct.c			\
 	srcs/builtin/cd.c					\
 	srcs/builtin/echo.c					\
 	srcs/builtin/env.c					\

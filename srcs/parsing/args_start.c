@@ -12,34 +12,6 @@
 
 #include "../../minishell.h"
 
-// create first element, which is the first command and argument before pipe
-int	first_pipe_cut(t_data *data)
-{
-	int		count;
-	char	quote;
-
-	data->i = 0;
-	count = 0;
-	while (data->trimmed[data->i])
-	{
-		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
-		{
-			quote = data->trimmed[data->i];
-			data->i++;
-			get_next_quote(quote, data);
-		}
-		else if (data->trimmed[data->i] == '|')
-		{
-			push_back(data, ft_strndup(&data->trimmed[count], data->i - count));
-			count = data->i + 1;
-		}
-		data->i++;
-	}
-	push_back(data, ft_strdup(&data->trimmed[count]));
-//	preview(data);
-	return (0);
-}
-
 // count words
 int	ft_count_words(t_data *data, char *s)
 {
@@ -123,76 +95,6 @@ int	create_tab(t_data *data, t_token *token)
 			i++;
 	}
 	return (0);
-}
-
-// suppress quotes
-int	in_del_quote(char *str, int j)
-{
-	char	quote;
-
-	quote = str[j];
-	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
-	while (str[j] != quote)
-		j++;
-	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
-	return (j);
-}
-
-// find suppressable quotes in redirections
-void	del_quotes_redir(t_token *token)
-{
-	int	i;
-	int	j;
-
-	while (token)
-	{
-		i = -1;
-		while (token->red[++i])
-		{
-			j = -1;
-			while (token->red[i][++j] != '\0')
-			{
-				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
-					j = in_del_quote(token->red[i], j);
-				if (token->red[i][j] == '\0')
-					break ;
-				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
-					j--;
-			}
-		}
-		token = token->next;
-	}
-}
-
-// find suppressable quotes
-void	del_quotes(t_token *token)
-{
-	t_token	*tmp;
-	int		i;
-	int		j;
-
-	tmp = token;
-	while (tmp)
-	{
-		i = -1;
-		while (tmp->args[++i])
-		{
-			j = -1;
-			while (tmp->args[i][++j] != '\0')
-			{
-				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
-					j = in_del_quote(tmp->args[i], j);
-				if (tmp->args[i][j] == '\0')
-					break ;
-				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
-					j--;
-			}
-		}
-		tmp = tmp->next;
-	}
-	tmp = token;
-	del_quotes_redir(tmp);
-	return ;
 }
 
 // in count_red, create char **red (redirection's list)
