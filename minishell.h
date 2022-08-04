@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/03 16:15:07 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/04 17:03:47 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,10 @@ void		free_params(t_params *params);
 //signaux.c
 void		sig_manage(int signal);
 void		ft_exit_d(t_data *data, t_params *params);
+void		ft_sig_heredoc(int signal);
 //here_doc.c
-char		*here_doc(char *str);
-void		get_hd_line(char *del);
+int		ft_here_doc(char *str);
+void		get_hd_line(char *del, int *pipefd);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);

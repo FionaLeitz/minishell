@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 17:57:57 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 18:08:02 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/04 14:25:18 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,3 +20,10 @@ int	ft_space(char c)
 		return (0);
 	return (-1);
 }
+
+/*void	close_pipes(int *pipefd)
+{
+	close(pipefd[0]);
+	close(pipefd[1]);
+}*/
+
