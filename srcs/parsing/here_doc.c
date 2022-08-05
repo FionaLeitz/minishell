@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/05 15:22:09 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/05 17:25:48 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,20 @@ const char *hd_name(void)
 	const char	*pathname;
 	int	i;
 	int	fd_exist;
-	char	*no;
 
 	i = 1;
-	pathname = ft_strdup("/tmp/hd");
-	fd_exist = open(pathname, O_RDONLY);
+	fd_exist = 0;
 	while (fd_exist != -1)
 	{
+		pathname = ft_strjoin("/tmp/hd", ft_itoa(i));
+		fd_exist = open(pathname, O_RDONLY);
+		if (fd_exist == -1)
+			break;
 		close(fd_exist);
-		no = ft_itoa(i);
-		pathname = ft_strjoin(pathname, no);
-		fd_exist = open(pathname, O_RDONLY); 
-		i++;
+		fd_exist = 0;
+		++i;
 	}
-	if (fd_exist != -1)
-		close(fd_exist);
+	close(fd_exist);
 	return (pathname);
 }
 
@@ -45,6 +44,8 @@ int	ft_here_doc(char *str)
 	delimiter = ft_strtrim(str, " \t\n\v\f\r");
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
+	if (fd == -1)
+		perror("Error:");
 //	signal(SIGINT, ft_sig_heredoc);
 //	signal(SIGQUIT, ft_sig_heredoc);
 	child = fork();
@@ -53,9 +54,12 @@ int	ft_here_doc(char *str)
 	if (child == 0)
 	{
 		get_hd_line(delimiter, fd);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		exit(0);
 	}
 	waitpid(child, NULL, 0);
-	close(fd);
+	//close(fd);
 	//unlink(pathname);
 	return (0);
 }
@@ -90,8 +94,8 @@ void	get_hd_line(char *del, int fd)
 		free(tmp);
 		line = readline(">");
 	}
-	write(fd, "\n", 1);
+	//write(fd, "\n", 1);
 	write(fd, buff, ft_strlen(buff));
-	//printf("\n");
-	//printf("%s\n", buff);
+//	printf("\n");
+//	printf("%s\n", buff);
 }
