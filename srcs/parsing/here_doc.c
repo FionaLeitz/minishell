@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/05 17:25:48 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/05 17:44:34 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_here_doc(char *str)
 	if (child == 0)
 	{
 		get_hd_line(delimiter, fd);
-		dup2(fd, STDIN_FILENO);
+	//	dup2(fd, STDIN_FILENO);
 		close(fd);
 		exit(0);
 	}
@@ -79,10 +79,10 @@ void	get_hd_line(char *del, int fd)
 	
 	line = readline(">");
 	buff = ft_strdup("\0");
-	while (line)
-	{
 	//	if (!line)
 	//		print_error_heredoc(del);
+	while (line)
+	{
 		if (ft_strcmp(line, del) == 0)
 			break ;
 		tmp = buff;
@@ -94,8 +94,6 @@ void	get_hd_line(char *del, int fd)
 		free(tmp);
 		line = readline(">");
 	}
-	//write(fd, "\n", 1);
 	write(fd, buff, ft_strlen(buff));
-//	printf("\n");
-//	printf("%s\n", buff);
+	write(fd, "\n", 1);
 }
