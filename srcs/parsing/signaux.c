@@ -6,14 +6,14 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/04 16:58:45 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/07 14:10:26 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 // handle ctrl-\ and ctrl-c
-void	sig_manage(int signal)
+void	ft_sig_manage(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -25,6 +25,12 @@ void	sig_manage(int signal)
 	if (signal == SIGQUIT)
 		write(1, "\b\b \b\b", 6);
 	return ;
+}
+
+void	ft_manage_sig(void)
+{
+	signal(SIGINT, ft_sig_manage);
+	signal(SIGQUIT, ft_sig_manage);
 }
 
 // handle ctrl-d
@@ -47,4 +53,10 @@ void	ft_sig_heredoc(int signal)
 	}
 	if (signal == SIGQUIT)
 		write(1, "\b\b \b\b", 6);
+}
+
+void	ft_manage_sighd(void)
+{
+	signal(SIGINT, ft_sig_heredoc);
+	signal(SIGQUIT, ft_sig_heredoc);
 }

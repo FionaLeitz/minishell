@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/05 17:44:34 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/07 16:17:29 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,66 +34,61 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-int	ft_here_doc(char *str)
+int	ft_here_doc(char *str, t_data *data)
 {
-	char	*delimiter;
+	char		*delimiter;
 	const char	*pathname;
-	pid_t	child;
-	int	fd;
-	
+	pid_t		child;
+	int		fd;
+
+	(void)data;
 	delimiter = ft_strtrim(str, " \t\n\v\f\r");
 	pathname = hd_name();
-	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
+	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);
 	if (fd == -1)
 		perror("Error:");
-//	signal(SIGINT, ft_sig_heredoc);
-//	signal(SIGQUIT, ft_sig_heredoc);
 	child = fork();
 	if (child < 0)
 		perror("Error:");
 	if (child == 0)
 	{
+		ft_manage_sighd();
 		get_hd_line(delimiter, fd);
 	//	dup2(fd, STDIN_FILENO);
-		close(fd);
+		//close(fd);
 		exit(0);
 	}
 	waitpid(child, NULL, 0);
-	//close(fd);
-	//unlink(pathname);
+	close(fd);
+//	unlink(pathname);
 	return (0);
 }
 
-/*static int	print_error_heredoc(char *str)
+static int	print_error_heredoc(char *str)
 {
-	printf("warning:\n");
-	printf("here-document delimited by end-of-file (wanted '%s')\n", str);
-	return (-1);
-}*/
+	ft_putstr_fd("minishell: warning: ", 2);
+	ft_putstr_fd("here-document at line delimited by end-of-file", 2);
+	ft_putstr_fd(" wanted '", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("')\n", 2);
+	//close(fd);
+	exit(0);
+}
 
 void	get_hd_line(char *del, int fd)
 {
 	char	*line;
-	char	*buff;
-	char	*tmp;
 	
-	line = readline(">");
-	buff = ft_strdup("\0");
-	//	if (!line)
-	//		print_error_heredoc(del);
-	while (line)
+	while (1)
 	{
+		line = readline("> ");	
+		if (!line)
+			print_error_heredoc(del);
+//		line = expand_heredoc;
 		if (ft_strcmp(line, del) == 0)
 			break ;
-		tmp = buff;
-		buff = ft_strjoin(tmp, line);
-		free(tmp);
+		write(fd, line, ft_strlen(line) *  sizeof(char));
+		write(fd, "\n", 1);
 		free(line);
-		tmp = buff;
-		buff = ft_strjoin(tmp, "\n");
-		free(tmp);
-		line = readline(">");
 	}
-	write(fd, buff, ft_strlen(buff));
-	write(fd, "\n", 1);
 }

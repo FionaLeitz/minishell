@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/05 15:20:07 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/07 15:37:00 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,14 @@ int			print_prompt(t_data *data, t_params *params);
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
 //signaux.c
-void		sig_manage(int signal);
+void		ft_sig_manage(int signal);
+void		ft_manage_sig(void);
 void		ft_exit_d(t_data *data, t_params *params);
 void		ft_sig_heredoc(int signal);
+void		ft_manage_sighd(void);
 //here_doc.c
 const char	*hd_name(void);
-int		ft_here_doc(char *str);
+int		ft_here_doc(char *str, t_data *data);
 void		get_hd_line(char *del, int fd);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
