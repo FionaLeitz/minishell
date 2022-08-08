@@ -58,8 +58,8 @@ int	in_del_quote(char *str, int j)
 // find suppressable quotes in redirections
 void	del_quotes_redir(t_token *token)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	while (token)
 	{

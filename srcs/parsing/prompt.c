@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 11:05:22 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 17:08:46 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	ft_cut(t_data *data, t_params *params)
 		tmp->value = s;
 		tmp = tmp->next;
 	}
+	printf("ICI !\n");
 	tmp = data->head;
 	while (tmp)
 	{
@@ -68,6 +69,9 @@ void	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	while (tmp)
 	{
+		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		free(tmp->value);
+		tmp->value = s;
 		create_tab(data, tmp);
 		tmp = tmp->next;
 	}
@@ -78,7 +82,7 @@ void	ft_cut(t_data *data, t_params *params)
 	{
 		ft_redirection(tmp->red);
 		tmp = tmp->next;
-	}	
+	}
 }
 
 // give the prompt, get readline, parses and execution's fonctions
@@ -86,14 +90,14 @@ int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
-//	data->fd_in = dup(STDIN_FILENO);
-//	data->fd_out = dup(STDOUT_FILENO);
+	//data->fd_in = dup(STDIN_FILENO);
+	//data->fd_out = dup(STDOUT_FILENO);
 	while (1)
 	{
 		init_data(data);
 		ft_manage_sig();
-		dup2(data->fd_in, STDIN_FILENO);
-		dup2(data->fd_out, STDOUT_FILENO);
+		//dup2(STDIN_FILENO, data->fd_in);
+		//dup2(STDOUT_FILENO, data->fd_out);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);

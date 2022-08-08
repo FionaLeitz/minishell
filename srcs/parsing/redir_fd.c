@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 14:20:51 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/05 11:08:03 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 15:24:50 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void	ft_redirection(char **str)
 		if (str[i][0] == '>')
 		{
 			if (str[i][1] == '>')
-				get_fd_output(ft_strtrim(&str[i][2], " \t\n\v\f\r"), ">>");
+				get_fd_output(&str[i][2], ">>");
 			else
-				get_fd_output(ft_strtrim(&str[i][1], " \t\n\v\f\r"), ">");
+				get_fd_output(&str[i][1], ">");
 		}
 		if (str[i][0] == '<')
 		{
@@ -71,7 +71,7 @@ void	ft_redirection(char **str)
 				ft_here_doc(&str[i][2]);
 			}
 			else
-				get_fd_input(ft_strtrim(&str[i][1], " \t\n\v\f\r"), "<");
+				get_fd_input(&str[i][1], "<");
 		}
 		i++;
 	}
