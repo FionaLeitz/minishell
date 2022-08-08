@@ -78,6 +78,7 @@ int	create_tab(t_data *data, t_token *token)
 
 	i = 0;
 	j = 0;
+
 	k = ft_count_words(data, token->value);
 	token->args = malloc(sizeof(char *) * (k + 1));
 	if (!token->args)

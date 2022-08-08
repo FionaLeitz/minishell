@@ -43,6 +43,7 @@ void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 	char	*s;
+	char	*s2;
 
 	first_pipe_cut(data);
 	tmp = data->head;
@@ -68,6 +69,9 @@ void	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	while (tmp)
 	{
+		s2 = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		free(tmp->value);
+		tmp->value = s2;
 		create_tab(data, tmp);
 		tmp = tmp->next;
 	}
@@ -78,7 +82,7 @@ void	ft_cut(t_data *data, t_params *params)
 	{
 		ft_redirection(tmp->red);
 		tmp = tmp->next;
-	}	
+	}
 }
 
 // give the prompt, get readline, parses and execution's fonctions
@@ -102,11 +106,11 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		while (tmp && tmp->args[0])
 		{
-		//	printf("cmd :\n");
-		//	print_table(tmp->args);
-		//	printf("---------------\n");
-		//	printf("redirect :\n");
-		//	print_table(tmp->red);
+			printf("cmd :\n");
+			print_table(tmp->args);
+			printf("---------------\n");
+			printf("redirect :\n");
+			print_table(tmp->red);
 			ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}

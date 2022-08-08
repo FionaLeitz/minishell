@@ -26,9 +26,6 @@ char	first_redir(char *str, t_data *data)
 
 	redir = str[data->i];
 	data->i++;
-	while (str[data->i]
-		&& ft_space(str[data->i]) == 0)
-		data->i++;
 	if (str[data->i] == '\0')
 	{
 		print_error_redir("newline", '\0');
