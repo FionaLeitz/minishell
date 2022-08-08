@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/07 14:06:58 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 11:05:22 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
-	data->fd_in = dup(STDIN_FILENO);
-	data->fd_out = dup(STDOUT_FILENO);
+//	data->fd_in = dup(STDIN_FILENO);
+//	data->fd_out = dup(STDOUT_FILENO);
 	while (1)
 	{
 		init_data(data);

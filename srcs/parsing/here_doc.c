@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/07 16:17:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 09:48:15 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,13 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-int	ft_here_doc(char *str, t_data *data)
+int	ft_here_doc(char *str)
 {
 	char		*delimiter;
 	const char	*pathname;
 	pid_t		child;
-	int		fd;
+	int			fd;
 
-	(void)data;
 	delimiter = ft_strtrim(str, " \t\n\v\f\r");
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);

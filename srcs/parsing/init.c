@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 13:35:21 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/02 17:36:33 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 11:02:56 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	init_data(t_data *data)
 	data->trimmed = NULL;
 	data->head = NULL;
 	data->i = 0;
-	data->fd_in = 0;
-	data->fd_out = 0;
+	data->fd_in = 0;// dup(STDIN_FILENO);
+	data->fd_out = 0; // dup(STDOUT_FILENO);
 }
 
 // put every variable in token to NULL
