@@ -78,11 +78,11 @@ void	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	del_quotes(tmp);
 	tmp = data->head;
-	while (tmp)
+/*	while (tmp)
 	{
 		ft_redirection(tmp->red);
 		tmp = tmp->next;
-	}
+	}*/
 }
 
 // give the prompt, get readline, parses and execution's fonctions
@@ -96,8 +96,8 @@ int	print_prompt(t_data *data, t_params *params)
 	{
 		init_data(data);
 		ft_manage_sig();
-		//dup2(STDIN_FILENO, data->fd_in);
-		//dup2(STDOUT_FILENO, data->fd_out);
+//		dup2(data->fd_in, STDIN_FILENO);
+//		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
@@ -106,11 +106,11 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		while (tmp && tmp->args[0])
 		{
-		//	printf("cmd :\n");
-		//	print_table(tmp->args);
-		//	printf("---------------\n");
-		//	printf("redirect :\n");
-		//	print_table(tmp->red);
+			printf("cmd :\n");
+			print_table(tmp->args);
+			printf("---------------\n");
+			printf("redirect :\n");
+			print_table(tmp->red);
 			ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}
