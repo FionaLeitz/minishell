@@ -58,8 +58,9 @@ int	in_del_quote(char *str, int j)
 // find suppressable quotes in redirections
 void	del_quotes_redir(t_token *token)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	while (token)
 	{
@@ -75,6 +76,23 @@ void	del_quotes_redir(t_token *token)
 					break ;
 				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
 					j--;
+			}
+			j = 0;
+			while (token->red[i][j] == '>' || token->red[i][j] == '<')
+				j++;
+			printf("&token->red[%d][%d] = -%s-\n", i, j, &token->red[i][j]);
+			if (ft_space(token->red[i][j]) == 0 || ft_space(token->red[i][ft_strlen(token->red[i]) - 1]) == 0)
+			{
+				printf("La\n");
+				tmp = malloc(sizeof(char) * ft_strlen(token->red[i]) + 3);
+				ft_bzero(tmp, ft_strlen(token->red[i]) + 3);
+				tmp[0] = token->red[i][0];
+				tmp[1] = token->red[i][1];
+				tmp[j] = '\'';
+				ft_strcat(tmp, &token->red[i][j]);
+				tmp[ft_strlen(tmp)] = '\'';
+				free(token->red[i]);
+				token->red[i] = tmp;
 			}
 		}
 		token = token->next;

@@ -71,6 +71,7 @@ int	get_red(t_data *data, t_token *token, int count)
 	int		j;
 	int		save;
 	char	quote;
+	int		tmp;
 
 	j = 0;
 	data->i = 0;
@@ -90,12 +91,16 @@ int	get_red(t_data *data, t_token *token, int count)
 		}
 		save = data->i;
 		data->i++;
-		while (ft_space(token->value[data->i]) == 0)
-			data->i++;
 		if (token->value[data->i] == '>' || token->value[data->i] == '<')
 			data->i++;
+		tmp = 0;
 		while (ft_space(token->value[data->i]) == 0)
+		{
 			data->i++;
+			tmp++;
+		}
+		ft_memcpy(&token->value[data->i - tmp], &token->value[data->i], ft_strlen(&token->value[data->i]) + 1);
+		data->i -= tmp;
 		while (token->value[data->i] != '\0' && ft_space(
 				token->value[data->i]) != 0 && token->value[data->i] != '>'
 			&& token->value[data->i] != '<')
@@ -111,7 +116,7 @@ int	get_red(t_data *data, t_token *token, int count)
 		}
 		token->red[j] = ft_strndup(&token->value[save], data->i - save);
 		ft_memcpy(&token->value[save], &token->value[data->i],
-			ft_strlen(&token->value[save]));
+			ft_strlen(&token->value[data->i]) + 1);
 		data->i = save;
 		j++;
 	}

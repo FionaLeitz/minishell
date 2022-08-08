@@ -43,7 +43,6 @@ void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 	char	*s;
-	char	*s2;
 
 	first_pipe_cut(data);
 	tmp = data->head;
@@ -54,6 +53,7 @@ void	ft_cut(t_data *data, t_params *params)
 		tmp->value = s;
 		tmp = tmp->next;
 	}
+	printf("ICI !\n");
 	tmp = data->head;
 	while (tmp)
 	{
@@ -69,20 +69,20 @@ void	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	while (tmp)
 	{
-		s2 = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
 		free(tmp->value);
-		tmp->value = s2;
+		tmp->value = s;
 		create_tab(data, tmp);
 		tmp = tmp->next;
 	}
 	tmp = data->head;
 	del_quotes(tmp);
 	tmp = data->head;
-	while (tmp)
+/*	while (tmp)
 	{
 		ft_redirection(tmp->red);
 		tmp = tmp->next;
-	}
+	}*/
 }
 
 // give the prompt, get readline, parses and execution's fonctions
@@ -96,8 +96,8 @@ int	print_prompt(t_data *data, t_params *params)
 	{
 		init_data(data);
 		ft_manage_sig();
-		dup2(data->fd_in, STDIN_FILENO);
-		dup2(data->fd_out, STDOUT_FILENO);
+//		dup2(data->fd_in, STDIN_FILENO);
+//		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);

@@ -19,9 +19,9 @@ void	jump_quotes(char *str, t_data *data)
 
 	quote = str[data->i];
 	data->i++;
-	while (str[data->i] != quote)
+	while (str[data->i] != '\0' && str[data->i] != quote)
 		data->i++;
-}
+}make 
 
 // check error with pipes
 int	check_string(t_data *data)
