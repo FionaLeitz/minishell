@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 12:39:29 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 14:44:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 17:38:38 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	del_quotes_redir(t_token *token)
 			j = 0;
 			while (token->red[i][j] == '>' || token->red[i][j] == '<')
 				j++;
-			printf("&token->red[%d][%d] = -%s-\n", i, j, &token->red[i][j]);
+		//	printf("&token->red[%d][%d] = -%s-\n", i, j, &token->red[i][j]);
 			if (ft_space(token->red[i][j]) == 0 || ft_space(token->red[i][ft_strlen(token->red[i]) - 1]) == 0)
 			{
 				printf("La\n");

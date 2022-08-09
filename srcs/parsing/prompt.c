@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 17:08:46 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/09 17:43:20 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	ft_cut(t_data *data, t_params *params)
 		tmp->value = s;
 		tmp = tmp->next;
 	}
-	printf("ICI !\n");
 	tmp = data->head;
 	while (tmp)
 	{
@@ -78,11 +77,11 @@ void	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	del_quotes(tmp);
 	tmp = data->head;
-/*	while (tmp)
+	while (tmp)
 	{
-		ft_redirection(tmp->red);
+		ft_redirection(tmp->red, params);
 		tmp = tmp->next;
-	}*/
+	}
 }
 
 // give the prompt, get readline, parses and execution's fonctions
@@ -90,14 +89,12 @@ int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
-	//data->fd_in = dup(STDIN_FILENO);
-	//data->fd_out = dup(STDOUT_FILENO);
 	while (1)
 	{
 		init_data(data);
 		ft_manage_sig();
-//		dup2(data->fd_in, STDIN_FILENO);
-//		dup2(data->fd_out, STDOUT_FILENO);
+		//dup2(data->fd_in, STDIN_FILENO);
+		//dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
@@ -106,11 +103,11 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		while (tmp && tmp->args[0])
 		{
-			printf("cmd :\n");
-			print_table(tmp->args);
-			printf("---------------\n");
-			printf("redirect :\n");
-			print_table(tmp->red);
+	//		printf("cmd :\n");
+	//		print_table(tmp->args);
+	//		printf("---------------\n");
+	//		printf("redirect :\n");
+	//		print_table(tmp->red);
 			ft_select_builtin(tmp, params);
 			tmp = tmp->next;
 		}

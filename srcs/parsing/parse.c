@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 14:47:40 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 14:06:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 17:33:58 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	jump_quotes(char *str, t_data *data)
 	data->i++;
 	while (str[data->i] != '\0' && str[data->i] != quote)
 		data->i++;
-}make 
+} 
 
 // check error with pipes
 int	check_string(t_data *data)
