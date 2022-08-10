@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/09 18:28:05 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:29:07 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,17 @@ int	ft_here_doc(char *str, t_params *params, t_data *data)
 {
 	char		*delimiter;
 	const char	*pathname;
-	pid_t		child;
 	int			fd;
 
+	(void)data;
 	delimiter = ft_strtrim(str, "\'");
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);
-	if (fd == -1)
-		perror("Error:");
-	child = fork();
-	if (child < 0)
-		perror("Error:");
-	if (child == 0)
-	{
-//	dup2(STDOUT_FILENO, 1);
-	//ft_manage_sighd();
+	ft_manage_sighd();
 	get_hd_line(delimiter, fd, params);
+	//dup2(fd, STDOUT_FILENO);
 	close(fd);
-//	dup2(STDIN_FILENO, data->fd_in);
-	
-	//dup2(fd, STDIN_FILENO);
-	exit(0);
-	}
-	waitpid(child, NULL, 0);
-	close(fd);
-//	unlink(pathname);
+	unlink(pathname);
 	return (0);
 }
 
@@ -82,6 +68,33 @@ static int	print_error_heredoc(char *str, int fd)
 	exit(0);
 }
 
+void	write_hd_expand(char *line, int fd, t_params *params)
+{
+	int	i;
+	int	save;
+	char	*tmp;
+	char 	*new;
+	
+	i = 0;
+	save = 0;
+	tmp = NULL;
+	new = NULL;
+	while(line[i])
+	{
+		if(line[i] == '$')
+		{	
+			tmp = expand_heredoc(&line[i], params);
+			if (tmp != NULL)
+				new = ft_strjoin(new, tmp);
+			continue;	
+		}
+		//else
+		//	new = ???;
+		i++;
+	}
+	ft_putstr_fd(new, fd);
+}
+
 void	get_hd_line(char *del, int fd, t_params *params)
 {
 	char	*line;
@@ -92,11 +105,13 @@ void	get_hd_line(char *del, int fd, t_params *params)
 		line = readline("> ");	
 		if (!line)
 			print_error_heredoc(del, fd);
-		//line = expand_heredoc(line, params);
 		if (ft_strcmp(line, del) == 0)
 			break ;
-		write(fd, line, ft_strlen(line) *  sizeof(char));
+		if (line contains '$')
+			write_hd_expand(line, fd, params);
+		else
+			write(fd, line, ft_strlen(line) * sizeof(char));
 		write(fd, "\n", 1);
-		free(line);
+		//free(line);
 	}
 }

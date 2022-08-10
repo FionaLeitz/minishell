@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/09 18:22:37 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/10 11:50:09 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
 void		get_fd_input(char *pathname, char *red);
 void		get_fd_output(char *pathname, char *red);
-void		ft_redirection(char **str, t_params *params);
+void		ft_redirection(char **str, t_params *params, t_data *data);
 //redirection.c
 char		first_redir(char *str, t_data *data);
 int			check_redir(t_data *data);
