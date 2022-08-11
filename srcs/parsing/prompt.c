@@ -76,13 +76,14 @@ void	ft_cut(t_data *data, t_params *params)
 	}
 	tmp = data->head;
 	del_quotes(tmp);
+/*
 	tmp = data->head;
 	while (tmp)
 	{
 		ft_redirection(tmp->red, params, data, tmp);
 //		printf("token->fds[0] = %d\ntoken->fds[1] = %d\n", tmp->fds[0], tmp->fds[1]);
 		tmp = tmp->next;
-	}
+	}*/
 }
 
 // give the prompt, get readline, parses and execution's fonctions
@@ -102,16 +103,25 @@ int	print_prompt(t_data *data, t_params *params)
 		if (syntax_check(data) == 0)
 			ft_cut(data, params);
 		tmp = data->head;
+<<<<<<< HEAD
 		//  while (tmp && tmp->args[0])
 		//  {
+=======
+		// while (tmp && tmp->args[0])
+		// {
+>>>>>>> c1c9cd7fc38c50bb48a79fa802353b0793b224f5
 		// 	printf("cmd :\n");
 		// 	print_table(tmp->args);
 		// 	printf("---------------\n");
 		// 	printf("redirect :\n");
 		// 	print_table(tmp->red);
 			ft_execute(tmp, params);
+<<<<<<< HEAD
 		// 	ft_select_builtin(tmp,params);
 		//   	tmp = tmp->next;
+=======
+		//  tmp = tmp->next;
+>>>>>>> c1c9cd7fc38c50bb48a79fa802353b0793b224f5
 		// }
 		free_struct(data);
 	}

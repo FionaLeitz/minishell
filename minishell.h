@@ -97,6 +97,7 @@ char		**ft_get_env(char **envp);
 // pwd.c
 int			ft_pwd(char **arg);
 // select_builtin.c
+int			ft_execute(t_token *token, t_params *params);
 void		ft_select_builtin(t_token *token, t_params *params);
 int			ft_execute(t_token *token, t_params *params);
 // table_utils.c
