@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 09:48:00 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/10 11:50:09 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,12 @@ void		ft_sig_heredoc(int signal);
 void		ft_manage_sighd(void);
 //here_doc.c
 const char	*hd_name(void);
-int		ft_here_doc(char *str);
-void		get_hd_line(char *del, int fd);
+int		ft_here_doc(char *str, t_params *params, t_data *data);
+void		get_hd_line(char *del, int fd, t_params *params);
+//expand_heredoc.c
+char		*rep_hd(t_params *params, char *str, int size, int quote);
+int		in_replace_hd(char *str, int s, char *line, int *i);
+char		*expand_heredoc(char *line, t_params *params);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
@@ -141,7 +145,7 @@ int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
 void		get_fd_input(char *pathname, char *red);
 void		get_fd_output(char *pathname, char *red);
-void		ft_redirection(char **str);
+void		ft_redirection(char **str, t_params *params, t_data *data);
 //redirection.c
 char		first_redir(char *str, t_data *data);
 int			check_redir(t_data *data);

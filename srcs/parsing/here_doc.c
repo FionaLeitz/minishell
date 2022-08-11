@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 09:48:15 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:29:07 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,64 +30,88 @@ const char *hd_name(void)
 		fd_exist = 0;
 		++i;
 	}
-	close(fd_exist);
+//	close(fd_exist);
 	return (pathname);
 }
 
-int	ft_here_doc(char *str)
+/*void	unlink_hd(char *pathname)
+{
+	char *
+}*/
+
+int	ft_here_doc(char *str, t_params *params, t_data *data)
 {
 	char		*delimiter;
 	const char	*pathname;
-	pid_t		child;
 	int			fd;
 
-	delimiter = ft_strtrim(str, " \t\n\v\f\r");
+	(void)data;
+	delimiter = ft_strtrim(str, "\'");
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);
-	if (fd == -1)
-		perror("Error:");
-	child = fork();
-	if (child < 0)
-		perror("Error:");
-	if (child == 0)
-	{
-		ft_manage_sighd();
-		get_hd_line(delimiter, fd);
-	//	dup2(fd, STDIN_FILENO);
-		//close(fd);
-		exit(0);
-	}
-	waitpid(child, NULL, 0);
+	ft_manage_sighd();
+	get_hd_line(delimiter, fd, params);
+	//dup2(fd, STDOUT_FILENO);
 	close(fd);
-//	unlink(pathname);
+	unlink(pathname);
 	return (0);
 }
 
-static int	print_error_heredoc(char *str)
+static int	print_error_heredoc(char *str, int fd)
 {
 	ft_putstr_fd("minishell: warning: ", 2);
 	ft_putstr_fd("here-document at line delimited by end-of-file", 2);
-	ft_putstr_fd(" wanted '", 2);
+	ft_putstr_fd(" (wanted '", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("')\n", 2);
-	//close(fd);
+	close(fd);
 	exit(0);
 }
 
-void	get_hd_line(char *del, int fd)
+void	write_hd_expand(char *line, int fd, t_params *params)
+{
+	int	i;
+	int	save;
+	char	*tmp;
+	char 	*new;
+	
+	i = 0;
+	save = 0;
+	tmp = NULL;
+	new = NULL;
+	while(line[i])
+	{
+		if(line[i] == '$')
+		{	
+			tmp = expand_heredoc(&line[i], params);
+			if (tmp != NULL)
+				new = ft_strjoin(new, tmp);
+			continue;	
+		}
+		//else
+		//	new = ???;
+		i++;
+	}
+	ft_putstr_fd(new, fd);
+}
+
+void	get_hd_line(char *del, int fd, t_params *params)
 {
 	char	*line;
-	
+	(void)params;
+
 	while (1)
 	{
 		line = readline("> ");	
 		if (!line)
-			print_error_heredoc(del);
-//		line = expand_heredoc;
+			print_error_heredoc(del, fd);
 		if (ft_strcmp(line, del) == 0)
 			break ;
-		write(fd, line, ft_strlen(line) *  sizeof(char));
+		if (line contains '$')
+			write_hd_expand(line, fd, params);
+		else
+			write(fd, line, ft_strlen(line) * sizeof(char));
 		write(fd, "\n", 1);
-		free(line);
+		//free(line);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 11:05:22 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/10 13:17:37 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,11 @@ void	ft_cut(t_data *data, t_params *params)
 	}
 	tmp = data->head;
 	del_quotes(tmp);
-/*	tmp = data->head;
+/*
+	tmp = data->head;
 	while (tmp)
 	{
-		ft_redirection(tmp->red);
+		ft_redirection(tmp->red, params, data);
 		tmp = tmp->next;
 	}*/
 }
@@ -93,8 +94,8 @@ int	print_prompt(t_data *data, t_params *params)
 	{
 		init_data(data);
 		ft_manage_sig();
-//		dup2(data->fd_in, STDIN_FILENO);
-//		dup2(data->fd_out, STDOUT_FILENO);
+	//	dup2(data->fd_in, STDIN_FILENO);
+		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
@@ -109,8 +110,7 @@ int	print_prompt(t_data *data, t_params *params)
 		// 	printf("redirect :\n");
 		// 	print_table(tmp->red);
 			ft_execute(tmp, params);
-		// 	ft_select_builtin(tmp, params);
-		//  	tmp = tmp->next;
+		//  tmp = tmp->next;
 		// }
 		free_struct(data);
 	}

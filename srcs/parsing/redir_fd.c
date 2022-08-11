@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 14:20:51 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/05 11:08:03 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/10 14:40:32 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	get_fd_input(char *pathname, char *red)
 {
 	int	fd;
 
-	fd = 0;
+//	fd = 0;
 	if (ft_strcmp(red, "<") == 0)
 	{
 		fd = open(pathname, O_RDONLY);
@@ -35,7 +35,7 @@ void	get_fd_output(char *pathname, char *red)
 {
 	int	fd;
 
-	fd = -1;
+	fd = 0;
 	if (ft_strcmp(red, ">") == 0)
 		fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	else if (ft_strcmp (red, ">>") == 0)
@@ -50,7 +50,7 @@ void	get_fd_output(char *pathname, char *red)
 	}
 }
 
-void	ft_redirection(char **str)
+void	ft_redirection(char **str, t_params *params, t_data *data)
 {
 	int	i;
 
@@ -68,10 +68,10 @@ void	ft_redirection(char **str)
 		{
 			if (str[i][1] == '<')
 			{
-				ft_here_doc(&str[i][2]);
+				ft_here_doc(&str[i][2], params, data);
 			}
 			else
-				get_fd_input(ft_strtrim(&str[i][1], " \t\n\v\f\r"), "<");
+				get_fd_input(&str[i][1], "<");
 		}
 		i++;
 	}

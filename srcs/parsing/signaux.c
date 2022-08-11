@@ -22,9 +22,11 @@ void	ft_sig_manage(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}		
-	else if (signal == SIGQUIT)
+	if (signal == SIGQUIT)
+	{
 		write(1, "\b\b \b\b", 6);
-	return ;
+		return ;
+	}
 }
 
 void	ft_manage_sig(void)
@@ -51,9 +53,9 @@ void	ft_sig_heredoc(int signal)
 		rl_replace_line("", 0);
 		close(STDIN_FILENO);
 	}
-	else if (signal == SIGQUIT)
+	if (signal == SIGQUIT)
 		write(1, "\b\b \b\b", 6);
-//	else if (signal == SIGSEGV)
+//	if (signal == SIGSEGV)
 //	{
 //		write(1, "n", 1);
 //		exit(0);

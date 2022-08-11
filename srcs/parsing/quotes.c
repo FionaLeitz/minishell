@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 12:39:29 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 14:44:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 17:38:38 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,21 @@ void	del_quotes_redir(t_token *token)
 					break ;
 				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
 					j--;
+			}
+			j = 0;
+			while (token->red[i][j] == '>' || token->red[i][j] == '<')
+				j++;
+			if (ft_space(token->red[i][j]) == 0 || ft_space(token->red[i][ft_strlen(token->red[i]) - 1]) == 0)
+			{
+				tmp = malloc(sizeof(char) * ft_strlen(token->red[i]) + 3);
+				ft_bzero(tmp, ft_strlen(token->red[i]) + 3);
+				tmp[0] = token->red[i][0];
+				tmp[1] = token->red[i][1];
+				tmp[j] = '\'';
+				ft_strcat(tmp, &token->red[i][j]);
+				tmp[ft_strlen(tmp)] = '\'';
+				free(token->red[i]);
+				token->red[i] = tmp;
 			}
 		}
 		token = token->next;
