@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/10 18:29:07 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/11 12:12:38 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,6 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-/*void	unlink_hd(char *pathname)
-{
-	char *
-}*/
-
 int	ft_here_doc(char *str, t_params *params, t_data *data)
 {
 	char		*delimiter;
@@ -53,7 +48,7 @@ int	ft_here_doc(char *str, t_params *params, t_data *data)
 	get_hd_line(delimiter, fd, params);
 	//dup2(fd, STDOUT_FILENO);
 	close(fd);
-	unlink(pathname);
+	//unlink(pathname);
 	return (0);
 }
 
@@ -74,22 +69,32 @@ void	write_hd_expand(char *line, int fd, t_params *params)
 	int	save;
 	char	*tmp;
 	char 	*new;
+	char	*buff;
 	
 	i = 0;
 	save = 0;
 	tmp = NULL;
 	new = NULL;
+	buff = NULL;
 	while(line[i])
 	{
 		if(line[i] == '$')
 		{	
+			save = i;
+			printf("save = %d, i = %d \n", save, i);
 			tmp = expand_heredoc(&line[i], params);
-			if (tmp != NULL)
-				new = ft_strjoin(new, tmp);
-			continue;	
+			printf("tmp $ = %s\n", tmp);
+			printf("%zu\n", ft_strlen(tmp));
+		//	if (tmp != NULL)
+		//		new = ft_strjoin(&line[save - i], tmp);
+		//	else
+		//	{		
+				buff = ft_strndup(&line[save - i], save);
+				printf("buff = %s\n", buff);
+				new = ft_strjoin(buff, tmp);
+				printf("new = %s\n", new);
+		//	}
 		}
-		//else
-		//	new = ???;
 		i++;
 	}
 	ft_putstr_fd(new, fd);
@@ -107,8 +112,9 @@ void	get_hd_line(char *del, int fd, t_params *params)
 			print_error_heredoc(del, fd);
 		if (ft_strcmp(line, del) == 0)
 			break ;
-		if (line contains '$')
+		if (ft_if_char(line, '$') == 0)
 			write_hd_expand(line, fd, params);
+			//printf("expand here\n");
 		else
 			write(fd, line, ft_strlen(line) * sizeof(char));
 		write(fd, "\n", 1);

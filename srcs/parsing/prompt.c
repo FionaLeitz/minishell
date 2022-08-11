@@ -79,7 +79,8 @@ void	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	while (tmp)
 	{
-		ft_redirection(tmp->red, params, data);
+		ft_redirection(tmp->red, params, data, tmp);
+//		printf("token->fds[0] = %d\ntoken->fds[1] = %d\n", tmp->fds[0], tmp->fds[1]);
 		tmp = tmp->next;
 	}
 }
@@ -93,24 +94,25 @@ int	print_prompt(t_data *data, t_params *params)
 	{
 		init_data(data);
 		ft_manage_sig();
-	//	dup2(data->fd_in, STDIN_FILENO);
-		dup2(data->fd_out, STDOUT_FILENO);
+		//dup2(data->fd_in, STDIN_FILENO);
+		//dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
 		if (syntax_check(data) == 0)
 			ft_cut(data, params);
 		tmp = data->head;
-		while (tmp && tmp->args[0])
-		{
-	//		printf("cmd :\n");
-	//		print_table(tmp->args);
-	//		printf("---------------\n");
-	//		printf("redirect :\n");
-	//		print_table(tmp->red);
-			ft_select_builtin(tmp, params);
-			tmp = tmp->next;
-		}
+		//  while (tmp && tmp->args[0])
+		//  {
+		// 	printf("cmd :\n");
+		// 	print_table(tmp->args);
+		// 	printf("---------------\n");
+		// 	printf("redirect :\n");
+		// 	print_table(tmp->red);
+			ft_execute(tmp, params);
+		// 	ft_select_builtin(tmp,params);
+		//   	tmp = tmp->next;
+		// }
 		free_struct(data);
 	}
 	free_params(params);

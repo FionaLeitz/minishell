@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/10 11:50:09 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/11 11:05:59 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,18 @@
 
 # define PROMPT "Minishell> "
 
+typedef struct s_fd
+{
+	int	a;
+	int	b;
+}		t_fd;
+
+typedef union s_pipe_fd
+{
+	t_fd	frame;
+	int		raw[2];
+}			t_pipe_fd;
+
 typedef struct s_export
 {
 	char			*name;
@@ -48,6 +60,7 @@ typedef struct s_token
 	char			*value;
 	char			**args;
 	char			**red;
+	int				fds[2];
 	struct s_token	*next;
 	struct s_token	*prev;
 }					t_token;
@@ -85,6 +98,7 @@ char		**ft_get_env(char **envp);
 int			ft_pwd(char **arg);
 // select_builtin.c
 void		ft_select_builtin(t_token *token, t_params *params);
+int			ft_execute(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);
 void		free_table(char **table);
@@ -110,12 +124,15 @@ void		ft_sig_heredoc(int signal);
 void		ft_manage_sighd(void);
 //here_doc.c
 const char	*hd_name(void);
-int		ft_here_doc(char *str, t_params *params, t_data *data);
+int			ft_here_doc(char *str, t_params *params, t_data *data);
 void		get_hd_line(char *del, int fd, t_params *params);
 //expand_heredoc.c
 char		*rep_hd(t_params *params, char *str, int size, int quote);
-int		in_replace_hd(char *str, int s, char *line, int *i);
+int			in_replace_hd(char *str, int s, char *line, int *i);
 char		*expand_heredoc(char *line, t_params *params);
+//heredoc_utils.c
+int			ft_if_char(char *str, char c);
+char		*ft_strncpy(char *dest, char *src, unsigned int n);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
@@ -130,9 +147,9 @@ char		*rep(char **env, char *str, int size, int quote);
 int			in_replace(char *str, int s, t_token *token, t_data *data);
 int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
-void		get_fd_input(char *pathname, char *red);
-void		get_fd_output(char *pathname, char *red);
-void		ft_redirection(char **str, t_params *params, t_data *data);
+int			get_fd_input(char *pathname, char *red);
+int			get_fd_output(char *pathname, char *red);
+void		ft_redirection(char **str, t_params *params, t_data *data, t_token *token);
 //redirection.c
 char		first_redir(char *str, t_data *data);
 int			check_redir(t_data *data);
