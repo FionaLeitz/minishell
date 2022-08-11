@@ -30,6 +30,18 @@
 
 # define PROMPT "Minishell> "
 
+typedef struct s_fd
+{
+	int	a;
+	int	b;
+}		t_fd;
+
+typedef union s_pipe_fd
+{
+	t_fd	frame;
+	int		raw[2];
+}			t_pipe_fd;
+
 typedef struct s_export
 {
 	char			*name;
@@ -84,6 +96,7 @@ char		**ft_get_env(char **envp);
 // pwd.c
 int			ft_pwd(char **arg);
 // select_builtin.c
+int			ft_execute(t_token *token, t_params *params);
 void		ft_select_builtin(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);

@@ -21,7 +21,6 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	params.env = ft_get_env(envp);
 	params.export = create_export(params.env);
-	init_data(&data);
 	if (ac == 1)
 		print_prompt(&data, &params);
 	free_export(params.export);

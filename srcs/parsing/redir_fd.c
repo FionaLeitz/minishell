@@ -60,9 +60,9 @@ void	ft_redirection(char **str)
 		if (str[i][0] == '>')
 		{
 			if (str[i][1] == '>')
-				get_fd_output(ft_strtrim(&str[i][2], " \t\n\v\f\r"), ">>");
+				get_fd_output(&str[i][2], ">>");
 			else
-				get_fd_output(ft_strtrim(&str[i][1], " \t\n\v\f\r"), ">");
+				get_fd_output(&str[i][1], ">");
 		}
 		if (str[i][0] == '<')
 		{
