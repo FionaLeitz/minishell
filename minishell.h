@@ -98,7 +98,7 @@ char		**ft_get_env(char **envp);
 int			ft_pwd(char **arg);
 // select_builtin.c
 int			ft_execute(t_token *token, t_params *params);
-void		ft_select_builtin(t_token *token, t_params *params);
+void		ft_select_builtin(t_token *token, t_params *params/*, int i*/);
 int			ft_execute(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);
@@ -173,7 +173,8 @@ int			ft_space(char c);
 
 // ""''echo hola""'''' que""'' tal""''
 
-// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline ./minishell'
+// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=.ignore_readline ./minishell'
+// alias minishell='valgrind --track-fds=yes --suppressions=.ignore_readline ./minishell'
 // {
 // ignore_libreadline_conditional_jump_errors
 // Memcheck:Leak

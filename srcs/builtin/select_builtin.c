@@ -19,53 +19,31 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	i = -1;
 	while (token)
 	{
-<<<<<<< HEAD
-//		printf("-- token->fds[0] = %d\n-- token->fds[1] = %d\n", token->fds[0], token->fds[1]);
 		pid[++i] = fork();
 		if (pid[i] < 0)
 			return (-1);
-=======
-		pid[++i] = fork();
-		if (pid[i] < 0)
-			return (-1);
-		
->>>>>>> c1c9cd7fc38c50bb48a79fa802353b0793b224f5
 		if (pid[i] == 0)
 		{
-			if (i == 0)
-				close(pipe_fd[i].raw[0]);
-			else
-<<<<<<< HEAD
-			{
+			if (i != 0 && token->fds[0] == 0)
 				dup2(pipe_fd[i - 1].raw[0], token->fds[0]);
-				close(pipe_fd[i - 1].raw[0]);
-			}
-			if (token->next != NULL)
-			{
+			else
+				dup2(token->fds[0], 0);
+			if (token->next == NULL || token->fds[1] != 1)
+				dup2(token->fds[1], 1);
+			else
 				dup2(pipe_fd[i].raw[1], token->fds[1]);
-				close(pipe_fd[i].raw[1]);
-			}
-			else
-			{
-				close(pipe_fd[i].raw[1]);
-			}
-			ft_select_builtin(token, params);
 			close(pipe_fd[i].raw[0]);
-			close(token->fds[0]);
-			close(token->fds[1]);
-=======
-				dup2(pipe_fd[i - 1].raw[0], 0);
-			if (token->next != NULL)
-				dup2(pipe_fd[i].raw[1], 1);
-			else
-				close(pipe_fd[i].raw[1]);
-			ft_select_builtin(token, params);
-			close(pipe_fd[i].raw[0]);
->>>>>>> c1c9cd7fc38c50bb48a79fa802353b0793b224f5
 			close(pipe_fd[i].raw[1]);
+			ft_select_builtin(token, params/*, 1*/);
 			exit(0);
 		}
+		if (i != 0)
+			close(pipe_fd[i - 1].raw[0]);
 		close(pipe_fd[i].raw[1]);
+		if (token->fds[0] != 0)
+			close(token->fds[0]);
+		if (token->fds[1] != 1)
+			close(token->fds[1]);
 		token = token->next;
 	}
 	close(pipe_fd[i].raw[0]);
@@ -115,12 +93,14 @@ int	ft_execute(t_token *token, t_params *params)
 		}
 	}
 	if (token->next == NULL && token->prev == NULL)
-		ft_select_builtin(token, params);
+		ft_select_builtin(token, params/*, 0*/);
 	else
 	{
 		tmp = token;
 		ft_pipe(tmp, params, pid, pipe_fd);
 	}
+	free(pid);
+	free(pipe_fd);
 	return (0);
 }
 
@@ -178,7 +158,7 @@ int	get_path(char **arg, t_params *params)
 }
 
 // select if built-in or execve
-void	ft_select_builtin(t_token *token, t_params *params)
+void	ft_select_builtin(t_token *token, t_params *params/*, int	i*/)
 {
 	int	pid;
 
@@ -198,11 +178,11 @@ void	ft_select_builtin(t_token *token, t_params *params)
 		ft_unset(token->args, params);
 	else
 	{
-		pid = fork();
-		if (pid < 0)
-			return ;
-		if (pid == 0)
-		{
+		// pid = fork();
+		// if (pid < 0)
+		// 	return ;
+		// if (pid == 0)
+		// {
 			if (access(token->args[0], F_OK | X_OK) == -1)
 				get_path(token->args, params);
 			execve(token->args[0], token->args, params->env);
@@ -212,6 +192,8 @@ void	ft_select_builtin(t_token *token, t_params *params)
 			exit(0);
 		}
 		waitpid(pid, NULL, 0);
+		// if (i == 1)
+		// 	exit(0);
 	}
 	return ;
 }

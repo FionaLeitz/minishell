@@ -60,6 +60,7 @@ void	del_quotes_redir(t_token *token)
 {
 	int		i;
 	int		j;
+	char	*tmp;
 	
 	while (token)
 	{
