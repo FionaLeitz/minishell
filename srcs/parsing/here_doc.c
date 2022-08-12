@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/11 12:12:38 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/12 15:22:56 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,33 +34,57 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-int	ft_here_doc(char *str, t_params *params, t_data *data)
+int	ft_here_doc(char *delim, t_params *params, t_data *data)
 {
-	char		*delimiter;
 	const char	*pathname;
-	int			fd;
+	int		fd;
+	int		quotes;
+	char		*delim_tmp;
 
+	
 	(void)data;
-	delimiter = ft_strtrim(str, "\'");
+	delim_tmp = ft_strdup(delim);
+//	printf("tmp delim = %s\n", delim_tmp);
+//	printf("delimiter is = %s\n", delim);
+//	printf("here\n");
+	quotes = check_delim(delim);
+//	printf("quotes = %d\n", quotes);
+	if (delim_quotes(delim) == 1)
+		delim = del_quotes_hd(delim);
+	else
+		delim = delim_tmp; 
+//	printf("delimiter is = %s\n", delim);
+	free(delim_tmp);
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);
 	ft_manage_sighd();
-	get_hd_line(delimiter, fd, params);
+	get_hd_line(delim, fd, quotes, params);
 	//dup2(fd, STDOUT_FILENO);
 	close(fd);
 	//unlink(pathname);
 	return (0);
 }
 
-static int	print_error_heredoc(char *str, int fd)
+void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
-	ft_putstr_fd("minishell: warning: ", 2);
-	ft_putstr_fd("here-document at line delimited by end-of-file", 2);
-	ft_putstr_fd(" (wanted '", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("')\n", 2);
-	close(fd);
-	exit(0);
+	char	*line;
+	(void)params;
+
+	while (1)
+	{
+		line = readline("> ");	
+		if (!line)
+			print_error_heredoc(del, fd);
+		if (ft_strcmp(line, del) == 0)
+			break ;
+		if (ft_if_char(line, '$') == 0 && quotes == 0)
+			//write_hd_expand(line, fd, params);
+			printf("expand here\n");
+		else if(line && quotes == 1)
+			write(fd, line, ft_strlen(line) * sizeof(char));
+		write(fd, "\n", 1);
+		//free(line);
+	}
 }
 
 void	write_hd_expand(char *line, int fd, t_params *params)
@@ -98,26 +122,4 @@ void	write_hd_expand(char *line, int fd, t_params *params)
 		i++;
 	}
 	ft_putstr_fd(new, fd);
-}
-
-void	get_hd_line(char *del, int fd, t_params *params)
-{
-	char	*line;
-	(void)params;
-
-	while (1)
-	{
-		line = readline("> ");	
-		if (!line)
-			print_error_heredoc(del, fd);
-		if (ft_strcmp(line, del) == 0)
-			break ;
-		if (ft_if_char(line, '$') == 0)
-			write_hd_expand(line, fd, params);
-			//printf("expand here\n");
-		else
-			write(fd, line, ft_strlen(line) * sizeof(char));
-		write(fd, "\n", 1);
-		//free(line);
-	}
 }

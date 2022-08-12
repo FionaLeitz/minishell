@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/10 13:17:37 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/12 12:19:33 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +100,21 @@ int	print_prompt(t_data *data, t_params *params)
 		if (!data->input)
 			ft_exit_d(data, params);
 		if (syntax_check(data) == 0)
+		{
 			ft_cut(data, params);
-		tmp = data->head;
-		// while (tmp && tmp->args[0])
-		// {
-		// 	printf("cmd :\n");
-		// 	print_table(tmp->args);
-		// 	printf("---------------\n");
-		// 	printf("redirect :\n");
-		// 	print_table(tmp->red);
-		// 	ft_select_builtin(tmp,params);
-		//  tmp = tmp->next;
-		// }
-		ft_execute(tmp, params);
+			tmp = data->head;
+			//while (tmp && tmp->args[0])
+			//{
+			//	printf("cmd :\n");
+			// 	print_table(tmp->args);
+			// 	printf("---------------\n");
+			// 	printf("redirect :\n");
+			// 	print_table(tmp->red);
+			// 	ft_select_builtin(tmp,params);
+			//	 tmp = tmp->next;
+			//}
+			ft_execute(tmp, params);
+		}
 		free_struct(data);
 	}
 	free_params(params);

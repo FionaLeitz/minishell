@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 14:20:51 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/10 14:40:32 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/12 11:20:42 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ void	ft_redirection(char **str, t_params *params, t_data *data, t_token *token)
 		{
 			if (str[i][1] == '<')
 			{
-				printf("herefuckingdoc\n");//ft_here_doc(&str[i][2], params, data);
+				//printf("herefuckingdoc\n");
+				ft_here_doc(&str[i][2], params, data);
 			}
 			else
 				token->fds[0] = get_fd_input(&str[i][1], "<");

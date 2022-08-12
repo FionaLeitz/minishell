@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 12:39:29 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 17:38:38 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/12 12:11:25 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	get_next_quote(char quote, t_data *data)
 	return (-1);
 }
 
-// check if quotes opened are clsoed correctly
+// check if quotes opened are closed correctly
 int	check_quotes(t_data *data)
 {
 	char	quote;
