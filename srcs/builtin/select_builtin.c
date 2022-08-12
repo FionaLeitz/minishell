@@ -25,7 +25,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		if (pid[i] == 0)
 		{
 			if (i != 0 && token->fds[0] == 0)
-				dup2(pipe_fd[i - 1].raw[0], token->fds[0]);
+				dup2(pipe_fd[i - 1].raw[0], 0);
 			else
 				dup2(token->fds[0], 0);
 			if (token->next == NULL || token->fds[1] != 1)
@@ -34,7 +34,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 				dup2(pipe_fd[i].raw[1], token->fds[1]);
 			close(pipe_fd[i].raw[0]);
 			close(pipe_fd[i].raw[1]);
-			ft_select_builtin(token, params/*, 1*/);
+			ft_select_builtin(token, params, 1);
 			exit(0);
 		}
 		if (i != 0)
@@ -61,6 +61,24 @@ int	ft_execute(t_token *token, t_params *params)
 	int			*pid;
 	t_pipe_fd	*pipe_fd;
 
+	if (token->next == NULL && token->prev == NULL)
+	{
+		dprintf(2, "fds[0] = %d\nfds[1] = %d\n", token->fds[0], token->fds[1]);
+		if (token->fds[0] != 0)
+		{
+			dup2(token->fds[0], 0);
+			close(token->fds[0]);
+		}
+		if (token->fds[1] != 1)
+		{
+			dup2(token->fds[1], 1);
+			close(token->fds[1]);
+		}
+		ft_select_builtin(token, params, 0);
+//		close(token->fds[0]);
+//		close(token->fds[1]);
+		return (0);
+	}
 	nbr = 0;
 	tmp = token;
 	while (tmp)
@@ -92,13 +110,8 @@ int	ft_execute(t_token *token, t_params *params)
 			return (-1);
 		}
 	}
-	if (token->next == NULL && token->prev == NULL)
-		ft_select_builtin(token, params/*, 0*/);
-	else
-	{
-		tmp = token;
-		ft_pipe(tmp, params, pid, pipe_fd);
-	}
+	tmp = token;
+	ft_pipe(tmp, params, pid, pipe_fd);
 	free(pid);
 	free(pipe_fd);
 	return (0);
@@ -158,10 +171,11 @@ int	get_path(char **arg, t_params *params)
 }
 
 // select if built-in or execve
-void	ft_select_builtin(t_token *token, t_params *params/*, int	i*/)
+void	ft_select_builtin(t_token *token, t_params *params, int	i)
 {
 	int	pid;
 
+	pid = 0;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
 		ft_cd(token->args, params);
 	else if (ft_strncmp(token->args[0], "echo", 5) == 0)
@@ -178,11 +192,14 @@ void	ft_select_builtin(t_token *token, t_params *params/*, int	i*/)
 		ft_unset(token->args, params);
 	else
 	{
-		// pid = fork();
-		// if (pid < 0)
-		// 	return ;
-		// if (pid == 0)
-		// {
+		if (i == 0)
+		{
+			pid = fork();
+			if (pid < 0)
+				return ;
+		}
+		if (pid == 0)
+		{
 			if (access(token->args[0], F_OK | X_OK) == -1)
 				get_path(token->args, params);
 			execve(token->args[0], token->args, params->env);
@@ -191,9 +208,8 @@ void	ft_select_builtin(t_token *token, t_params *params/*, int	i*/)
 			write(2, " : command not found\n", 21);
 			exit(0);
 		}
-		waitpid(pid, NULL, 0);
-		// if (i == 1)
-		// 	exit(0);
+		if (i == 0)
+			waitpid(pid, NULL, 0);
 	}
 	return ;
 }
