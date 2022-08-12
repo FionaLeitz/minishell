@@ -176,6 +176,8 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i)
 	int	pid;
 
 	pid = 0;
+	if (token->args[0] == NULL)
+		return ;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
 		ft_cd(token->args, params);
 	else if (ft_strncmp(token->args[0], "echo", 5) == 0)

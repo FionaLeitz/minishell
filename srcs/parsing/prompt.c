@@ -100,9 +100,10 @@ int	print_prompt(t_data *data, t_params *params)
 		if (!data->input)
 			ft_exit_d(data, params);
 		if (syntax_check(data) == 0)
+		{
 			ft_cut(data, params);
-		tmp = data->head;
-		// while (tmp && tmp->args[0])
+			tmp = data->head;
+		// while (tmp)
 		// {
 		// 	printf("cmd :\n");
 		// 	print_table(tmp->args);
@@ -110,9 +111,10 @@ int	print_prompt(t_data *data, t_params *params)
 		// 	printf("redirect :\n");
 		// 	print_table(tmp->red);
 		// 	ft_select_builtin(tmp,params);
-		//  tmp = tmp->next;
+		// 	tmp = tmp->next;
 		// }
-		ft_execute(tmp, params);
+			ft_execute(tmp, params);
+		}
 		free_struct(data);
 	}
 	free_params(params);
