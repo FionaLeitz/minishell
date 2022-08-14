@@ -74,7 +74,6 @@ void	ft_redirection(char **str, t_params *params, t_data *data, t_token *token)
 		{
 			if (str[i][1] == '<')
 			{
-				//printf("herefuckingdoc\n");
 				ft_here_doc(&str[i][2], params, data);
 			}
 			else

@@ -127,9 +127,10 @@ void		ft_manage_sighd(void);
 const char	*hd_name(void);
 int			ft_here_doc(char *str, t_params *params, t_data *data);
 void		get_hd_line(char *del, int fd, int quotes, t_params *params);
+char		*write_hd_expand(char *line, int fd, t_params *params);
 //expand_heredoc.c
 char		*rep_hd(t_params *params, char *str, int size, int quote);
-int			in_replace_hd(char *str, int s, char *line, int *i);
+char		*in_replace_hd(char *str, int s, char *line, int *i);
 char		*expand_heredoc(char *line, t_params *params);
 //heredoc_utils.c
 int			ft_if_char(char *str, char c);
@@ -137,7 +138,8 @@ char		*ft_strncpy(char *dest, char *src, unsigned int n);
 int			delim_quotes(char *delim);
 int			check_delim(char *delim);
 int			print_error_heredoc(char *str, int fd);
-char	*del_quotes_hd(char *delim);
+char		*del_quotes_hd(char *delim);
+char		*ft_strjoin_char(char *s1, char c);
 int	in_del_quote_hd(char *str, int i);
 //parse.c
 void		jump_quotes(char *str, t_data *data);

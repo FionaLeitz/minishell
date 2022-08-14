@@ -12,6 +12,8 @@
 
 #include "../../minishell.h"
 
+int	exit_status = 0;
+
 // main
 int	main(int ac, char **av, char **envp)
 {
@@ -19,8 +21,13 @@ int	main(int ac, char **av, char **envp)
 	t_params	params;
 
 	(void)av;
+	//tests whether fd is a open fd reffering to a terminal, in this case returns 1
+	if (isatty(0) == 0 || isatty(1) == 0)
+		return (0);
 	params.env = ft_get_env(envp);
 	params.export = create_export(params.env);
+	//if (ac != 1)
+	//	error message ?
 	if (ac == 1)
 		print_prompt(&data, &params);
 	free_export(params.export);
