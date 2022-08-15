@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 11:42:13 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/11 12:19:06 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 11:39:04 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ char *rep_hd(t_params *params, char *str, int size, int quote)
 	while(params->env[++count])
 	{
 		if (ft_strncmp(params->env[count], str, size) == 0 && params->env[count][size] == '=')
-			{return (&params->env[count][size + 1]);
-			tmp = ft_strjoin_char(tmp, params->env[count][size + 1]);
-			printf("tmpenv = %s\n", tmp);}
+			return (&params->env[count][size + 1]);
 	}
 	return (NULL);
 }

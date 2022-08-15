@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:29:40 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/10 09:29:42 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 14:53:37 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ int	ft_env(char **arg, t_params *params)
 	if (arg[1] != NULL)
 	{
 		ft_printf("env: ‘%s’ too many arguments\n", arg[1]);
+		//exit_st = 1;
 		return (1);
 	}
 	if (params->env == NULL)
 		ft_printf("\n");
 	else
 		print_table(params->env);
+	exit_st = 0;
 	return (0);
 }
 

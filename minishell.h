@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/12 12:29:27 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:00:30 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <signal.h>
 
 # define PROMPT "Minishell> "
+
+extern int	exit_st;
 
 typedef struct s_fd
 {
@@ -125,7 +127,7 @@ void		ft_sig_heredoc(int signal);
 void		ft_manage_sighd(void);
 //here_doc.c
 const char	*hd_name(void);
-int			ft_here_doc(char *str, t_params *params, t_data *data);
+int			ft_here_doc(char *str, t_params *params, t_token *token);
 void		get_hd_line(char *del, int fd, int quotes, t_params *params);
 char		*write_hd_expand(char *line, int fd, t_params *params);
 //expand_heredoc.c
@@ -175,6 +177,7 @@ int			in_create_tab(char *str, int *i);
 int			create_tab(t_data *data, t_token *token);
 //utils.c
 int			ft_space(char c);
+int			check_fd(int fd);
 
 #endif
 

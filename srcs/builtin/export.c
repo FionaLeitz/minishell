@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:18:53 by fleitz            #+#    #+#             */
-/*   Updated: 2022/06/03 14:18:56 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 14:45:58 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,6 @@ int	ft_export(char **arg, t_params *params)
 			new_export(arg[count], params);
 		}
 	}
+	exit_st = 0;
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:41:15 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/11 14:41:18 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 14:12:03 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// unset variable in exxport
+// unset variable in export
 static void	ft_unset_export(char **arg, t_params *params)
 {
 	int			i;
@@ -66,5 +66,6 @@ int	ft_unset(char **arg, t_params *params)
 		}
 	}
 	ft_unset_export(arg, params);
+	exit_st = 0;
 	return (0);
 }

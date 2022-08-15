@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/10 09:30:12 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 15:15:14 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,8 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i)
 			write(2, "minishell: ", 11);
 			write(2, token->args[0], ft_strlen(token->args[0]));
 			write(2, " : command not found\n", 21);
+			exit_st = 127;
+			//exit(exit_st);?
 			exit(0);
 		}
 		if (i == 0)

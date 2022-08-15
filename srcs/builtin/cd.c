@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:29:22 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/10 09:29:25 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 15:06:47 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static int	ft_if_cd(int i, int j, char **env)
 			free(env[j]);
 		return (1);
 	}
+	//?exit_st = 0;
 	return (0);
 }
 
@@ -100,11 +101,15 @@ int	ft_cd(char **arg, t_params *params)
 	char	path[4095];
 
 	if (ft_error_cd(arg) == -1)
+	{
+		exit_st = 1;
 		return (1);
+	}
 	i = ft_find(params->env, "PWD=", 4);
 	j = ft_find(params->env, "OLDPWD=", 7);
 	getcwd(path, 4095);
 	if (i == -1 && j == -1)
 		return (0);
+	//exit_st = 0; or in the ft_if_cd
 	return (ft_end_cd(i, j, params->env, path));
 }

@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/14 12:08:55 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 11:43:19 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ const char *hd_name(void)
 }
 
 //main fct of here_doc, check delimiter, eventually change the return to return fd
-int	ft_here_doc(char *delim, t_params *params, t_data *data)
+int	ft_here_doc(char *delim, t_params *params, t_token *token)
 {
 	const char	*pathname;
 	int		fd;
 	int		quotes;
 	char		*delim_tmp;
 
-	(void)data;
+	(void)token;
 	delim_tmp = delim;
 	printf("tmp delim = %s\n", delim_tmp);
 	printf("delimiter is = %s\n", delim);
@@ -56,9 +56,10 @@ int	ft_here_doc(char *delim, t_params *params, t_data *data)
 	printf("delimiter after = %s\n", delim);
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);
+	printf("fd de hd = %d\n", fd);
 	ft_manage_sighd();
 	get_hd_line(delim, fd, quotes, params);
-	//dup2(fd, STDIN_FILENO);
+	//dup2(fd, STDOUT_FILENO);
 	close(fd);
 	//unlink(pathname);
 	return (0);//return(valeur fd in heredoc);
@@ -82,8 +83,8 @@ void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
 			new = write_hd_expand(line, fd, params);
-		else if(line && quotes == 1)
-			new = line;
+		else if(line)
+			new = ft_strdup(line);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
 	}
