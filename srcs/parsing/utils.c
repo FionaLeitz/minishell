@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 17:57:57 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 15:05:51 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 16:20:19 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,15 @@ int	check_fd(int fd)
 		exit_st = 127;
 	}
 	return(-1);
+}
+
+int	check_child(int pid)
+{
+	if (pid < 0)
+	{
+		perror("Fork:");
+		exit_st = 127;
+		return (-1);
+	}
+	return (0);
 }

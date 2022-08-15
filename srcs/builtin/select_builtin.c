@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/15 15:15:14 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 16:21:37 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	while (token)
 	{
 		pid[++i] = fork();
-		if (pid[i] < 0)
-			return (-1);
+		//if (pid[i] < 0)
+		//	return (-1);
+		check_child(pid[i]);
 		if (pid[i] == 0)
 		{
 			if (i != 0 && token->fds[0] == 0)
@@ -199,6 +200,7 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i)
 			pid = fork();
 			if (pid < 0)
 				return ;
+			//check_child(pid);
 		}
 		if (pid == 0)
 		{
@@ -209,7 +211,6 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i)
 			write(2, token->args[0], ft_strlen(token->args[0]));
 			write(2, " : command not found\n", 21);
 			exit_st = 127;
-			//exit(exit_st);?
 			exit(0);
 		}
 		if (i == 0)

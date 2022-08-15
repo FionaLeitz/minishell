@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 15:00:30 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 16:20:56 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ int			create_tab(t_data *data, t_token *token);
 //utils.c
 int			ft_space(char c);
 int			check_fd(int fd);
+int			check_child(int pid);
 
 #endif
 
