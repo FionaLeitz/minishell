@@ -18,12 +18,15 @@ const char *hd_name(void)
 	const char	*pathname;
 	int	i;
 	int	fd_exist;
+	char	*tmp;
 
 	i = 1;
 	fd_exist = 0;
 	while (fd_exist != -1)
 	{
-		pathname = ft_strjoin("/tmp/hd", ft_itoa(i));
+		tmp = ft_itoa(i);
+		pathname = ft_strjoin("/tmp/hd", tmp);
+		free(tmp);
 		fd_exist = open(pathname, O_RDONLY);
 		if (fd_exist == -1)
 			break;
@@ -45,24 +48,33 @@ int	ft_here_doc(char *delim, t_params *params, t_token *token)
 
 	(void)token;
 	delim_tmp = delim;
-	printf("tmp delim = %s\n", delim_tmp);
-	printf("delimiter is = %s\n", delim);
+	//printf("tmp delim = %s\n", delim_tmp);
+	//printf("delimiter is = %s\n", delim);
 	quotes = check_delim(delim);
-	printf("quotes = %d\n", quotes);
+	//printf("quotes = %d\n", quotes);
 	if (delim_quotes(delim) == 1)
 		delim = del_quotes_hd(delim);
 	else
 		delim = delim_tmp; 
-	printf("delimiter after = %s\n", delim);
+	//printf("delimiter after = %s\n", delim);
 	pathname = hd_name();
-	fd = open(pathname, O_CREAT | O_WRONLY | O_TRUNC, 00664);
-	printf("fd de hd = %d\n", fd);
+	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
+	//printf("fd de hd = %d\n", fd);
 	ft_manage_sighd();
 	get_hd_line(delim, fd, quotes, params);
 	//dup2(fd, STDOUT_FILENO);
+
+
+//	dup2(new_fd, 1);
+//	close(new_fd);
+//	return (fd);
 	close(fd);
-	//unlink(pathname);
-	return (0);//return(valeur fd in heredoc);
+	
+	fd = get_fd_input((char*)pathname, "<");
+	unlink(pathname);
+	free((char*)pathname);
+	return (fd);
+//	return (0);//return(valeur fd in heredoc);
 }
 
 
@@ -87,6 +99,7 @@ void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			new = ft_strdup(line);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
+		free(new);
 	}
 }
 

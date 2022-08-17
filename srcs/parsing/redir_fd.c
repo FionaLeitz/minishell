@@ -63,7 +63,7 @@ void	ft_redirection(char **str, t_params *params, t_data *data, t_token *token)
 			if (token->fds[0] != 0)
 				close(token->fds[0]);
 			if (str[i][1] == '<')
-				/*token->fds[0] = */ft_here_doc(&str[i][2], params, token);
+				token->fds[0] = ft_here_doc(&str[i][2], params, token);
 			else
 				token->fds[0] = get_fd_input(&str[i][1], "<");
 		}

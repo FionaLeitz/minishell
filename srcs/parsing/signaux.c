@@ -17,18 +17,16 @@ void	ft_sig_manage(int signal)
 {
 	if (signal == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 		exit_st = 130;
-		exit(130);
 	}		
 	if (signal == SIGQUIT)
 	{
-		write(1, "\b\b \b\b", 6);
+		write(2, "\b\b  \b\b", 6);
 		exit_st = 131;
-		exit(131);
 	}
 }
 
@@ -41,7 +39,7 @@ void	ft_manage_sig(void)
 // handle ctrl-d
 void	ft_exit_d(t_data *data, t_params *params)
 {
-	write(1, "exit\n", 4);
+	write(2, "exit\n", 4);
 	free_params(params);
 	free_struct(data);
 	exit(0);
@@ -52,13 +50,13 @@ void	ft_sig_heredoc(int signal)
 {
 	if (signal == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 		rl_replace_line("", 0);
 		close(STDIN_FILENO);
 		exit_st = 130;
 	}
 	if (signal == SIGQUIT)
-		write(1, "\b\b \b\b", 6);
+		write(2, "\b\b  \b\b", 6);
 //	if (signal == SIGSEGV)
 //	{
 //		write(1, "n", 1);

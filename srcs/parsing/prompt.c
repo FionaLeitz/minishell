@@ -94,7 +94,7 @@ int	print_prompt(t_data *data, t_params *params)
 	{
 		init_data(data);
 		ft_manage_sig();
-		//dup2(data->fd_in, STDIN_FILENO);
+//		dup2(data->fd_in, STDIN_FILENO);
 //		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
