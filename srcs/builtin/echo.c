@@ -52,6 +52,6 @@ int	ft_echo(char **arg)
 		ft_printf("%s", arg[count]);
 	if (line != 1)
 		ft_printf("\n");
-	exit_st = 0;
+	// exit_st = 0;
 	return (0);
 }

@@ -15,13 +15,13 @@
 int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 {
 	int	i;
+	int	save;
+	int	status;
 
 	i = -1;
 	while (token)
 	{
 		pid[++i] = fork();
-		//if (pid[i] < 0)
-		//	return (-1);
 		check_child(pid[i]);
 		if (pid[i] == 0)
 		{
@@ -49,8 +49,10 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	}
 	close(pipe_fd[i].raw[0]);
 	close(pipe_fd[i].raw[1]);
-	while (i >= 0)
-		waitpid(pid[i--], NULL, 0);
+	save = 0;
+	while (save <= i)
+		waitpid(pid[save++], &status, 0);
+	exit_st = WEXITSTATUS(status);
 	return (0);
 }
 
@@ -58,13 +60,15 @@ int	ft_execute(t_token *token, t_params *params)
 {
 	int			nbr;
 	int			nbr2;
+	int			old_fd[2];
 	t_token		*tmp;
 	int			*pid;
 	t_pipe_fd	*pipe_fd;
 
 	if (token->next == NULL && token->prev == NULL)
 	{
-		dprintf(2, "fds[0] = %d\nfds[1] = %d\n", token->fds[0], token->fds[1]);
+		old_fd[0] = dup(0);
+		old_fd[1] = dup(1);
 		if (token->fds[0] != 0)
 		{
 			dup2(token->fds[0], 0);
@@ -76,8 +80,10 @@ int	ft_execute(t_token *token, t_params *params)
 			close(token->fds[1]);
 		}
 		ft_select_builtin(token, params, 0);
-//		close(token->fds[0]);
-//		close(token->fds[1]);
+		dup2(old_fd[0], 0);
+		dup2(old_fd[1], 1);
+		close(old_fd[0]);
+		close(old_fd[1]);
 		return (0);
 	}
 	nbr = 0;
@@ -175,24 +181,25 @@ int	get_path(char **arg, t_params *params)
 void	ft_select_builtin(t_token *token, t_params *params, int	i)
 {
 	int	pid;
+	int	status;
 
 	pid = 0;
 	if (token->args[0] == NULL)
 		return ;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
-		ft_cd(token->args, params);
+		exit_st = ft_cd(token->args, params);
 	else if (ft_strncmp(token->args[0], "echo", 5) == 0)
-		ft_echo(token->args);
+		exit_st = ft_echo(token->args);
 	else if (ft_strncmp(token->args[0], "env", 4) == 0)
-		ft_env(token->args, params);
+		exit_st = ft_env(token->args, params);
 	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
-		ft_pwd(token->args);
+		exit_st = ft_pwd(token->args);
 	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
-		ft_exit(token->args);
+		exit_st = ft_exit(token->args);
 	else if (ft_strncmp(token->args[0], "export", 7) == 0)
-		ft_export(token->args, params);
+		exit_st = ft_export(token->args, params);
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
-		ft_unset(token->args, params);
+		exit_st = ft_unset(token->args, params);
 	else
 	{
 		if (i == 0)
@@ -214,7 +221,10 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i)
 			exit(0);
 		}
 		if (i == 0)
-			waitpid(pid, NULL, 0);
+		{
+			waitpid(pid, &status, 0);
+			exit_st = WEXITSTATUS(status);
+		}
 	}
 	return ;
 }

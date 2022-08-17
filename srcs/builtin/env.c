@@ -25,7 +25,7 @@ int	ft_env(char **arg, t_params *params)
 		ft_printf("\n");
 	else
 		print_table(params->env);
-	exit_st = 0;
+	//exit_st = 0;
 	return (0);
 }
 

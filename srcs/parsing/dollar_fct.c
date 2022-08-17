@@ -20,6 +20,9 @@ char	*rep(char **env, char *str, int size, int quote)
 	if ((size == 0 && (ft_space(str[1]) == 0 || str[1] == '\0'))
 		|| (quote % 2 != 0 && str[0] == '\"'))
 		return ("$");
+	if (str[0] == '?' && (ft_space(str[1]) == 0 || str[1] == '\0'))
+		return (ft_itoa(exit_st));
+//	dprintf(2, "variable $ = %s\n", str);
 	count = -1;
 	while (env[++count])
 	{

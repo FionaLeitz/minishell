@@ -29,8 +29,8 @@ int	ft_exit(char **arg)
 			{
 				ft_printf("minishell: exit: %s: numeric argument required\n",
 					arg[1]);
-				//exit_st = 2;?
-				return (2);
+				exit_st = 2;
+				exit(2);
 			}
 		}
 		n = ft_atol(arg[1]);
@@ -39,7 +39,8 @@ int	ft_exit(char **arg)
 	{
 		ft_printf("minisehll: exit: too many arguments\n");
 		exit_st = 1;
-		return (1);
+		exit(1);
 	}
-	return (n);
+	exit_st = n;
+	exit(n);
 }

@@ -32,5 +32,6 @@ int	main(int ac, char **av, char **envp)
 		print_prompt(&data, &params);
 	free_export(params.export);
 	free_table(params.env);
-	return (EXIT_SUCCESS);
+	return (exit_st);
+//	return (EXIT_SUCCESS);
 }
