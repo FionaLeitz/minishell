@@ -51,12 +51,6 @@ typedef struct s_export
 	struct s_export	*next;
 }					t_export;
 
-typedef struct s_params
-{
-	char			**env;
-	t_export		*export;
-}					t_params;
-
 typedef struct s_token
 {	
 	char			*value;
@@ -76,6 +70,13 @@ typedef struct s_data
 	int				fd_out;
 	struct s_token	*head;
 }					t_data;
+
+typedef struct s_params
+{
+	char			**env;
+	t_export		*export;
+	t_data			*data;
+}					t_params;
 
 // BUILT-IN
 // cd.c
@@ -100,7 +101,7 @@ char		**ft_get_env(char **envp);
 int			ft_pwd(char **arg);
 // select_builtin.c
 int			ft_execute(t_token *token, t_params *params);
-void		ft_select_builtin(t_token *token, t_params *params, int i);
+void		ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd);
 int			ft_execute(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);

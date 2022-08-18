@@ -26,9 +26,8 @@ void	jump_quotes(char *str, t_data *data)
 // check error with pipes
 int	check_string(t_data *data)
 {
-	data->i = -1;
-	printf("data->trimmed = %s\n", data->trimmed);
-	while (data->trimmed[++data->i + 1])	// warning + 1 ???
+	data->i = 0;
+	while (data->trimmed[data->i++])	// warning + 1 ???
 	{
 		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
 			jump_quotes(data->trimmed, data);

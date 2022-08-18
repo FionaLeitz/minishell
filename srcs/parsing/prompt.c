@@ -90,6 +90,7 @@ int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
+	params->data = data;
 	while (1)
 	{
 		init_data(data);
