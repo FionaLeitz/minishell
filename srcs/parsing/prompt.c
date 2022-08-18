@@ -6,34 +6,17 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/14 10:24:53 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 16:34:11 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	print_table2(char **table, int j)
-{
-	int	i;
-
-	i = 0;
-	if (j == 2)
-		printf("red :\n");
-	if (j == 1)
-		printf("args :\n");
-	while (table[i])
-	{
-		if (table[i] == NULL)
-			printf("C'est vide\n");
-		printf("%s", table[i]);
-		printf("\n");
-		i++;
-	}
-	printf("------\n");
-}
-
+// parse errors
 int	syntax_check(t_data *data)
 {
+	if (data->input != NULL && ft_strlen(data->input) != 0)
+		add_history(data->input);
 	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
 	if (data->trimmed[0] == '|')
 	{
@@ -41,9 +24,6 @@ int	syntax_check(t_data *data)
 		free_struct(data);
 		return (-1);
 	}
-	if (data->input != NULL && ft_strlen(data->input) != 0)
-		add_history(data->input);
-	//rl_clear_history();
 	if (check_string(data) == -1)
 	{
 		free_struct(data);
@@ -58,18 +38,19 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
-void	ft_cut(t_data *data)
+// start separating pipes
+void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
-	char	*save;
+	char	*s;
 
 	first_pipe_cut(data);
 	tmp = data->head;
 	while (tmp)
 	{
-		save = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
 		free(tmp->value);
-		tmp->value = save;
+		tmp->value = s;
 		tmp = tmp->next;
 	}
 	tmp = data->head;
@@ -78,18 +59,33 @@ void	ft_cut(t_data *data)
 		count_red(data, tmp);
 		tmp = tmp->next;
 	}
-// gerer ici le remplacement des $
-// COMPLIQUE !
+	tmp = data->head;
+	if (replace_var(tmp, data, params) == -1)
+	{
+		printf("ERROR REPLACE_VAR\n");
+		return ;
+	}
 	tmp = data->head;
 	while (tmp)
 	{
+		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
+		free(tmp->value);
+		tmp->value = s;
 		create_tab(data, tmp);
 		tmp = tmp->next;
 	}
 	tmp = data->head;
 	del_quotes(tmp);
+
+	tmp = data->head;
+	while (tmp)
+	{
+		ft_redirection(tmp->red, params, data, tmp);
+		tmp = tmp->next;
+	}
 }
 
+// give the prompt, get readline, parses and execution's fonctions
 int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
@@ -97,33 +93,31 @@ int	print_prompt(t_data *data, t_params *params)
 	while (1)
 	{
 		init_data(data);
-		//ctrl-c		
-		signal(SIGINT, sig_manage);
-		//ctrl-backslash
-		signal(SIGQUIT, sig_manage);
+		ft_manage_sig();
+//		dup2(data->fd_in, STDIN_FILENO);
+//		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
-			ft_exit_d(data);
+			ft_exit_d(data, params);
 		if (syntax_check(data) == 0)
-			ft_cut(data);
-		tmp = data->head;
-		while (tmp)
 		{
-			params->env = ft_select_builtin(tmp, params);
-			tmp = tmp->next;
+			ft_cut(data, params);
+			tmp = data->head;
+			//while (tmp && tmp->args[0])
+			//{
+			//	printf("cmd :\n");
+			// 	print_table(tmp->args);
+			// 	printf("---------------\n");
+			// 	printf("redirect :\n");
+			// 	print_table(tmp->red);
+			// 	ft_select_builtin(tmp,params);
+			//	 tmp = tmp->next;
+			//}
+			ft_execute(tmp, params);
 		}
-//			printf("Error parsing\n");
-//////////////////////////////
-/*		tmp = data->head;
-		while (tmp)
-		{
-			print_table(tmp->args, 1);
-			print_table(tmp->red, 2);
-			tmp = tmp->next;
-		}*/
-/////////////////////////////
 		free_struct(data);
 	}
+	free_params(params);
 	rl_clear_history();
 	return (0);
 }

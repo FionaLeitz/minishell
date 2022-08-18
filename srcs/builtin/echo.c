@@ -6,12 +6,13 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:29:30 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/10 09:29:33 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 14:07:26 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+// check if -n applies
 static int	ft_checkn(char **arg)
 {
 	int	i;
@@ -35,6 +36,7 @@ static int	ft_checkn(char **arg)
 	return (count);
 }
 
+// write in stdout the arguments
 int	ft_echo(char **arg)
 {
 	int	count;
@@ -50,5 +52,6 @@ int	ft_echo(char **arg)
 		ft_printf("%s", arg[count]);
 	if (line != 1)
 		ft_printf("\n");
+	// exit_st = 0;
 	return (0);
 }

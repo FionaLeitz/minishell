@@ -6,31 +6,37 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 14:47:40 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 18:07:01 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/08 17:33:58 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	check_string(t_data *data)
+// jump quotes
+void	jump_quotes(char *str, t_data *data)
 {
 	char	quote;
 
-	data->i = 0;
-	while (data->trimmed[data->i])
+	quote = str[data->i];
+	data->i++;
+	while (str[data->i] != '\0' && str[data->i] != quote)
+		data->i++;
+}
+
+// check error with pipes
+int	check_string(t_data *data)
+{
+	data->i = -1;
+	printf("data->trimmed = %s\n", data->trimmed);
+	while (data->trimmed[++data->i + 1])	// warning + 1 ???
 	{
 		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
-		{
-			quote = data->trimmed[data->i];
-			data->i++;
-			while (data->trimmed[data->i] != quote)
-				data->i++;
-		}
+			jump_quotes(data->trimmed, data);
 		else if (data->trimmed[data->i] == '|')
 		{
 			data->i++;
 			while (data->trimmed[data->i]
-				&& ft_check_whitespace(data->trimmed[data->i]) == 0)
+				&& ft_space(data->trimmed[data->i]) == 0)
 				data->i++;
 			if (data->trimmed[data->i] == '|' || data->trimmed[data->i] == '\0')
 			{
@@ -40,50 +46,33 @@ int	check_string(t_data *data)
 		}
 		if (check_redir(data) == -1)
 			return (-1);
-		data->i++;
 	}
 	return (0);
 }
 
-int	check_redir(t_data *data)
+// create first element, which is the first command and argument before pipe
+int	first_pipe_cut(t_data *data)
 {
-	char	redir;
+	int		count;
+	char	quote;
 
-	if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
+	data->i = 0;
+	count = 0;
+	while (data->trimmed[data->i])
 	{
-		redir = data->trimmed[data->i];
+		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
+		{
+			quote = data->trimmed[data->i];
+			data->i++;
+			get_next_quote(quote, data);
+		}
+		else if (data->trimmed[data->i] == '|')
+		{
+			push_back(data, ft_strndup(&data->trimmed[count], data->i - count));
+			count = data->i + 1;
+		}
 		data->i++;
-		while (data->trimmed[data->i]
-			&& ft_check_whitespace(data->trimmed[data->i]) == 0)
-			data->i++;
-		if (data->trimmed[data->i] == '\0')
-		{
-			printf("minishell: syntax error near unexpected token `newline'\n");
-			return (-1);
-		}
-		if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
-		{
-			if (data->trimmed[data->i] != redir)
-			{
-				printf("minishell: syntax error near unexpected token `%c'\n", data->trimmed[data->i]);
-				return (-1);
-			}
-			redir = data->trimmed[data->i];
-			data->i++;
-		}
-		while (data->trimmed[data->i]
-			&& ft_check_whitespace(data->trimmed[data->i]) == 0)
-			data->i++;
-		if (data->trimmed[data->i] == '\0')
-		{
-			printf("minishell: syntax error near unexpected token `newline'\n");
-			return (-1);
-		}
-		if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
-		{
-			printf("minishell: syntax error near unexpected token `%c'\n", redir);
-			return (-1);
-		}
 	}
+	push_back(data, ft_strdup(&data->trimmed[count]));
 	return (0);
 }

@@ -6,50 +6,66 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 10:36:34 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 13:52:42 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	free_struct(t_data *data)
-{
-	t_token	*tmp;
-
-	if (data->input != NULL)
-		free(data->input);
-	if (data->trimmed != NULL)
-		free(data->trimmed);
-	while (data->head != NULL)
-	{
-		tmp = data->head;
-		free(tmp->value);
-		free_table(tmp->args);
-		free_table(tmp->red);
-		data->head = data->head->next;
-		free(tmp);
-	}
-	init_data(data);
-}
-
-void	sig_manage(int signal)
+// handle ctrl-\ and ctrl-c
+void	ft_sig_manage(int signal)
 {
 	if (signal == SIGINT)
 	{
-		printf("\n");
+		write(2, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		exit_st = 130;
 	}		
 	if (signal == SIGQUIT)
-		printf("\b\b  \b\b");
-	return ;
+	{
+		write(2, "\b\b  \b\b", 6);
+		exit_st = 131;
+	}
 }
 
-void	ft_exit_d(t_data *data)
+void	ft_manage_sig(void)
 {
-	printf("exit\n");
-	(void)data;
-//	free_struct(data);
+	signal(SIGINT, ft_sig_manage);
+	signal(SIGQUIT, ft_sig_manage);
+}
+
+// handle ctrl-d
+void	ft_exit_d(t_data *data, t_params *params)
+{
+	write(2, "exit\n", 4);
+	free_params(params);
+	free_struct(data);
 	exit(0);
+}
+
+//handle signals in the here_doc
+void	ft_sig_heredoc(int signal)
+{
+	if (signal == SIGINT)
+	{
+		write(2, "\n", 1);
+		rl_replace_line("", 0);
+		close(STDIN_FILENO);
+		exit_st = 130;
+	}
+	if (signal == SIGQUIT)
+		write(2, "\b\b  \b\b", 6);
+//	if (signal == SIGSEGV)
+//	{
+//		write(1, "n", 1);
+//		exit(0);
+//	}
+}
+
+void	ft_manage_sighd(void)
+{
+	signal(SIGINT, ft_sig_heredoc);
+	signal(SIGQUIT, ft_sig_heredoc);
 }

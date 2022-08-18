@@ -6,15 +6,44 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 17:57:57 by masamoil          #+#    #+#             */
-/*   Updated: 2022/07/11 18:08:02 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/15 16:20:19 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_check_whitespace(char c)
+// return 0 if c is white space, else return -1
+int	ft_space(char c)
 {
-	if (c == '\f' || c == '\n' || c == '\r' || c == '\t' || c == '\v' || c == ' ')
+	if (c == '\f' || c == '\n' || c == '\r' || c == '\t'
+		|| c == '\v' || c == ' ')
 		return (0);
 	return (-1);
+}
+
+/*void	close_pipes(int *pipefd)
+{
+	close(pipefd[0]);
+	close(pipefd[1]);
+}*/
+
+int	check_fd(int fd)
+{
+	if (fd == -1)
+	{
+		perror("Open:");
+		exit_st = 127;
+	}
+	return(-1);
+}
+
+int	check_child(int pid)
+{
+	if (pid < 0)
+	{
+		perror("Fork:");
+		exit_st = 127;
+		return (-1);
+	}
+	return (0);
 }

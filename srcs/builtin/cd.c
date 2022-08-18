@@ -6,12 +6,13 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:29:22 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/10 09:29:25 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 15:06:47 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+// check arguments and chdir changethe curant working directory
 static int	ft_error_cd(char **arg)
 {
 	if (arg[1] == NULL)
@@ -32,7 +33,7 @@ static int	ft_error_cd(char **arg)
 	return (0);
 }
 
-// return 1 = stupid !
+// get variable  in env
 static int	ft_find(char **env, char *str, int i)
 {
 	int	count;
@@ -41,10 +42,11 @@ static int	ft_find(char **env, char *str, int i)
 	while (env[count] && ft_strncmp(env[count], str, i))
 		count++;
 	if (env[count] == NULL)
-		return (1); ////////fais!un truc ICI
+		return (-1);
 	return (count);
 }
 
+// end cd correctly
 static int	ft_if_cd(int i, int j, char **env)
 {
 	if (i == -1)
@@ -65,9 +67,11 @@ static int	ft_if_cd(int i, int j, char **env)
 			free(env[j]);
 		return (1);
 	}
+	//?exit_st = 0;
 	return (0);
 }
 
+// replace variables in env
 static int	ft_end_cd(int i, int j, char **env, char *path)
 {
 	char	*oldpath;
@@ -89,18 +93,23 @@ static int	ft_end_cd(int i, int j, char **env, char *path)
 	return (ft_if_cd(i, j, env));
 }
 
-int	ft_cd(char **arg, char **env)
+// change directory
+int	ft_cd(char **arg, t_params *params)
 {
 	int		i;
 	int		j;
 	char	path[4095];
 
 	if (ft_error_cd(arg) == -1)
+	{
+		exit_st = 1;
 		return (1);
-	i = ft_find(env, "PWD=", 4);
-	j = ft_find(env, "OLDPWD=", 7);
+	}
+	i = ft_find(params->env, "PWD=", 4);
+	j = ft_find(params->env, "OLDPWD=", 7);
 	getcwd(path, 4095);
 	if (i == -1 && j == -1)
 		return (0);
-	return (ft_end_cd(i, j, env, path));
+	//exit_st = 0; or in the ft_if_cd
+	return (ft_end_cd(i, j, params->env, path));
 }

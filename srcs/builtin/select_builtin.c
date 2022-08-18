@@ -6,82 +6,227 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/10 09:30:12 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 16:21:37 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	get_path(char **arg, t_params *params)
+int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 {
-	int		i;
-	char	**path;
+	int	i;
+	int	save;
+	int	status;
+
+	i = -1;
+	while (token)
+	{
+		pid[++i] = fork();
+		check_child(pid[i]);
+		if (pid[i] == 0)
+		{
+			if (i != 0 && token->fds[0] == 0)
+				dup2(pipe_fd[i - 1].raw[0], 0);
+			else
+				dup2(token->fds[0], 0);
+			if (token->next == NULL || token->fds[1] != 1)
+				dup2(token->fds[1], 1);
+			else
+				dup2(pipe_fd[i].raw[1], token->fds[1]);
+			close(pipe_fd[i].raw[0]);
+			close(pipe_fd[i].raw[1]);
+			ft_select_builtin(token, params, 1);
+			exit(0);
+		}
+		if (i != 0)
+			close(pipe_fd[i - 1].raw[0]);
+		close(pipe_fd[i].raw[1]);
+		if (token->fds[0] != 0)
+			close(token->fds[0]);
+		if (token->fds[1] != 1)
+			close(token->fds[1]);
+		token = token->next;
+	}
+	close(pipe_fd[i].raw[0]);
+	close(pipe_fd[i].raw[1]);
+	save = 0;
+	while (save <= i)
+		waitpid(pid[save++], &status, 0);
+	exit_st = WEXITSTATUS(status);
+	return (0);
+}
+
+int	ft_execute(t_token *token, t_params *params)
+{
+	int			nbr;
+	int			nbr2;
+	int			old_fd[2];
+	t_token		*tmp;
+	int			*pid;
+	t_pipe_fd	*pipe_fd;
+
+	if (token->next == NULL && token->prev == NULL)
+	{
+		old_fd[0] = dup(0);
+		old_fd[1] = dup(1);
+		if (token->fds[0] != 0)
+		{
+			dprintf(2, "token->fds[0] = %d\n", token->fds[0]);
+			dup2(token->fds[0], 0);
+			close(token->fds[0]);
+		}
+		if (token->fds[1] != 1)
+		{
+			dprintf(2, "token->fds[1] = %d\n", token->fds[1]);
+			dup2(token->fds[1], 1);
+			close(token->fds[1]);
+		}
+		ft_select_builtin(token, params, 0);
+		dup2(old_fd[0], 0);
+		dup2(old_fd[1], 1);
+		close(old_fd[0]);
+		close(old_fd[1]);
+		return (0);
+	}
+	nbr = 0;
+	tmp = token;
+	while (tmp)
+	{
+		nbr++;
+		tmp = tmp->next;
+	}
+	pid = malloc(sizeof(int) * nbr);
+	if (pid == NULL)
+		return (-1);
+	pipe_fd = malloc(sizeof(t_pipe_fd) * nbr);
+	if (pipe_fd == NULL)
+	{
+		free(pid);
+		return (-1);
+	}
+	nbr2 = nbr;
+	while (--nbr >= 0)
+	{
+		if (pipe(pipe_fd[nbr].raw) == -1)
+		{
+			free(pid);
+			while (--nbr2 > nbr)
+			{
+				close(pipe_fd[nbr2].raw[0]);
+				close(pipe_fd[nbr2].raw[1]);
+			}
+			free(pipe_fd);
+			return (-1);
+		}
+	}
+	tmp = token;
+	ft_pipe(tmp, params, pid, pipe_fd);
+	free(pid);
+	free(pipe_fd);
+	return (0);
+}
+
+// create possible path
+static int	error_path(char **path, int	*i, char *arg)
+{
 	char	*tmp;
 
-	if (access(arg[0], F_OK | X_OK) != -1)
-		return (0);
-	i = 0;
-	while (params->env[i] && ft_strncmp(params->env[i], "PATH=", 5) != 0)
-		i++;
-	if (params->env[i] == NULL)
-		return (1);
-	path = ft_split(&params->env[i][5], ':');
-	if (path == NULL)
-		return (1);
-	i = -1;
-	while (path[++i])
+	tmp = ft_strcat_malloc(path[i[0]], "/");
+	if (tmp == NULL)
 	{
-		tmp = ft_strcat_malloc(path[i], "/");
-		if (tmp == NULL)
-		{
-			free_table(path);
-			return (1);
-		}
-		free(path[i]);
-		path[i] = ft_strcat_malloc(tmp, arg[0]);
-		free(tmp);
-		if (path[i] == NULL)
-		{
-			free_table(path);
-			free_table(&path[i + 1]);
-			return (1);
-		}
-		if (access(path[i], F_OK | X_OK) != -1)
-		{
-			free(arg[0]);
-			arg[0] = ft_strdup(path[i]);
-			free_table(path);
-			break ;
-		}
+		free_table(path);
+		return (-1);
+	}
+	free(path[i[0]]);
+	path[i[0]] = ft_strcat_malloc(tmp, arg);
+	free(tmp);
+	if (path[i[0]] == NULL)
+	{
+		free_table(path);
+		free_table(&path[i[0] + 1]);
+		return (-1);
 	}
 	return (0);
 }
 
-char	**ft_select_builtin(t_token *token, t_params *params)
+// get path of command if not built-in
+int	get_path(char **arg, t_params *params)
 {
-	if (params->env == NULL)
-		ft_printf("Error malloc...\n");
+	int		i;
+	char	**path;
+
+	i = 0;
+	while (params->env[i] && ft_strncmp(params->env[i], "PATH=", 5) != 0)
+		i++;
+	if (params->env[i] == NULL)
+		return (-1);
+	path = ft_split(&params->env[i][5], ':');
+	if (path == NULL)
+		return (-1);
+	i = -1;
+	while (path[++i])
+	{
+		if (error_path(path, &i, arg[0]) == -1)
+			return (-1);
+		if (access(path[i], F_OK | X_OK) != -1)
+		{
+			free(arg[0]);
+			arg[0] = ft_strdup(path[i]);
+			break ;
+		}
+	}
+	free_table(path);
+	return (0);
+}
+
+// select if built-in or execve
+void	ft_select_builtin(t_token *token, t_params *params, int	i)
+{
+	int	pid;
+	int	status;
+
+	pid = 0;
+	if (token->args[0] == NULL)
+		return ;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
-		ft_cd(token->args, params->env);
+		exit_st = ft_cd(token->args, params);
 	else if (ft_strncmp(token->args[0], "echo", 5) == 0)
-		ft_echo(token->args);
+		exit_st = ft_echo(token->args);
 	else if (ft_strncmp(token->args[0], "env", 4) == 0)
-		ft_env(token->args, params->env);
+		exit_st = ft_env(token->args, params);
 	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
-		ft_pwd(token->args);
+		exit_st = ft_pwd(token->args);
 	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
-		ft_exit(token->args);
+		exit_st = ft_exit(token->args);
 	else if (ft_strncmp(token->args[0], "export", 7) == 0)
-		params->env = ft_export(token->args, params->env, params->export);
+		exit_st = ft_export(token->args, params);
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
-		ft_unset(token->args, params->env, params->export);
+		exit_st = ft_unset(token->args, params);
 	else
 	{
-		get_path(token->args, params);
-		execve(token->args[0], token->args, params->env);
-		write(2, "minishell: ", 11);
-		write(2, token->args[0], ft_strlen(token->args[0]));
-		write(2, " : command not found\n", 21);
+		if (i == 0)
+		{
+			pid = fork();
+			if (pid < 0)
+				return ;
+			//check_child(pid);
+		}
+		if (pid == 0)
+		{
+			if (access(token->args[0], F_OK | X_OK) == -1)
+				get_path(token->args, params);
+			execve(token->args[0], token->args, params->env);
+			write(2, "minishell: ", 11);
+			write(2, token->args[0], ft_strlen(token->args[0]));
+			write(2, " : command not found\n", 21);
+			exit_st = 127;
+			exit(0);
+		}
+		if (i == 0)
+		{
+			waitpid(pid, &status, 0);
+			exit_st = WEXITSTATUS(status);
+		}
 	}
-	return (params->env);
+	return ;
 }

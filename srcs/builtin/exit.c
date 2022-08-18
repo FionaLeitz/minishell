@@ -6,12 +6,13 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:41:48 by fleitz            #+#    #+#             */
-/*   Updated: 2022/05/11 14:41:49 by fleitz           ###   ########.fr       */
+/*   Updated: 2022/08/15 14:44:38 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+// exit with error messages
 int	ft_exit(char **arg)
 {
 	long int	n;
@@ -28,7 +29,8 @@ int	ft_exit(char **arg)
 			{
 				ft_printf("minishell: exit: %s: numeric argument required\n",
 					arg[1]);
-				return (2);
+				exit_st = 2;
+				exit(2);
 			}
 		}
 		n = ft_atol(arg[1]);
@@ -36,8 +38,9 @@ int	ft_exit(char **arg)
 	if (arg[1] != NULL && arg[2] != NULL)
 	{
 		ft_printf("minisehll: exit: too many arguments\n");
-		// should not exit if too many arguments
-		return (1);
+		exit_st = 1;
+		exit(1);
 	}
-	return (n);
+	exit_st = n;
+	exit(n);
 }
