@@ -71,7 +71,6 @@ int	ft_execute(t_token *token, t_params *params)
 		old_fd[1] = dup(1);
 		if (token->fds[0] != 0)
 		{
-			dprintf(2, "token->fds[0] = %d\n", token->fds[0]);
 			dup2(token->fds[0], 0);
 			close(token->fds[0]);
 		}

@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 16:20:56 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/18 15:04:56 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@
 # include <signal.h>
 
 # define PROMPT "Minishell> "
+
+typedef enum s_sig_mode
+{
+	DEFAULT,
+	HEREDOC,
+	MUTE,
+	RESET
+}	t_sig_mode;
 
 extern int	exit_st;
 
@@ -121,14 +129,13 @@ void		free_struct(t_data *data);
 void		free_params(t_params *params);
 //signaux.c
 void		ft_sig_manage(int signal);
-void		ft_manage_sig(void);
-void		ft_exit_d(t_data *data, t_params *params);
 void		ft_sig_heredoc(int signal);
-void		ft_manage_sighd(void);
+void		ft_signals(t_sig_mode mode);
+void		ft_exit_d(t_data *data, t_params *params);
 //here_doc.c
 const char	*hd_name(void);
-int			ft_here_doc(char *str, t_params *params, t_token *token);
-void		get_hd_line(char *del, int fd, int quotes, t_params *params);
+int			ft_here_doc(char *str, t_params *params);
+void			get_hd_line(char *del, int fd, int quotes, t_params *params);
 char		*write_hd_expand(char *line, int fd, t_params *params);
 //expand_heredoc.c
 char		*rep_hd(t_params *params, char *str, int size, int quote);
@@ -139,7 +146,7 @@ int			ft_if_char(char *str, char c);
 char		*ft_strncpy(char *dest, char *src, unsigned int n);
 int			delim_quotes(char *delim);
 int			check_delim(char *delim);
-int			print_error_heredoc(char *str, int fd);
+void			print_error_heredoc(char *str, int fd);
 char		*del_quotes_hd(char *delim);
 char		*ft_strjoin_char(char *s1, char c);
 int	in_del_quote_hd(char *str, int i);

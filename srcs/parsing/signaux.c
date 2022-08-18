@@ -6,66 +6,68 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 13:52:42 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/18 16:34:03 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// handle ctrl-\ and ctrl-c
+// handles ctrl-c in the shell with prompt
 void	ft_sig_manage(int signal)
 {
 	if (signal == SIGINT)
 	{
-		write(2, "\n", 1);
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 		exit_st = 130;
 	}		
-	if (signal == SIGQUIT)
+}
+
+//handles ctrl-c in heredoc
+void	ft_sig_heredoc(int signal)
+{
+	if (signal == SIGINT)
 	{
-		write(2, "\b\b  \b\b", 6);
-		exit_st = 131;
+		write(1, "\n", 1);
+		//rl_replace_line("", 0);
+		close(STDIN_FILENO);
+		exit_st = 130;
 	}
 }
 
-void	ft_manage_sig(void)
+void	ft_signals(t_sig_mode mode)
 {
-	signal(SIGINT, ft_sig_manage);
-	signal(SIGQUIT, ft_sig_manage);
+	
+	if (mode == DEFAULT)
+	{
+		signal(SIGINT, ft_sig_manage);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (mode == HEREDOC)
+	{	
+		signal(SIGINT, ft_sig_heredoc);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (mode == MUTE)
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (mode == RESET)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	}
 }
 
-// handle ctrl-d
+// handles ctrl-d
 void	ft_exit_d(t_data *data, t_params *params)
 {
-	write(2, "exit\n", 4);
+	write(1, "exit\n", 4);
 	free_params(params);
 	free_struct(data);
 	exit(0);
 }
 
-//handle signals in the here_doc
-void	ft_sig_heredoc(int signal)
-{
-	if (signal == SIGINT)
-	{
-		write(2, "\n", 1);
-		rl_replace_line("", 0);
-		close(STDIN_FILENO);
-		exit_st = 130;
-	}
-	if (signal == SIGQUIT)
-		write(2, "\b\b  \b\b", 6);
-//	if (signal == SIGSEGV)
-//	{
-//		write(1, "n", 1);
-//		exit(0);
-//	}
-}
-
-void	ft_manage_sighd(void)
-{
-	signal(SIGINT, ft_sig_heredoc);
-	signal(SIGQUIT, ft_sig_heredoc);
-}

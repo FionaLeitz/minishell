@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 14:47:40 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/08 17:33:58 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:23:40 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	jump_quotes(char *str, t_data *data)
 int	check_string(t_data *data)
 {
 	data->i = -1;
-	printf("data->trimmed = %s\n", data->trimmed);
 	while (data->trimmed[++data->i + 1])	// warning + 1 ???
 	{
 		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
