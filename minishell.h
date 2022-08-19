@@ -143,7 +143,7 @@ int			check_delim(char *delim);
 int			print_error_heredoc(char *str, int fd);
 char		*del_quotes_hd(char *delim);
 char		*ft_strjoin_char(char *s1, char c);
-int	in_del_quote_hd(char *str, int i);
+int			in_del_quote_hd(char *str, int i);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
@@ -154,7 +154,7 @@ void		push_front(t_data *data, char *value);
 void		push_back(t_data *data, char *value);
 int			ft_size(t_token *lst);
 //dollar_fct.c
-char		*rep(char **env, char *str, int size, int quote);
+char		*rep(char **env, char *str, int *quote, char *buff);
 int			in_replace(char *str, int s, t_token *token, t_data *data);
 int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c

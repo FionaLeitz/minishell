@@ -13,21 +13,23 @@
 #include "../../minishell.h"
 
 // find variable to replace $
-char	*rep(char **env, char *str, int size, int quote)
+char	*rep(char **env, char *str, int *quote, char *buff)
 {
-	int	count;
+	int		count;
 
-	if ((size == 0 && (ft_space(str[1]) == 0 || str[1] == '\0'))
-		|| (quote % 2 != 0 && str[0] == '\"'))
+	if ((quote[1] == 0 && (ft_space(str[1]) == 0 || str[1] == '\0'))
+		|| (quote[0] % 2 != 0 && str[0] == '\"'))
 		return ("$");
 	if (str[0] == '?' && (ft_space(str[1]) == 0 || str[1] == '\0'))
-		return (ft_itoa(exit_st));
-//	dprintf(2, "variable $ = %s\n", str);
+	{
+		ft_itoa_no_malloc(exit_st, buff);
+		return (buff);
+	}
 	count = -1;
 	while (env[++count])
 	{
-		if (ft_strncmp(env[count], str, size) == 0 && env[count][size] == '=')
-			return (&env[count][size + 1]);
+		if (ft_strncmp(env[count], str, quote[1]) == 0 && env[count][quote[1]] == '=')
+			return (&env[count][quote[1] + 1]);
 	}
 	return (NULL);
 }
@@ -66,17 +68,18 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 {
 	int		s;
 	char	*str;
-	int		quote;
+	int		quote[2];
+	char buff[12];
 
 	while (token)
 	{
-		quote = 0;
+		quote[0] = 0;
 		data->i = -1;
 		while (token->value[++data->i])
 		{
 			if (token->value[data->i] == '\"')
-				quote++;
-			if (token->value[data->i] == '\'' && quote % 2 == 0)
+				quote[0]++;
+			if (token->value[data->i] == '\'' && quote[0] % 2 == 0)
 				jump_quotes(token->value, data);
 			if (token->value[data->i] == '$')
 			{
@@ -85,7 +88,8 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 					!= 0 && token->value[data->i] != '\'' && token->value[
 						data->i] != '\"' && token->value[data->i] != '$')
 					data->i++;
-				str = rep(params->env, &token->value[s + 1], data->i - s - 1, quote);
+				quote[1] = data->i - s - 1;
+				str = rep(params->env, &token->value[s + 1], quote, buff);
 				if (in_replace(str, s, token, data) == -1)
 					return (-1);
 			}

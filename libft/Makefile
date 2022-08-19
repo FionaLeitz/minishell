@@ -17,19 +17,18 @@ _ORANGE=$'\033[38;2;255;165;0m
 
 NAME		= libft.a
 
-SRCS_GNL		= srcs_gnl/get_next_line.c			\
+SRCS_GNL		= srcs_gnl/get_next_line.c		\
 
-SRCS_PRINTF		= srcs_printf/ft_printf.c			\
+SRCS_PRINTF		= srcs_printf/ft_printf.c		\
 			  srcs_printf/ft_putchar.c			\
 			  srcs_printf/ft_putnbr.c			\
-			  srcs_printf/ft_putnbr_16.c			\
-			  srcs_printf/ft_putnbr_unsigned.c		\
+			  srcs_printf/ft_putnbr_16.c		\
+			  srcs_printf/ft_putnbr_unsigned.c	\
 			  srcs_printf/ft_putptr.c			\
 			  srcs_printf/ft_putstr.c			\
 			  srcs_printf/ft_select.c			\
 			
-
-SRCS_STRINGS	= srcs_strings/ft_isalpha.c				\
+SRCS_STRINGS	= srcs_strings/ft_isalpha.c		\
 		  srcs_strings/ft_isdigit.c				\
 		  srcs_strings/ft_isalnum.c				\
 		  srcs_strings/ft_isascii.c				\
@@ -60,19 +59,20 @@ SRCS_STRINGS	= srcs_strings/ft_isalpha.c				\
 		  srcs_strings/ft_strtrim.c				\
 		  srcs_strings/ft_split.c				\
 		  srcs_strings/ft_strmapi.c				\
-		  srcs_strings/ft_striteri.c				\
+		  srcs_strings/ft_striteri.c			\
 
-SRCS_NBR	= srcs_nbr/ft_atoi.c					\
-		  srcs_nbr/ft_itoa.c					\
+SRCS_NBR	= srcs_nbr/ft_atoi.c				\
 		  srcs_nbr/ft_atol.c					\
+		  srcs_nbr/ft_itoa.c					\
+		  srcs_nbr/ft_itoa_no_malloc.c			\
 
-SRCS_WRITE	= srcs_write/ft_putchar_fd.c				\
+SRCS_WRITE	= srcs_write/ft_putchar_fd.c		\
 		  srcs_write/ft_putstr_fd.c				\
-		  srcs_write/ft_putendl_fd.c				\
+		  srcs_write/ft_putendl_fd.c			\
 		  srcs_write/ft_putnbr_fd.c				\
 
-SRCS_LST	= srcs_lst/ft_lstnew.c					\
-		  srcs_lst/ft_lstadd_front.c				\
+SRCS_LST	= srcs_lst/ft_lstnew.c				\
+		  srcs_lst/ft_lstadd_front.c			\
 		  srcs_lst/ft_lstsize.c					\
 		  srcs_lst/ft_lstlast.c					\
 		  srcs_lst/ft_lstadd_back.c				\

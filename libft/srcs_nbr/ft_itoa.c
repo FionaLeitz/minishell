@@ -22,7 +22,7 @@ static char	*ft_recursive_itoa(unsigned int n, char *result)
 	n2 = n;
 	n = n / 10;
 	if (n > 0)
-		(ft_recursive_itoa(n, result));
+		ft_recursive_itoa(n, result);
 	while (result[i])
 		i++;
 	result[i] = (n2 % 10) + '0';
