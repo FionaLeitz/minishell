@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 09:42:04 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/18 13:01:23 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/19 17:25:59 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void	print_error_heredoc(char *str, int fd)
 	ft_putstr_fd(" (wanted '", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("')\n", 2);
-	//close(fd);
-//	exit(0);
 }
 
 char	*del_quotes_hd(char *delim)

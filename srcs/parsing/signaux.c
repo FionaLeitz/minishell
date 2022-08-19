@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/18 16:34:03 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:03:36 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ void	ft_sig_heredoc(int signal)
 	if (signal == SIGINT)
 	{
 		write(1, "\n", 1);
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		close(STDIN_FILENO);
 		exit_st = 130;
 	}
 }
 
+//handles the signals depending on mode
 void	ft_signals(t_sig_mode mode)
 {
 	
