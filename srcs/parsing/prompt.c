@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:34 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 16:34:11 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/18 15:02:48 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	print_prompt(t_data *data, t_params *params)
 	while (1)
 	{
 		init_data(data);
-		ft_manage_sig();
+		ft_signals(DEFAULT);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
