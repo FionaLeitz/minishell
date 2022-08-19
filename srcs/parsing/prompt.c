@@ -22,18 +22,18 @@ int	syntax_check(t_data *data)
 	{
 		printf("minishell: syntax error near unexpected token `|'\n");
 		free_struct(data);
-		return (-1);
+		return (2);
 	}
 	if (check_string(data) == -1)
 	{
 		free_struct(data);
-		return (-1);
+		return (2);
 	}
 	if (check_quotes(data) == -1)
 	{
 		printf("minishell: quotes are unclosed\n");
 		free_struct(data);
-		return (-1);
+		return (2);
 	}
 	return (0);
 }
@@ -76,7 +76,6 @@ void	ft_cut(t_data *data, t_params *params)
 	}
 	tmp = data->head;
 	del_quotes(tmp);
-
 	tmp = data->head;
 	while (tmp)
 	{
@@ -90,29 +89,20 @@ int	print_prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
+	params->data = data;
 	while (1)
 	{
 		init_data(data);
 		ft_signals(DEFAULT);
-//		dup2(data->fd_in, STDIN_FILENO);
-//		dup2(data->fd_out, STDOUT_FILENO);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
-		if (syntax_check(data) == 0)
+		if (syntax_check(data) != 0)
+			exit_st = 2;
+		else
 		{
 			ft_cut(data, params);
 			tmp = data->head;
-			//while (tmp && tmp->args[0])
-			//{
-			//	printf("cmd :\n");
-			// 	print_table(tmp->args);
-			// 	printf("---------------\n");
-			// 	printf("redirect :\n");
-			// 	print_table(tmp->red);
-			// 	ft_select_builtin(tmp,params);
-			//	 tmp = tmp->next;
-			//}
 			ft_execute(tmp, params);
 		}
 		free_struct(data);

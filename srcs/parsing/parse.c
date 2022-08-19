@@ -16,18 +16,22 @@
 void	jump_quotes(char *str, t_data *data)
 {
 	char	quote;
+	int		save;
 
 	quote = str[data->i];
 	data->i++;
+	save = data->i;
 	while (str[data->i] != '\0' && str[data->i] != quote)
 		data->i++;
+	if (str[data->i] == '\0')
+		data->i = save;
 }
 
 // check error with pipes
 int	check_string(t_data *data)
 {
-	data->i = -1;
-	while (data->trimmed[++data->i + 1])	// warning + 1 ???
+	data->i = 0;
+	while (data->trimmed[data->i])
 	{
 		if (data->trimmed[data->i] == '\'' || data->trimmed[data->i] == '\"')
 			jump_quotes(data->trimmed, data);
@@ -45,6 +49,7 @@ int	check_string(t_data *data)
 		}
 		if (check_redir(data) == -1)
 			return (-1);
+		data->i++;
 	}
 	return (0);
 }

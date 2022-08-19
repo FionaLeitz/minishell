@@ -17,8 +17,12 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	int	i;
 	int	save;
 	int	status;
+	t_token	*tmp;
+	t_token	*tmp2;
 
 	i = -1;
+	tmp = token;
+	tmp2 = token;
 	while (token)
 	{
 		pid[++i] = fork();
@@ -26,20 +30,54 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		if (pid[i] == 0)
 		{
 			if (i != 0 && token->fds[0] == 0)
+			{
 				dup2(pipe_fd[i - 1].raw[0], 0);
+				close(pipe_fd[i - 1].raw[0]);
+			}
 			else
 				dup2(token->fds[0], 0);
 			if (token->next == NULL || token->fds[1] != 1)
 				dup2(token->fds[1], 1);
 			else
+			{
 				dup2(pipe_fd[i].raw[1], token->fds[1]);
-			close(pipe_fd[i].raw[0]);
-			close(pipe_fd[i].raw[1]);
-			ft_select_builtin(token, params, 1);
+				close(pipe_fd[i].raw[1]);
+			}
+			if (i != 0)
+			{
+				close(pipe_fd[i - 1].raw[0]);
+				close(pipe_fd[i - 1].raw[1]);
+			}
+			ft_select_builtin(token, params, 1, NULL);
+			tmp2 = token;
+			while (tmp2)
+			{
+				close(pipe_fd[i].raw[0]);
+				close(pipe_fd[i].raw[1]);
+				tmp2 = tmp2->next;
+				i++;
+			}
+			free_params(params);
+			free(pid);
+			free(pipe_fd);
+			free(params->data->trimmed);
+			token = tmp;
+			while (token != NULL)
+			{
+				tmp = token;
+				free(tmp->value);
+				free_table(tmp->args);
+				free_table(tmp->red);
+				token = token->next;
+				free(tmp);
+			}
 			exit(0);
 		}
 		if (i != 0)
+		{
 			close(pipe_fd[i - 1].raw[0]);
+			close(pipe_fd[i - 1].raw[1]);
+		}
 		close(pipe_fd[i].raw[1]);
 		if (token->fds[0] != 0)
 			close(token->fds[0]);
@@ -76,11 +114,10 @@ int	ft_execute(t_token *token, t_params *params)
 		}
 		if (token->fds[1] != 1)
 		{
-			dprintf(2, "token->fds[1] = %d\n", token->fds[1]);
 			dup2(token->fds[1], 1);
 			close(token->fds[1]);
 		}
-		ft_select_builtin(token, params, 0);
+		ft_select_builtin(token, params, 0, old_fd);
 		dup2(old_fd[0], 0);
 		dup2(old_fd[1], 1);
 		close(old_fd[0]);
@@ -179,7 +216,7 @@ int	get_path(char **arg, t_params *params)
 }
 
 // select if built-in or execve
-void	ft_select_builtin(t_token *token, t_params *params, int	i)
+void	ft_select_builtin(t_token *token, t_params *params, int	i, int *old_fd)
 {
 	int	pid;
 	int	status;
@@ -218,7 +255,14 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i)
 			write(2, "minishell: ", 11);
 			write(2, token->args[0], ft_strlen(token->args[0]));
 			write(2, " : command not found\n", 21);
-			exit_st = 127;
+			exit_st = 127;free_params(params);
+			free(params->data->trimmed);
+			free(token->value);
+			free_table(token->args);
+			free_table(token->red);
+			free(token);
+			close(old_fd[0]);
+			close(old_fd[1]);
 			exit(0);
 		}
 		if (i == 0)

@@ -19,8 +19,6 @@ void	init_data(t_data *data)
 	data->trimmed = NULL;
 	data->head = NULL;
 	data->i = 0;
-//	data->fd_in = dup(STDIN_FILENO);
-//	data->fd_out = dup(STDOUT_FILENO);
 }
 
 // put every variable in token to NULL
