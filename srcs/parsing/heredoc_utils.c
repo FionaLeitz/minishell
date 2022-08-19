@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 09:42:04 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/14 15:33:38 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/18 13:01:23 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,16 @@ int	check_delim(char *delim)
 	return (quotes);
 }
 
-int	print_error_heredoc(char *str, int fd)
+void	print_error_heredoc(char *str, int fd)
 {
+	(void)fd;
 	ft_putstr_fd("minishell: warning: ", 2);
 	ft_putstr_fd("here-document at line delimited by end-of-file", 2);
 	ft_putstr_fd(" (wanted '", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("')\n", 2);
-	close(fd);
-	exit(0);
+	//close(fd);
+//	exit(0);
 }
 
 char	*del_quotes_hd(char *delim)

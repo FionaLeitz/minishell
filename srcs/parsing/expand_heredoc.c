@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 11:42:13 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 11:39:04 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/18 11:07:50 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char *rep_hd(t_params *params, char *str, int size, int quote)
 	if ((size == 0 && (ft_space(str[1]) == 0 || str[1] == '\0'))
 		|| (quote % 2 != 0 && str[0] == '\"'))
 		return ("$");
+	if (str[0] == '?' && (ft_space(str[1] == 0) || str[1] == '\0'))
+		return (ft_itoa(exit_st));
 	count = -1;
 	while(params->env[++count])
 	{
@@ -78,7 +80,7 @@ char	*expand_heredoc(char *line, t_params *params)
 
 	i = 0;
 	quote = 0;
-	while(line[i])
+	while(line[i] != '\0')
 	{
 		if (line[i] == '\"')
 			quote++;
