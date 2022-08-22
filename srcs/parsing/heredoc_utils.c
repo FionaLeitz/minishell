@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 09:42:04 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/19 17:25:59 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/22 14:41:14 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_if_char(char *str, char c)
 	int	 i;
 
 	i = 0;
-	while(str[i])
+	while(str[i] != '\0')
 	{
 		if (str[i] == c)
 			return (0);

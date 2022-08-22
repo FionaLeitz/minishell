@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/22 13:48:45 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/22 15:53:49 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,23 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-//main fct of here_doc, check delimiter, creates heredocin child(fork) 
+//waitpid in the here_doc
+int	ft_wait_hd(pid_t pid)
+{
+	waitpid(pid, &exit_st, 0);
+	if (WIFEXITED(exit_st))
+	{
+        	if (WEXITSTATUS(exit_st))
+        	{
+			exit_st = WEXITSTATUS(exit_st);
+			close(STDIN_FILENO);
+                	return (-1);
+        	}
+	}
+	return (0);
+}
+
+//main fct of here_doc, check delimiter, creates heredoc in child(fork) 
 int	ft_here_doc(char *delim, t_params *params)
 {
 	const char	*pathname;
@@ -45,9 +61,9 @@ int	ft_here_doc(char *delim, t_params *params)
 	int		quotes;
 	char		*delim_tmp;
 	pid_t		pid;
-	int 		status;
+//	int 		status;
 
-	status = 0;
+	exit_st = 0;
 	delim_tmp = delim;
 	quotes = check_delim(delim);
 	if (delim_quotes(delim) == 1)
@@ -61,20 +77,19 @@ int	ft_here_doc(char *delim, t_params *params)
 	check_child(pid);
 	if (pid == 0)
 	{
-		get_hd_line(delim, fd, quotes, params);
-		exit(exit_st);
+		if (get_hd_line(delim, fd, quotes, params) == -1)
+		{
+			exit_st = 130;
+			exit(130);
+		}
 		close(fd);
+		exit(exit_st);	
 	}
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
+	if (ft_wait_hd(pid) == -1)
 	{
-        	if (WEXITSTATUS(status))
-        	{
-			exit_st = WEXITSTATUS(status);
-			close(STDIN_FILENO);
-                	return (1);
-        	}
+		
 	}
+	printf("exit status=%d\n", exit_st);
 	ft_signals(RESET);
 	close(fd);
 	fd = get_fd_input((char*)pathname, "<");
@@ -85,7 +100,7 @@ int	ft_here_doc(char *delim, t_params *params)
 
 
 //fct to get the line of the here_doc with readline as in prompt
-void	get_hd_line(char *del, int fd, int quotes, t_params *params)
+int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
 	char	*line;
 	char	*new;
@@ -93,6 +108,7 @@ void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 	line = NULL;
 	new = NULL;
 	ft_signals(HEREDOC);
+	dprintf(1, "exit status in child = %d\n", exit_st);
 	while (1)
 	{
 		line = readline("> ");
@@ -101,7 +117,11 @@ void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			print_error_heredoc(del, fd);
 			break ;
 		}
-		if (ft_strcmp(line, del) == 0)
+		if (!line && exit_st == 130)
+		{
+			return (-1);
+		}
+		if (line && ft_strcmp(line, del) == 0)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
 			new = write_hd_expand(line, fd, params);
@@ -111,6 +131,7 @@ void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 		ft_putstr_fd("\n", fd);
 		free(new);	
 	}
+	return (0);
 }
 	
 char	*write_hd_expand(char *line, int fd, t_params *params)
