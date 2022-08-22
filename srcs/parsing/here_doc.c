@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/19 18:29:42 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/22 13:48:45 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,17 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-//main fct of here_doc, check delimiter, returns fd or (-1) if receives ctrl-c 
+//main fct of here_doc, check delimiter, creates heredocin child(fork) 
 int	ft_here_doc(char *delim, t_params *params)
 {
 	const char	*pathname;
 	int		fd;
 	int		quotes;
 	char		*delim_tmp;
+	pid_t		pid;
+	int 		status;
 
+	status = 0;
 	delim_tmp = delim;
 	quotes = check_delim(delim);
 	if (delim_quotes(delim) == 1)
@@ -53,23 +56,36 @@ int	ft_here_doc(char *delim, t_params *params)
 		delim = delim_tmp; 
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
-	if (get_hd_line(delim, fd, quotes, params) == -1)
-	{
-		close(fd);
-		dup2(0, STDIN_FILENO);
-		return (-1);
-	}
 	ft_signals(MUTE);
+	pid = fork();
+	check_child(pid);
+	if (pid == 0)
+	{
+		get_hd_line(delim, fd, quotes, params);
+		exit(exit_st);
+		close(fd);
+	}
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+        	if (WEXITSTATUS(status))
+        	{
+			exit_st = WEXITSTATUS(status);
+			close(STDIN_FILENO);
+                	return (1);
+        	}
+	}
+	ft_signals(RESET);
 	close(fd);
 	fd = get_fd_input((char*)pathname, "<");
-	unlink(pathname);
+//	unlink(pathname);
 	free((char*)pathname);
 	return (fd);
 }
 
 
 //fct to get the line of the here_doc with readline as in prompt
-int	get_hd_line(char *del, int fd, int quotes, t_params *params)
+void	get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
 	char	*line;
 	char	*new;
@@ -85,8 +101,6 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			print_error_heredoc(del, fd);
 			break ;
 		}
-		if (!line &&  exit_st == 130)
-			return (-1);
 		if (ft_strcmp(line, del) == 0)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
@@ -95,60 +109,10 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			new = ft_strdup(line);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
-		free(new);	}
-	//-----------------------------version2----------------------------------
-	// line = ft_strdup("\0");
-	// line = readline("> ");
-	// if (!line)
-	// 	print_error_heredoc(del, fd);
-	// while (line)
-	// {
-	// 	ft_signals(HEREDOC);
-	// 	if (!line && exit_st != 130)
-	// 	{
-	// 		dprintf(1, "exit status = %d\n", exit_st);
-	// 		print_error_heredoc(del, fd);
-	// 		break ;
-	// 	}
-	// 	//if (exit_st == 130)
-	// 	//	break ;
-	// 	if (line && ft_strcmp(line, del) == 0)
-	// 		break ;
-	// 	if (line && ft_if_char(line, '$') == 0 && quotes == 0)
-	// 		new = write_hd_expand(line, fd, params);
-	// 	else if(line)
-	// 		new = ft_strdup(line);
-	// 	ft_putstr_fd(new, fd);
-	// 	ft_putstr_fd("\n", fd);
-	// 	free(new);
-	// }
-	//---------------------------------version3----------------------------
-	// while (line)
-	// {
-	// 	ft_signals(HEREDOC);
-	// 	free(line);
-	// 	line = NULL;
-	// 	line = readline("> ");	
-	// 	if (!line && exit_st != 130)
-	// 		print_error_heredoc(del, fd);
-	// 	if (!line && exit_st == 130)
-	// 		return ;
-	// 	else
-	// 	{
-	// 		if (line && ft_strcmp(line, del) == 0)
-	// 			break ;
-	// 		if (line && ft_if_char(line, '$') == 0 && quotes == 0)
-	// 			new = write_hd_expand(line, fd, params);
-	// 		else if(line)
-	// 			new = ft_strdup(line);
-	// 		ft_putstr_fd(new, fd);
-	// 		ft_putstr_fd("\n", fd);
-	// 		free(new);
-	// 	}
-	// }
-	return (0);
+		free(new);	
+	}
 }
-
+	
 char	*write_hd_expand(char *line, int fd, t_params *params)
 {
 	int	i;

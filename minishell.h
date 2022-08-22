@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/19 18:20:55 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/22 11:14:13 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void		ft_exit_d(t_data *data, t_params *params);
 //here_doc.c
 const char	*hd_name(void);
 int			ft_here_doc(char *str, t_params *params);
-int			get_hd_line(char *del, int fd, int quotes, t_params *params);
+void			get_hd_line(char *del, int fd, int quotes, t_params *params);
 char		*write_hd_expand(char *line, int fd, t_params *params);
 //expand_heredoc.c
 char		*rep_hd(t_params *params, char *str, int size, int quote);
