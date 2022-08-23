@@ -6,14 +6,14 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/19 16:03:36 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/23 17:08:29 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 // handles ctrl-c in the shell with prompt
-void	ft_sig_manage(int signal)
+void	ft_sig_int(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -37,13 +37,25 @@ void	ft_sig_heredoc(int signal)
 	}
 }
 
+//handles ctrl'\'
+void	ft_sig_quit(int signal)
+{
+	if (signal == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		exit_st = 131;
+		exit(exit_st);
+	}
+}
+	
 //handles the signals depending on mode
 void	ft_signals(t_sig_mode mode)
 {
 	
 	if (mode == DEFAULT)
 	{
-		signal(SIGINT, ft_sig_manage);
+		signal(SIGINT, ft_sig_int);
 		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (mode == HEREDOC)
@@ -56,10 +68,10 @@ void	ft_signals(t_sig_mode mode)
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 	}
-	else if (mode == RESET)
+	else if (mode == COMMAND)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, ft_sig_int);
+		signal(SIGQUIT, ft_sig_quit);
 	}
 }
 
@@ -67,8 +79,26 @@ void	ft_signals(t_sig_mode mode)
 void	ft_exit_d(t_data *data, t_params *params)
 {
 	write(1, "exit\n", 4);
+	write(1, "\n", 1);
 	free_params(params);
 	free_struct(data);
 	exit(0);
 }
 
+//checks the exit status of process, returns the error message
+void    check_exit_status(void)
+{
+    	if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 3)
+	{
+        	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+		exit_st = 131;
+	}
+    ///else if (exit_st == (128 | SIGSEGV))
+       // ft_putstr_fd("Segmentation fault (core dumped)\n",
+         //   STDERR_FILENO);
+    	else if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 2)
+	{
+        	ft_putchar_fd('\n', STDERR_FILENO);
+		exit_st = 130;
+	}
+}

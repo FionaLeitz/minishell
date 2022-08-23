@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/15 16:21:37 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/23 17:11:08 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,20 +242,22 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i, int *old_fd)
 	{
 		if (i == 0)
 		{
+			ft_signals(MUTE);
 			pid = fork();
 			if (pid < 0)
 				return ;
-			//check_child(pid);
 		}
 		if (pid == 0)
 		{
+			ft_signals(COMMAND);
 			if (access(token->args[0], F_OK | X_OK) == -1)
 				get_path(token->args, params);
 			execve(token->args[0], token->args, params->env);
 			write(2, "minishell: ", 11);
 			write(2, token->args[0], ft_strlen(token->args[0]));
 			write(2, " : command not found\n", 21);
-			exit_st = 127;free_params(params);
+			exit_st = 127;
+			free_params(params);
 			free(params->data->trimmed);
 			free(token->value);
 			free_table(token->args);
@@ -267,9 +269,19 @@ void	ft_select_builtin(t_token *token, t_params *params, int	i, int *old_fd)
 		}
 		if (i == 0)
 		{
-			waitpid(pid, &status, 0);
-			exit_st = WEXITSTATUS(status);
+			//waitpid(pid, &status, 0);
+			//exit_st = WEXITSTATUS(status);
+			if (pid != -1 && (0 < waitpid(pid, &status, 0)))
+                 	exit_st = WEXITSTATUS(exit_st);
+			check_exit_status();
+			printf("exit status = %d\n", exit_st);
 		}
+		if (pid != -1 && (0 < waitpid(pid, &status, 0)))
+                exit_st = WEXITSTATUS(exit_st);
+		check_exit_status();
+		printf("exit status = %d\n", exit_st);
+		check_exit_status();
+		ft_signals(DEFAULT);
 	}
 	return ;
 }

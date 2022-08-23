@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/23 10:53:50 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/23 17:09:49 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef enum s_sig_mode
 	DEFAULT,
 	HEREDOC,
 	MUTE,
-	RESET
+	COMMAND
 }	t_sig_mode;
 
 extern int	exit_st;
@@ -129,10 +129,13 @@ int			print_prompt(t_data *data, t_params *params);
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
 //signaux.c
-void		ft_sig_manage(int signal);
+void		ft_sig_int(int signal);
+void		ft_sig_quit(int signal);
+void		ft_sig_heredoc(int signal);
 void		ft_sig_heredoc(int signal);
 void		ft_signals(t_sig_mode mode);
 void		ft_exit_d(t_data *data, t_params *params);
+void		check_exit_status(void);
 //here_doc.c
 const char	*hd_name(void);
 int			ft_here_doc(char *str, t_params *params);

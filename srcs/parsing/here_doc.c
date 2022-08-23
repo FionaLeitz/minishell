@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/23 11:32:38 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/23 14:38:42 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,6 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-//waitpid in the here_doc
-/*int	ft_wait_hd(pid_t pid)
-{
-	waitpid(pid, &exit_st, 0);
-	if (WIFEXITED(exit_st))
-	{
-        	if (WEXITSTATUS(exit_st))
-        	{
-			exit_st = WEXITSTATUS(exit_st);
-			close(STDIN_FILENO);
-                	return (-1);
-        	}
-	}
-	return (0);
-}*/
-
 static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
 {
 	pid_t		pid;
@@ -62,17 +46,11 @@ static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
 	if (pid == 0)
 	{
 		get_hd_line(delim, fd, quotes, params);
-		//{
-		//	exit_st = 130;
-		//	exit(130);
-		//}
 		close(fd);
 		exit(exit_st);	
 	}
 	if (pid != -1 && (0 < waitpid(pid, &exit_st, 0)))
-{
 		exit_st = WEXITSTATUS(exit_st);
-		printf("exit status = %d\n", exit_st);}
 	if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 2)
 	{
 		exit_st = 130;
@@ -130,7 +108,7 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			break ;
 		}
 		if (!line && exit_st == 130)
-			return (-1);
+			return (2);
 		if (line && ft_strcmp(line, del) == 0)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
