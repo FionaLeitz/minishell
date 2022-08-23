@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/22 15:53:49 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/23 11:32:38 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ const char *hd_name(void)
 }
 
 //waitpid in the here_doc
-int	ft_wait_hd(pid_t pid)
+/*int	ft_wait_hd(pid_t pid)
 {
 	waitpid(pid, &exit_st, 0);
 	if (WIFEXITED(exit_st))
@@ -51,6 +51,34 @@ int	ft_wait_hd(pid_t pid)
         	}
 	}
 	return (0);
+}*/
+
+static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
+{
+	pid_t		pid;
+	
+	pid = fork();
+	check_child(pid);
+	if (pid == 0)
+	{
+		get_hd_line(delim, fd, quotes, params);
+		//{
+		//	exit_st = 130;
+		//	exit(130);
+		//}
+		close(fd);
+		exit(exit_st);	
+	}
+	if (pid != -1 && (0 < waitpid(pid, &exit_st, 0)))
+{
+		exit_st = WEXITSTATUS(exit_st);
+		printf("exit status = %d\n", exit_st);}
+	if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 2)
+	{
+		exit_st = 130;
+		return (1);
+	}
+	return (0);
 }
 
 //main fct of here_doc, check delimiter, creates heredoc in child(fork) 
@@ -60,8 +88,7 @@ int	ft_here_doc(char *delim, t_params *params)
 	int		fd;
 	int		quotes;
 	char		*delim_tmp;
-	pid_t		pid;
-//	int 		status;
+	int 		child;
 
 	exit_st = 0;
 	delim_tmp = delim;
@@ -73,27 +100,12 @@ int	ft_here_doc(char *delim, t_params *params)
 	pathname = hd_name();
 	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
-	pid = fork();
-	check_child(pid);
-	if (pid == 0)
-	{
-		if (get_hd_line(delim, fd, quotes, params) == -1)
-		{
-			exit_st = 130;
-			exit(130);
-		}
-		close(fd);
-		exit(exit_st);	
-	}
-	if (ft_wait_hd(pid) == -1)
-	{
-		
-	}
+	child = fork_heredoc(delim, fd, quotes, params);
 	printf("exit status=%d\n", exit_st);
 	ft_signals(RESET);
 	close(fd);
 	fd = get_fd_input((char*)pathname, "<");
-//	unlink(pathname);
+	unlink(pathname);
 	free((char*)pathname);
 	return (fd);
 }
@@ -118,9 +130,7 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			break ;
 		}
 		if (!line && exit_st == 130)
-		{
 			return (-1);
-		}
 		if (line && ft_strcmp(line, del) == 0)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
