@@ -61,7 +61,7 @@ void	del_quotes_redir(t_token *token)
 	int		i;
 	int		j;
 	char	*tmp;
-	
+
 	while (token)
 	{
 		i = -1;
@@ -82,7 +82,8 @@ void	del_quotes_redir(t_token *token)
 			j = 0;
 			while (token->red[i][j] == '>' || token->red[i][j] == '<')
 				j++;
-			if (ft_space(token->red[i][j]) == 0 || ft_space(token->red[i][ft_strlen(token->red[i]) - 1]) == 0)
+			if (ft_space(token->red[i][j]) == 0 || ft_space(token->red[i][
+				ft_strlen(token->red[i]) - 1]) == 0)
 			{
 				tmp = malloc(sizeof(char) * ft_strlen(token->red[i]) + 3);
 				ft_bzero(tmp, ft_strlen(token->red[i]) + 3);
