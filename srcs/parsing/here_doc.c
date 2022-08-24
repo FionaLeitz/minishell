@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/23 14:38:42 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/24 11:44:54 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ft_here_doc(char *delim, t_params *params)
 	ft_signals(MUTE);
 	child = fork_heredoc(delim, fd, quotes, params);
 	printf("exit status=%d\n", exit_st);
-	ft_signals(RESET);
+	ft_signals(DEFAULT);
 	close(fd);
 	fd = get_fd_input((char*)pathname, "<");
 	unlink(pathname);

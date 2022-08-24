@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 18:06:01 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 11:50:38 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/24 17:17:03 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ int	main(int ac, char **av, char **envp)
 		return (0);
 	params.env = ft_get_env(envp);
 	params.export = create_export(params.env);
-	//if (ac != 1)
-	//	error message ?
+	ft_shlvl(params.env);
+	if (ac != 1)
+		printf("This minishell does not take arguments\n");
 	if (ac == 1)
 		print_prompt(&data, &params);
 	free_export(params.export);

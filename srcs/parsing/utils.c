@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 17:57:57 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/15 16:20:19 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/24 17:23:32 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@ int	ft_space(char c)
 		return (0);
 	return (-1);
 }
-
-/*void	close_pipes(int *pipefd)
-{
-	close(pipefd[0]);
-	close(pipefd[1]);
-}*/
 
 int	check_fd(int fd)
 {
@@ -47,3 +41,22 @@ int	check_child(int pid)
 	}
 	return (0);
 }
+
+void	ft_shlvl(char** envp)
+{
+	int	i;
+	char 	*shlvl;
+	char	*tmp;
+
+	i = 0;
+	while (ft_strncmp("SHLVL", *envp, 5))
+		envp++;
+	shlvl = ft_itoa(ft_atoi(*envp + 6) + 1);
+	tmp = NULL;
+	while (ft_strncmp("SHLVL", envp[i], 5))
+		i++;
+	tmp = strndup(envp[i], 6);
+	envp[i] = ft_strjoin(tmp, shlvl);
+	free(tmp);
+}
+
