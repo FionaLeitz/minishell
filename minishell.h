@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/24 17:19:16 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/25 13:19:45 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ void		ft_sig_int(int signal);
 void		ft_sig_quit(int signal);
 void		ft_sig_heredoc(int signal);
 void		ft_signals(t_sig_mode mode);
-void		ft_exit_d(t_data *data, t_params *params);
 void		check_exit_status(void);
 //here_doc.c
 const char	*hd_name(void);
@@ -191,6 +190,7 @@ int			ft_space(char c);
 int			check_fd(int fd);
 int			check_child(int pid);
 void			ft_shlvl(char **envp);
+void		ft_exit_d(t_data *data, t_params *params);
 
 #endif
 

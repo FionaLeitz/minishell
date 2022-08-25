@@ -6,13 +6,13 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/15 16:21:37 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/25 14:22:00 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// use dup2 to duplicate fdsand read and write at the right place
+// use dup2 to duplicate fds and read and write at the right place
 static void	make_dup(t_token *token, t_pipe_fd *pipe_fd, int i)
 {
 	close((pipe_fd[i].raw[0]));
@@ -91,6 +91,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	i = -1;
 	while (token)
 	{
+		ft_signals(MUTE);
 		pid[++i] = fork();
 		check_child(pid[i]);
 		if (pid[i] == 0)
@@ -106,6 +107,8 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	while (++save <= i)
 		waitpid(pid[save], &status, 0);
 	g_exit_st = WEXITSTATUS(status);
+	printf("exit status pipe = %d\n", g_exit_st);
+	check_exit_status();
 	return (0);
 }
 
@@ -262,8 +265,10 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	int	status;
 
 	pid = 0;
+	status = 0;
 	if (i == 0)
 	{
+		ft_signals(MUTE);
 		pid = fork();
 		if (pid < 0)
 			return ;
@@ -271,6 +276,7 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	}
 	if (pid == 0)
 	{
+		ft_signals(COMMAND);
 		if (access(token->args[0], F_OK | X_OK) == -1)
 			get_path(token->args, params);
 		execve(token->args[0], token->args, params->env);
@@ -280,7 +286,12 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	{
 		waitpid(pid, &status, 0);
 		g_exit_st = WEXITSTATUS(status);
+	//	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
+          //     		g_exit_st = WEXITSTATUS(g_exit_st);
+		check_exit_status();
+		//printf("exit_status command = %d\n", g_exit_st);
 	}
+	ft_signals(DEFAULT);
 }
 
 // select if built-in
