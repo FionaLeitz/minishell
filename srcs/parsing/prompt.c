@@ -98,7 +98,7 @@ int	print_prompt(t_data *data, t_params *params)
 		if (!data->input)
 			ft_exit_d(data, params);
 		if (syntax_check(data) != 0)
-			exit_st = 2;
+			g_exit_st = 2;
 		else
 		{
 			ft_cut(data, params);

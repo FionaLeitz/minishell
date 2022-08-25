@@ -102,7 +102,7 @@ int	ft_cd(char **arg, t_params *params)
 
 	if (ft_error_cd(arg) == -1)
 	{
-		exit_st = 1;
+		g_exit_st = 1;
 		return (1);
 	}
 	i = ft_find(params->env, "PWD=", 4);

@@ -148,6 +148,6 @@ int	ft_export(char **arg, t_params *params)
 			new_export(arg[count], params);
 		}
 	}
-//	exit_st = 0;
+//	g_exit_st = 0;
 	return (0);
 }

@@ -47,13 +47,13 @@ static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
 	{
 		get_hd_line(delim, fd, quotes, params);
 		close(fd);
-		exit(exit_st);	
+		exit(g_exit_st);	
 	}
-	if (pid != -1 && (0 < waitpid(pid, &exit_st, 0)))
-		exit_st = WEXITSTATUS(exit_st);
-	if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 2)
+	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
+		g_exit_st = WEXITSTATUS(g_exit_st);
+	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 2)
 	{
-		exit_st = 130;
+		g_exit_st = 130;
 		return (1);
 	}
 	return (0);
@@ -68,7 +68,7 @@ int	ft_here_doc(char *delim, t_params *params)
 	char		*delim_tmp;
 	int 		child;
 
-	exit_st = 0;
+	g_exit_st = 0;
 	delim_tmp = delim;
 	quotes = check_delim(delim);
 	if (delim_quotes(delim) == 1)
@@ -79,7 +79,7 @@ int	ft_here_doc(char *delim, t_params *params)
 	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
 	child = fork_heredoc(delim, fd, quotes, params);
-	printf("exit status=%d\n", exit_st);
+	printf("exit status=%d\n", g_exit_st);
 	ft_signals(DEFAULT);
 	close(fd);
 	fd = get_fd_input((char*)pathname, "<");
@@ -98,16 +98,16 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 	line = NULL;
 	new = NULL;
 	ft_signals(HEREDOC);
-	dprintf(1, "exit status in child = %d\n", exit_st);
+	dprintf(1, "exit status in child = %d\n", g_exit_st);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line && exit_st != 130)
+		if (!line && g_exit_st != 130)
 		{
 			print_error_heredoc(del, fd);
 			break ;
 		}
-		if (!line && exit_st == 130)
+		if (!line && g_exit_st == 130)
 			return (2);
 		if (line && ft_strcmp(line, del) == 0)
 			break ;

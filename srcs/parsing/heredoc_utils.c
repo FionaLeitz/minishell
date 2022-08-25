@@ -60,7 +60,6 @@ void	print_error_heredoc(char *str, int fd)
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("')\n", 2);
 	close(fd);
-	//free?
 	exit(0);
 }
 

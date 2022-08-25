@@ -21,7 +21,7 @@ void	ft_sig_int(int signal)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		exit_st = 130;
+		g_exit_st = 130;
 	}		
 }
 
@@ -33,7 +33,7 @@ void	ft_sig_heredoc(int signal)
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		close(STDIN_FILENO);
-		exit_st = 130;
+		g_exit_st = 130;
 	}
 }
 
@@ -44,8 +44,8 @@ void	ft_sig_quit(int signal)
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		exit_st = 131;
-		exit(exit_st);
+		g_exit_st = 131;
+		exit(g_exit_st);
 	}
 }
 	
@@ -88,17 +88,17 @@ void	ft_exit_d(t_data *data, t_params *params)
 //checks the exit status of process, returns the error message
 void    check_exit_status(void)
 {
-    	if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 3)
+    	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 3)
 	{
         	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-		exit_st = 131;
+		g_exit_st = 131;
 	}
     ///else if (exit_st == (128 | SIGSEGV))
        // ft_putstr_fd("Segmentation fault (core dumped)\n",
          //   STDERR_FILENO);
-    	else if (WIFSIGNALED(exit_st) && WTERMSIG(exit_st) == 2)
+    	else if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 2)
 	{
         	ft_putchar_fd('\n', STDERR_FILENO);
-		exit_st = 130;
+		g_exit_st = 130;
 	}
 }

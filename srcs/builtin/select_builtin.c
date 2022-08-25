@@ -105,7 +105,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	save = -1;
 	while (++save <= i)
 		waitpid(pid[save], &status, 0);
-	exit_st = WEXITSTATUS(status);
+	g_exit_st = WEXITSTATUS(status);
 	return (0);
 }
 
@@ -240,7 +240,7 @@ static void	command_no(t_token *token, t_params *params, int *old_fd)
 	write(2, "minishell: ", 11);
 	write(2, token->args[0], ft_strlen(token->args[0]));
 	write(2, " : command not found\n", 21);
-	exit_st = 127;
+	g_exit_st = 127;
 	free_params(params);
 	free(params->data->trimmed);
 	free(token->value);
@@ -279,7 +279,7 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	if (i == 0)
 	{
 		waitpid(pid, &status, 0);
-		exit_st = WEXITSTATUS(status);
+		g_exit_st = WEXITSTATUS(status);
 	}
 }
 
@@ -289,19 +289,19 @@ void	ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd)
 	if (token->args[0] == NULL)
 		return ;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
-		exit_st = ft_cd(token->args, params);
+		g_exit_st = ft_cd(token->args, params);
 	else if (ft_strncmp(token->args[0], "echo", 5) == 0)
-		exit_st = ft_echo(token->args);
+		g_exit_st = ft_echo(token->args);
 	else if (ft_strncmp(token->args[0], "env", 4) == 0)
-		exit_st = ft_env(token->args, params);
+		g_exit_st = ft_env(token->args, params);
 	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
-		exit_st = ft_pwd(token->args);
+		g_exit_st = ft_pwd(token->args);
 	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
-		exit_st = ft_exit(token->args);
+		g_exit_st = ft_exit(token->args);
 	else if (ft_strncmp(token->args[0], "export", 7) == 0)
-		exit_st = ft_export(token->args, params);
+		g_exit_st = ft_export(token->args, params);
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
-		exit_st = ft_unset(token->args, params);
+		g_exit_st = ft_unset(token->args, params);
 	else
 		make_command(token, params, i, old_fd);
 	return ;

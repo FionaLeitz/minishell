@@ -32,7 +32,7 @@ char *rep_hd(t_params *params, char *str, int size, int quote)
 		|| (quote % 2 != 0 && str[0] == '\"'))
 		return ("$");
 	if (str[0] == '?' && (ft_space(str[1] == 0) || str[1] == '\0'))
-		return (ft_itoa(exit_st));
+		return (ft_itoa(g_exit_st));
 	count = -1;
 	while(params->env[++count])
 	{

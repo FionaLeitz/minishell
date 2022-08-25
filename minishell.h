@@ -38,7 +38,7 @@ typedef enum s_sig_mode
 	COMMAND
 }	t_sig_mode;
 
-extern int	exit_st;
+extern int	g_exit_st;
 
 typedef struct s_fd
 {

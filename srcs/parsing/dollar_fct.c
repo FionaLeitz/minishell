@@ -22,7 +22,7 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 		return ("$");
 	if (str[0] == '?' && (ft_space(str[1]) == 0 || str[1] == '\0'))
 	{
-		ft_itoa_no_malloc(exit_st, buff);
+		ft_itoa_no_malloc(g_exit_st, buff);
 		return (buff);
 	}
 	count = -1;
