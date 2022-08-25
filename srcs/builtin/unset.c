@@ -66,6 +66,5 @@ int	ft_unset(char **arg, t_params *params)
 		}
 	}
 	ft_unset_export(arg, params);
-//	g_exit_st = 0;
 	return (0);
 }

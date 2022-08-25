@@ -108,14 +108,7 @@ static void	new_export(char *arg, t_params *params)
 			return ;
 		else if (ft_strncmp(arg, tmp->name, limit) < 0)
 		{
-			if (tmp2 == NULL)
-			{
-				params->export = new_element(arg);
-				params->export->next = tmp;
-				return ;
-			}
-			tmp2->next = new_element(arg);
-			tmp2->next->next = tmp;
+			place_new(arg, tmp, tmp2, params);
 			return ;
 		}
 		tmp2 = tmp;
@@ -148,6 +141,5 @@ int	ft_export(char **arg, t_params *params)
 			new_export(arg[count], params);
 		}
 	}
-//	g_exit_st = 0;
 	return (0);
 }

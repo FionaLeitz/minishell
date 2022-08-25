@@ -100,6 +100,8 @@ int			ft_exit(char **arg);
 int			ft_export(char **arg, t_params *params);
 t_export	*create_export(char **env);
 // export2.c
+void		place_new(char *arg, t_export *new, t_export *new2,
+				t_params *params);
 void		*free_export(t_export *export);
 t_export	*new_element(char *str);
 void		print_export(t_params *params);
@@ -109,7 +111,8 @@ char		**ft_get_env(char **envp);
 int			ft_pwd(char **arg);
 // select_builtin.c
 int			ft_execute(t_token *token, t_params *params);
-void		ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd);
+void		ft_select_builtin(t_token *token, t_params *params, int i,
+				int *old_fd);
 int			ft_execute(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);
@@ -149,7 +152,7 @@ int			ft_if_char(char *str, char c);
 char		*ft_strncpy(char *dest, char *src, unsigned int n);
 int			delim_quotes(char *delim);
 int			check_delim(char *delim);
-void			print_error_heredoc(char *str, int fd);
+void		print_error_heredoc(char *str, int fd);
 char		*del_quotes_hd(char *delim);
 char		*ft_strjoin_char(char *s1, char c);
 int			in_del_quote_hd(char *str, int i);
@@ -169,7 +172,8 @@ int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
 int			get_fd_input(char *pathname, char *red);
 int			get_fd_output(char *pathname, char *red);
-void		ft_redirection(char **str, t_params *params, t_data *data, t_token *token);
+void		ft_redirection(char **str, t_params *params, t_data *data,
+				t_token *token);
 //redirection.c
 char		first_redir(char *str, t_data *data);
 int			check_redir(t_data *data);
@@ -189,8 +193,12 @@ int			create_tab(t_data *data, t_token *token);
 int			ft_space(char c);
 int			check_fd(int fd);
 int			check_child(int pid);
+<<<<<<< HEAD
 void			ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
+=======
+void		ft_shlvl(char **envp);
+>>>>>>> 333afbd8a382ab3b5c47c72a24ba818195af7cb1
 
 #endif
 
@@ -204,3 +212,11 @@ void		ft_exit_d(t_data *data, t_params *params);
 // ...
 // obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
 // }
+
+/*			while (tmp2)
+			{
+				close((pipe_fd[i].raw[0]));
+				close((pipe_fd[i].raw[1]));
+				i++;
+				tmp2 = tmp2->next;
+			}*/

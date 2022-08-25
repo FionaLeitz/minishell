@@ -12,6 +12,20 @@
 
 #include "../../minishell.h"
 
+// if new element needs to be placed
+void	place_new(char *arg, t_export *new, t_export *new2, t_params *params)
+{
+	if (new2 == NULL)
+	{
+		params->export = new_element(arg);
+		params->export->next = new;
+		return ;
+	}
+	new2->next = new_element(arg);
+	new2->next->next = new;
+	return ;
+}
+
 // free export
 void	*free_export(t_export *export)
 {

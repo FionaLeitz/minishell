@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+<<<<<<< HEAD
 // use dup2 to duplicate fds and read and write at the right place
 static void	make_dup(t_token *token, t_pipe_fd *pipe_fd, int i)
 {
@@ -82,22 +83,80 @@ static void	in_child(t_params *params, int *pid, t_pipe_fd *pipe_fd, int i)
 }
 
 // create childs
+=======
+>>>>>>> 333afbd8a382ab3b5c47c72a24ba818195af7cb1
 int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 {
-	int		i;
-	int		save;
-	int		status;
+	int	i;
+	int	save;
+	int	status;
+	t_token	*tmp;
+	t_token	*tmp2;
 
 	i = -1;
+	tmp = token;
+	tmp2 = token;
 	while (token)
 	{
 		ft_signals(MUTE);
 		pid[++i] = fork();
 		check_child(pid[i]);
 		if (pid[i] == 0)
-			in_child(params, pid, pipe_fd, i);
-		close((pipe_fd[i].raw[1]));
+		{
+			if (i != 0 && token->fds[0] == 0)
+			{
+				dup2(pipe_fd[i - 1].raw[0], 0);
+				close(pipe_fd[i - 1].raw[0]);
+			}
+			else
+				dup2(token->fds[0], 0);
+			if (token->next == NULL || token->fds[1] != 1)
+				dup2(token->fds[1], 1);
+			else
+			{
+				dup2(pipe_fd[i].raw[1], token->fds[1]);
+				close(pipe_fd[i].raw[1]);
+			}
+			if (i != 0)
+			{
+				close(pipe_fd[i - 1].raw[0]);
+				close(pipe_fd[i - 1].raw[1]);
+			}
+			tmp2 = token;
+			while (tmp2)
+			{
+				close((pipe_fd[i].raw[0]));
+				close((pipe_fd[i].raw[1]));
+				i++;
+				tmp2 = tmp2->next;
+			}
+			ft_select_builtin(token, params, 1, NULL);
+			tmp2 = token;
+			while (tmp2)
+			{
+				close(pipe_fd[i].raw[0]);
+				close(pipe_fd[i].raw[1]);
+				tmp2 = tmp2->next;
+				i++;
+			}
+			free_params(params);
+			free(pid);
+			free(pipe_fd);
+			free(params->data->trimmed);
+			token = tmp;
+			while (token != NULL)
+			{
+				tmp = token;
+				free(tmp->value);
+				free_table(tmp->args);
+				free_table(tmp->red);
+				token = token->next;
+				free(tmp);
+			}
+			exit(0);
+		}
 		if (i != 0)
+<<<<<<< HEAD
 			close((pipe_fd[i - 1].raw[0]));
 		if (token->next == NULL)
 			close((pipe_fd[i].raw[0]));
@@ -144,27 +203,65 @@ static int	create_pipe(t_pipe_fd *pipe_fd, int *pid, int nbr, int nbr2)
 	{
 		free(pid);
 		while (--nbr2 > nbr)
+=======
+>>>>>>> 333afbd8a382ab3b5c47c72a24ba818195af7cb1
 		{
-			close(pipe_fd[nbr2].raw[0]);
-			close(pipe_fd[nbr2].raw[1]);
+			close(pipe_fd[i - 1].raw[0]);
+			close(pipe_fd[i - 1].raw[1]);
 		}
-		free(pipe_fd);
-		return (-1);
+		close(pipe_fd[i].raw[1]);
+		if (token->fds[0] != 0)
+			close(token->fds[0]);
+		if (token->fds[1] != 1)
+			close(token->fds[1]);
+		token = token->next;
 	}
+	close(pipe_fd[i].raw[0]);
+	close(pipe_fd[i].raw[1]);
+	save = 0;
+	while (save <= i)
+		waitpid(pid[save++], &status, 0);
+	g_exit_st = WEXITSTATUS(status);
 	return (0);
 }
 
-// start the execution by making pipes and childs
 int	ft_execute(t_token *token, t_params *params)
 {
 	int			nbr;
 	int			nbr2;
+	int			old_fd[2];
+	t_token		*tmp;
 	int			*pid;
 	t_pipe_fd	*pipe_fd;
 
 	if (token->next == NULL && token->prev == NULL)
-		return (only_one(token, params));
-	nbr = ft_size(token);
+	{
+		old_fd[0] = dup(0);
+		old_fd[1] = dup(1);
+		if (token->fds[0] != 0)
+		{
+			dup2(token->fds[0], 0);
+			close(token->fds[0]);
+		}
+		if (token->fds[1] != 1)
+		{
+			dup2(token->fds[1], 1);
+			close(token->fds[1]);
+		}
+		ft_select_builtin(token, params, 0, old_fd);
+		dup2(old_fd[0], 0);
+		dup2(old_fd[1], 1);
+		close(old_fd[0]);
+		close(old_fd[1]);
+		return (0);
+	}
+	nbr = 0;
+	tmp = token;
+	while (tmp)
+	{
+		nbr++;
+		tmp = tmp->next;
+	}
 	pid = malloc(sizeof(int) * nbr);
 	if (pid == NULL)
 		return (-1);
@@ -176,9 +273,21 @@ int	ft_execute(t_token *token, t_params *params)
 	}
 	nbr2 = nbr;
 	while (--nbr >= 0)
-		if (create_pipe(pipe_fd, pid, nbr, nbr2) == -1)
+	{
+		if (pipe(pipe_fd[nbr].raw) == -1)
+		{
+			free(pid);
+			while (--nbr2 > nbr)
+			{
+				close(pipe_fd[nbr2].raw[0]);
+				close(pipe_fd[nbr2].raw[1]);
+			}
+			free(pipe_fd);
 			return (-1);
-	ft_pipe(token, params, pid, pipe_fd);
+		}
+	}
+	tmp = token;
+	ft_pipe(tmp, params, pid, pipe_fd);
 	free(pid);
 	free(pipe_fd);
 	return (0);
@@ -237,34 +346,14 @@ int	get_path(char **arg, t_params *params)
 	return (0);
 }
 
-// if command not found
-static void	command_no(t_token *token, t_params *params, int *old_fd)
-{
-	write(2, "minishell: ", 11);
-	write(2, token->args[0], ft_strlen(token->args[0]));
-	write(2, " : command not found\n", 21);
-	g_exit_st = 127;
-	free_params(params);
-	free(params->data->trimmed);
-	free(token->value);
-	free_table(token->args);
-	free_table(token->red);
-	free(token);
-	if (old_fd != NULL)
-	{
-		close(old_fd[0]);
-		close(old_fd[1]);
-	}
-	exit(0);
-}
-
-// execve if not built-in
-static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
+// select if built-in or execve
+void	ft_select_builtin(t_token *token, t_params *params, int	i, int *old_fd)
 {
 	int	pid;
 	int	status;
 
 	pid = 0;
+<<<<<<< HEAD
 	status = 0;
 	if (i == 0)
 	{
@@ -297,6 +386,8 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 // select if built-in
 void	ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd)
 {
+=======
+>>>>>>> 333afbd8a382ab3b5c47c72a24ba818195af7cb1
 	if (token->args[0] == NULL)
 		return ;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)
@@ -314,6 +405,37 @@ void	ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd)
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
 		g_exit_st = ft_unset(token->args, params);
 	else
-		make_command(token, params, i, old_fd);
+	{
+		if (i == 0)
+		{
+			pid = fork();
+			if (pid < 0)
+				return ;
+			//check_child(pid);
+		}
+		if (pid == 0)
+		{
+			if (access(token->args[0], F_OK | X_OK) == -1)
+				get_path(token->args, params);
+			execve(token->args[0], token->args, params->env);
+			write(2, "minishell: ", 11);
+			write(2, token->args[0], ft_strlen(token->args[0]));
+			write(2, " : command not found\n", 21);
+			g_exit_st = 127;free_params(params);
+			free(params->data->trimmed);
+			free(token->value);
+			free_table(token->args);
+			free_table(token->red);
+			free(token);
+			close(old_fd[0]);
+			close(old_fd[1]);
+			exit(0);
+		}
+		if (i == 0)
+		{
+			waitpid(pid, &status, 0);
+			g_exit_st = WEXITSTATUS(status);
+		}
+	}
 	return ;
 }

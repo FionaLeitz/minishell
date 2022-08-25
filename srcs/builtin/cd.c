@@ -67,7 +67,6 @@ static int	ft_if_cd(int i, int j, char **env)
 			free(env[j]);
 		return (1);
 	}
-	//?exit_st = 0;
 	return (0);
 }
 
@@ -110,6 +109,5 @@ int	ft_cd(char **arg, t_params *params)
 	getcwd(path, 4095);
 	if (i == -1 && j == -1)
 		return (0);
-	//exit_st = 0; or in the ft_if_cd
 	return (ft_end_cd(i, j, params->env, path));
 }
