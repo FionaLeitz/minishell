@@ -66,3 +66,12 @@ void	ft_shlvl(char** envp)
 	free(tmp);
 }
 
+// handles ctrl-d
+void	ft_exit_d(t_data *data, t_params *params)
+{
+	write(1, "exit\n", 4);
+	write(1, "\n", 1);
+	free_params(params);
+	free_struct(data);
+	exit(0);
+}

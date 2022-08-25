@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/15 16:21:37 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/25 14:22:00 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	tmp = token;
 	while (token)
 	{
+		ft_signals(MUTE);
 		pid[++i] = fork();
 		check_child(pid[i]);
 		if (pid[i] == 0)
@@ -271,8 +272,10 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	int	status;
 
 	pid = 0;
+	status = 0;
 	if (i == 0)
 	{
+		ft_signals(MUTE);
 		pid = fork();
 		if (pid < 0)
 			return ;
