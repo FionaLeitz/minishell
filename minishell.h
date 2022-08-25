@@ -208,3 +208,11 @@ void		ft_shlvl(char **envp);
 // ...
 // obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
 // }
+
+/*			while (tmp2)
+			{
+				close((pipe_fd[i].raw[0]));
+				close((pipe_fd[i].raw[1]));
+				i++;
+				tmp2 = tmp2->next;
+			}*/
