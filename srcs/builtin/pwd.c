@@ -27,13 +27,11 @@ int	ft_pwd(char **arg)
 		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
 		ft_putstr_fd("No such file or directory\n", 2);
 		return (1);
-//		g_exit_st = 1;
 	}
 	else
 	{
 		ft_printf("%s\n", path2);
 		free(path2);
-//		g_exit_st = 0;
 	}
 	return (0);
 }
