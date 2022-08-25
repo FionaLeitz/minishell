@@ -94,6 +94,8 @@ int			ft_echo(char **arg);
 // env.c
 int			ft_env(char **arg, t_params *params);
 int			new_env(char *arg, t_params *params);
+// execution.c
+int			ft_execute(t_token *token, t_params *params);
 // exit.c
 int			ft_exit(char **arg);
 // export.c
@@ -107,13 +109,14 @@ t_export	*new_element(char *str);
 void		print_export(t_params *params);
 // get_env.c
 char		**ft_get_env(char **envp);
+// pipes.c
+int			ft_pipe(t_token *token, t_params *params, int *pid,
+				t_pipe_fd *pipe_fd);
 // pwd.c
 int			ft_pwd(char **arg);
 // select_builtin.c
-int			ft_execute(t_token *token, t_params *params);
 void		ft_select_builtin(t_token *token, t_params *params, int i,
 				int *old_fd);
-int			ft_execute(t_token *token, t_params *params);
 // table_utils.c
 void		print_table(char **table);
 void		free_table(char **table);

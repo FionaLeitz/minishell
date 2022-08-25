@@ -31,15 +31,17 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/parsing/dollar_fct.c			\
 	srcs/parsing/here_doc.c				\
 	srcs/parsing/free.c					\
-	srcs/parsing/expand_heredoc.c			\
-	srcs/parsing/heredoc_utils.c			\
+	srcs/parsing/expand_heredoc.c		\
+	srcs/parsing/heredoc_utils.c		\
 	srcs/builtin/cd.c					\
 	srcs/builtin/echo.c					\
 	srcs/builtin/env.c					\
+	srcs/builtin/execution.c			\
 	srcs/builtin/exit.c					\
 	srcs/builtin/export.c				\
 	srcs/builtin/export2.c				\
 	srcs/builtin/get_env.c				\
+	srcs/builtin/pipes.c				\
 	srcs/builtin/pwd.c					\
 	srcs/builtin/select_builtin.c		\
 	srcs/builtin/table_utils.c			\
