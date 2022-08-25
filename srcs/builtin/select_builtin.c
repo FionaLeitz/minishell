@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/25 14:22:00 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/25 16:19:07 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	}
 	if (pid == 0)
 	{
+		ft_signals(COMMAND);
 		if (access(token->args[0], F_OK | X_OK) == -1)
 			get_path(token->args, params);
 		execve(token->args[0], token->args, params->env);

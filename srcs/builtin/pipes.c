@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/25 15:28:05 by masamoil          #+#    #+#             */
+/*   Updated: 2022/08/25 15:47:29 by masamoil         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 // use dup2 to duplicate fdsand read and write at the right place
@@ -67,7 +79,7 @@ static void	clean_child(t_params *params, int *pid, t_pipe_fd *pipe_fd)
 }
 
 // get exit status from child
-static void	get_exit_st(int i, int *pid)
+/*static void	get_exit_st(int i, int *pid)
 {
 	int	save;
 	int	status;
@@ -76,7 +88,10 @@ static void	get_exit_st(int i, int *pid)
 	while (save <= i)
 		waitpid(pid[save++], &status, 0);
 	g_exit_st = WEXITSTATUS(status);
-}
+//	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
+//		g_exit_st = WEXITSTATUS(g_exit_st);
+
+}*/
 
 // create childs
 int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
@@ -93,6 +108,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		check_child(pid[i]);
 		if (pid[i] == 0)
 		{
+			ft_signals(COMMAND);
 			in_child(token, params, pipe_fd, i);
 			clean_child(params, pid, pipe_fd);
 		}
@@ -103,6 +119,9 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 			close((pipe_fd[i].raw[0]));
 		token = token->next;
 	}
-	get_exit_st(i, pid);
+	//get_exit_st(i, pid);
+	if (*pid != -1 && (0 < waitpid(*pid, &g_exit_st, 0)))
+		g_exit_st = WEXITSTATUS(g_exit_st);
+	ft_signals(DEFAULT);
 	return (0);
 }
