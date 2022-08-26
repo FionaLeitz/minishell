@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 16:05:49 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/26 16:05:55 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/26 17:12:55 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	ft_execute(t_token *token, t_params *params)
 		if (create_pipe(pipe_fd, pid, nbr, nbr2) == -1)
 			return (-1);
 	ft_pipe(token, params, pid, pipe_fd);
-	printf("exit status samere = %d\n", g_exit_st);
 	free(pid);
 	free(pipe_fd);
 	return (0);

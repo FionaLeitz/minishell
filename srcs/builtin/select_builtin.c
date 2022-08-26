@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/26 15:27:04 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/26 17:13:50 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd);
 	}
+	//printf("exit status access = %d\n", g_exit_st);
 	if (i == 0)
 	{
 	 	if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
