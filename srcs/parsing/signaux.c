@@ -22,7 +22,8 @@ void	ft_sig_int(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		g_exit_st = 130;
-	}		
+	}
+	//printf("SIGNAL 2 : %d\n", g_exit_st);
 }
 
 //handles ctrl-c in heredoc
@@ -52,7 +53,7 @@ void	ft_sig_quit(int signal)
 //handles the signals depending on mode
 void	ft_signals(t_sig_mode mode)
 {
-	
+	//printf("SIGNAL 1 : %d ==== MODE : %d\n", g_exit_st, mode);
 	if (mode == DEFAULT)
 	{
 		signal(SIGINT, ft_sig_int);
@@ -73,6 +74,7 @@ void	ft_signals(t_sig_mode mode)
 		signal(SIGINT, ft_sig_int);
 		signal(SIGQUIT, ft_sig_quit);
 	}
+	//printf("SIGNAL 3 : %d ==== MODE : %d\n", g_exit_st, mode);
 }
 
 //checks the exit status of process, returns the error message

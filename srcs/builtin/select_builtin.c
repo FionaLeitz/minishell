@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/25 16:19:07 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/26 11:43:29 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,21 +100,24 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 		pid = fork();
 		if (pid < 0)
 			return ;
-		//check_child(pid);
 	}
 	if (pid == 0)
 	{
 		ft_signals(COMMAND);
 		if (access(token->args[0], F_OK | X_OK) == -1)
 			get_path(token->args, params);
+		printf("here\n");
+		printf("exit status prout = %d\n", g_exit_st);
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd);
 	}
 	if (i == 0)
 	{
-		waitpid(pid, &status, 0);
-		g_exit_st = WEXITSTATUS(status);
+	 	if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
+		g_exit_st = WEXITSTATUS(g_exit_st);
+		check_exit_status();
 	}
+	ft_signals(DEFAULT);
 }
 
 // select if built-in

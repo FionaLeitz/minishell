@@ -6,13 +6,13 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 15:28:05 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/25 15:47:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/25 16:27:59 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// use dup2 to duplicate fdsand read and write at the right place
+// use dup2 to duplicate fds and read and write at the right place
 static void	make_dup(t_token *token, t_pipe_fd *pipe_fd, int i)
 {
 	close((pipe_fd[i].raw[0]));
