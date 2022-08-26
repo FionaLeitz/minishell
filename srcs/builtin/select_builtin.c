@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/26 11:43:29 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/26 15:27:04 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void	command_no(t_token *token, t_params *params, int *old_fd)
 		close(old_fd[0]);
 		close(old_fd[1]);
 	}
-	exit(0);
+	exit(g_exit_st);
 }
 
 // execve if not built-in
@@ -106,15 +106,13 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 		ft_signals(COMMAND);
 		if (access(token->args[0], F_OK | X_OK) == -1)
 			get_path(token->args, params);
-		printf("here\n");
-		printf("exit status prout = %d\n", g_exit_st);
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd);
 	}
 	if (i == 0)
 	{
 	 	if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
-		g_exit_st = WEXITSTATUS(g_exit_st);
+			g_exit_st = WEXITSTATUS(g_exit_st);
 		check_exit_status();
 	}
 	ft_signals(DEFAULT);

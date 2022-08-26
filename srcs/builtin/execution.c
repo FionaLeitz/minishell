@@ -42,7 +42,7 @@ static int	only_one(t_token *token, t_params *params)
 	return (0);
 }
 
-// start the execution by making pipes and childs
+// start the execution by making pipes and children
 int	ft_execute(t_token *token, t_params *params)
 {
 	int			nbr;
@@ -67,7 +67,9 @@ int	ft_execute(t_token *token, t_params *params)
 		if (create_pipe(pipe_fd, pid, nbr, nbr2) == -1)
 			return (-1);
 	ft_pipe(token, params, pid, pipe_fd);
+	printf("exit status samere = %d\n", g_exit_st);
 	free(pid);
 	free(pipe_fd);
 	return (0);
+	//return (g_exit_st);
 }

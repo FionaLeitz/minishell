@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 15:28:05 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/25 16:27:59 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/26 12:55:18 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,14 @@ static void	clean_child(t_params *params, int *pid, t_pipe_fd *pipe_fd)
 /*static void	get_exit_st(int i, int *pid)
 {
 	int	save;
-	int	status;
+	//int	status;
 
 	save = 0;
 	while (save <= i)
-		waitpid(pid[save++], &status, 0);
-	g_exit_st = WEXITSTATUS(status);
-//	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
-//		g_exit_st = WEXITSTATUS(g_exit_st);
-
+	{
+		if ((0 < waitpid(pid[save++], &g_exit_st, 0)) && (WIFEXITED(g_exit_st)))
+			g_exit_st = WEXITSTATUS(g_exit_st);
+	}
 }*/
 
 // create childs
@@ -120,8 +119,10 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		token = token->next;
 	}
 	//get_exit_st(i, pid);
-	if (*pid != -1 && (0 < waitpid(*pid, &g_exit_st, 0)))
-		g_exit_st = WEXITSTATUS(g_exit_st);
+	if ((0 < waitpid(*pid, &g_exit_st, 0)) && (WIFEXITED(g_exit_st)))
+			g_exit_st = WEXITSTATUS(g_exit_st);
+	printf("exit status in ft_pipe is = %d\n", g_exit_st);
+	check_exit_status();
 	ft_signals(DEFAULT);
 	return (0);
 }

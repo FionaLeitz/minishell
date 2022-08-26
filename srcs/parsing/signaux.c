@@ -82,12 +82,12 @@ void    check_exit_status(void)
 {
     	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 3)
 	{
-        	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+        ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 		g_exit_st = 131;
 	}
     	else if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 2)
 	{
-        	ft_putchar_fd('\n', STDERR_FILENO);
+        ft_putchar_fd('\n', STDERR_FILENO);
 		g_exit_st = 130;
 	}
 }
