@@ -13,9 +13,9 @@
 #include "../../minishell.h"
 
 //used to create a new here_doc name each time hd1, hd2, etc...
-const char *hd_name(void)
+char *hd_name(void)
 {
-	const char	*pathname;
+	char	*pathname;
 	int	i;
 	int	fd_exist;
 	char	*tmp;
@@ -37,7 +37,7 @@ const char *hd_name(void)
 	return (pathname);
 }
 
-static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
+static int	fork_heredoc(char *delim, int *utils, t_params *params, char *pathname)
 {
 	pid_t		pid;
 	
@@ -45,8 +45,11 @@ static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
 	check_child(pid);
 	if (pid == 0)
 	{
-		get_hd_line(delim, fd, quotes, params);
-		close(fd);
+		get_hd_line(delim, utils[0], utils[1], params);
+		close(utils[0]);
+		free_struct(params->data);
+		free_params(params);
+		free(pathname);
 		exit(g_exit_st);	
 	}
 	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
@@ -62,29 +65,28 @@ static int	fork_heredoc(char *delim, int fd, int quotes, t_params *params)
 //main fct of here_doc, check delimiter, creates heredoc in child(fork) 
 int	ft_here_doc(char *delim, t_params *params)
 {
-	const char	*pathname;
-	int		fd;
-	int		quotes;
+	char	*pathname;
+	int		utils[2];
 	char		*delim_tmp;
 	int 		child;
 
 	g_exit_st = 0;
 	delim_tmp = delim;
-	quotes = check_delim(delim);
+	utils[1] = check_delim(delim);
 	if (delim_quotes(delim) == 1)
 		delim = del_quotes_hd(delim);
 	else
 		delim = delim_tmp; 
 	pathname = hd_name();
-	fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
+	utils[0] = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
-	child = fork_heredoc(delim, fd, quotes, params);
+	child = fork_heredoc(delim, utils, params, pathname);
 	ft_signals(DEFAULT);
-	close(fd);
-	fd = get_fd_input((char*)pathname, "<");
+	close(utils[0]);
+	utils[0] = get_fd_input(pathname, "<");
 	unlink(pathname);
-	free((char*)pathname);
-	return (fd);
+	free(pathname);
+	return (utils[0]);
 }
 
 

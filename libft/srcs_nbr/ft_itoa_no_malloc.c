@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa_no_malloc.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/29 11:45:09 by fleitz            #+#    #+#             */
+/*   Updated: 2022/08/29 11:45:14 by fleitz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/libft.h"
 
 static int	recursive(unsigned int nbr, char *buff)
 {
-	int	size;
-	int	i;
+	int				size;
+	int				i;
 	unsigned int	nbr2;
 
 	size = 1;
@@ -20,7 +32,7 @@ static int	recursive(unsigned int nbr, char *buff)
 
 int	ft_itoa_no_malloc(int nbr, char *buff)
 {
-	int	size;
+	int				size;
 	unsigned int	nbr2;
 
 	ft_bzero(buff, 12);

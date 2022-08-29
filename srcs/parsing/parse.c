@@ -49,6 +49,8 @@ int	check_string(t_data *data)
 		}
 		if (check_redir(data) == -1)
 			return (-1);
+		if (data->trimmed[data->i] == '\0')
+			break ;
 		data->i++;
 	}
 	return (0);

@@ -48,7 +48,7 @@ int	check_child(int pid)
 void	ft_shlvl(char** envp)
 {
 	int	i;
-	char 	*shlvl;
+	char 	shlvl[12];
 	char	*tmp;
 
 	i = 0;
@@ -56,11 +56,11 @@ void	ft_shlvl(char** envp)
 		return ;
 	while (ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
-	shlvl = ft_itoa(ft_atoi(*envp + 6) + 1);
+	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
 	tmp = NULL;
 	//while (ft_strncmp("SHLVL", envp[i], 5))
 	//	i++;
-	tmp = strndup(envp[i], 6);
+	tmp = ft_strndup(envp[i], 6);
 	free(envp[i]);
 	envp[i] = ft_strjoin(tmp, shlvl);
 	free(tmp);

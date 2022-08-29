@@ -82,5 +82,5 @@ int	ft_execute(t_token *token, t_params *params)
 	free(pid);
 	free(pipe_fd);
 	return (0);
-	//return (g_exit_st);
+//	return (g_exit_st);
 }

@@ -141,7 +141,7 @@ void		ft_sig_heredoc(int signal);
 void		ft_signals(t_sig_mode mode);
 void		check_exit_status(void);
 //here_doc.c
-const char	*hd_name(void);
+char	*hd_name(void);
 int			ft_here_doc(char *str, t_params *params);
 //int		ft_wait_hd(pid_t pid);
 int			get_hd_line(char *del, int fd, int quotes, t_params *params);
@@ -204,6 +204,7 @@ void		ft_exit_d(t_data *data, t_params *params);
 // ""''echo hola""'''' que""'' tal""''
 
 // alias minishell='valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=.ignore_readline ./minishell'
+// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline ./minishell'
 // alias minishell='valgrind --track-fds=yes --suppressions=.ignore_readline ./minishell'
 // {
 // ignore_libreadline_conditional_jump_errors
