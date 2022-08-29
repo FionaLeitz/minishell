@@ -14,10 +14,10 @@
 
 int	ft_if_char(char *str, char c)
 {
-	int	 i;
+	int	i;
 
 	i = 0;
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		if (str[i] == c)
 			return (0);
@@ -33,7 +33,7 @@ int	delim_quotes(char *delim)
 	i = 0;
 	while (delim[i])
 	{
-		if(delim[i] == '\'' || delim[i] == '\"')
+		if (delim[i] == '\'' || delim[i] == '\"')
 			return (1);
 		i++;
 	}
@@ -47,7 +47,7 @@ int	check_delim(char *delim)
 	quotes = 0;
 	if (delim_quotes(delim) == 0)
 		quotes = 0;
-	else if(delim_quotes(delim) == 1)
+	else if (delim_quotes(delim) == 1)
 		quotes = 1;
 	return (quotes);
 }
@@ -79,7 +79,7 @@ char	*del_quotes_hd(char *delim)
 			i--;
 		i++;
 	}
-	return(delim);
+	return (delim);
 }
 
 int	in_del_quote_hd(char *str, int i)

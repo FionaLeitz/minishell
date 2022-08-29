@@ -28,7 +28,8 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 	count = -1;
 	while (env[++count])
 	{
-		if (ft_strncmp(env[count], str, quote[1]) == 0 && env[count][quote[1]] == '=')
+		if (ft_strncmp(env[count], str, quote[1]) == 0
+			&& env[count][quote[1]] == '=')
 			return (&env[count][quote[1] + 1]);
 	}
 	return (NULL);
@@ -63,13 +64,28 @@ int	in_replace(char *str, int s, t_token *token, t_data *data)
 	return (0);
 }
 
-// find $
-int	replace_var(t_token *token, t_data *data, t_params *params)
+static int	if_dollar(t_token *token, t_data *data, t_params *par, int *quote)
 {
 	int		s;
 	char	*str;
+	char	buff[12];
+
+	s = data->i++;
+	while (token->value[data->i] && ft_space(token->value[data->i])
+		!= 0 && token->value[data->i] != '\'' && token->value[
+			data->i] != '\"' && token->value[data->i] != '$')
+		data->i++;
+	quote[1] = data->i - s - 1;
+	str = rep(par->env, &token->value[s + 1], quote, buff);
+	if (in_replace(str, s, token, data) == -1)
+		return (-1);
+	return (0);
+}
+
+// find $
+int	replace_var(t_token *token, t_data *data, t_params *params)
+{
 	int		quote[2];
-	char buff[12];
 
 	while (token)
 	{
@@ -83,14 +99,7 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 				jump_quotes(token->value, data);
 			if (token->value[data->i] == '$')
 			{
-				s = data->i++;
-				while (token->value[data->i] && ft_space(token->value[data->i])
-					!= 0 && token->value[data->i] != '\'' && token->value[
-						data->i] != '\"' && token->value[data->i] != '$')
-					data->i++;
-				quote[1] = data->i - s - 1;
-				str = rep(params->env, &token->value[s + 1], quote, buff);
-				if (in_replace(str, s, token, data) == -1)
+				if (if_dollar(token, data, params, quote) != 0)
 					return (-1);
 			}
 		}
