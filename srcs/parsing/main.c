@@ -30,7 +30,7 @@ int	main(int ac, char **av, char **envp)
 	params.export = create_export(params.env);
 	if (ac != 1)
 		ft_putstr_fd("This minishell does not take arguments\n", 2);
-	if (ac == 1)
+	else
 		print_prompt(&data, &params);
 	free_export(params.export);
 	free_table(params.env);
