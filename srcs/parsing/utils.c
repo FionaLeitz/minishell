@@ -29,7 +29,7 @@ int	check_fd(int fd)
 		perror("Open:");
 		g_exit_st = 127;
 	}
-	return(-1);
+	return (-1);
 }
 
 //child protection when forking
@@ -45,10 +45,10 @@ int	check_child(int pid)
 }
 
 //increments SHLVL variable
-void	ft_shlvl(char** envp)
+void	ft_shlvl(char **envp)
 {
-	int	i;
-	char 	shlvl[12];
+	int		i;
+	char	shlvl[12];
 	char	*tmp;
 
 	i = 0;
@@ -57,9 +57,9 @@ void	ft_shlvl(char** envp)
 	while (ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
 	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
-	tmp = NULL;
-	//while (ft_strncmp("SHLVL", envp[i], 5))
-	//	i++;
+//	tmp = NULL;
+//	while (ft_strncmp("SHLVL", envp[i], 5))
+//		i++;
 	tmp = ft_strndup(envp[i], 6);
 	free(envp[i]);
 	envp[i] = ft_strjoin(tmp, shlvl);

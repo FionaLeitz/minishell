@@ -78,14 +78,9 @@ char	*expand_heredoc(char *line, t_params *params)
 	char	*new;
 	char	*tmp;
 
-	i = -1;
+	i = 0;
 	quote = 0;
-<<<<<<< HEAD
-	new = NULL;
-	while(line[i] != '\0')
-=======
-	while (line[++i] != '\0')
->>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
+	while (line[i] != '\0')
 	{
 		if (line[i] == '\"')
 			quote++;
@@ -95,7 +90,6 @@ char	*expand_heredoc(char *line, t_params *params)
 		{
 			printf("line in the beg = %s\n", line);
 			s = i++;
-<<<<<<< HEAD
 			printf("s = %d\n", s);
 			while(line[i] && ft_space(line[i]) != 0 && line[i] != '\''
 				&& line[i] != '\"' && line[i] != '$')
@@ -103,22 +97,14 @@ char	*expand_heredoc(char *line, t_params *params)
 			tmp = rep_hd(params, &line[s + 1], i - s - 1, quote);
 			printf("tmp = %s\n", tmp);
 			//new = ft_strjoin(new,tmp);
-=======
-			while (line[i] && ft_space(line[i]) != 0 && line[i] != '\''
-				&& line[i] != '\"' && line[i] != '$')
-				i++;
-			tmp = rep_hd(params, &line[s + 1], i - s - 1, quote);
->>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
 			new = in_replace_hd(tmp, s, line, &i);
 			printf("new = %s\n", new);
 			printf("line = %s\n", line);
 			printf("boucle est terminee\n");
 			printf("-------------------------\n");
 		}
+		else
+			i++;
 	}
 	return (new);
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a

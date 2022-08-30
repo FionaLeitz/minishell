@@ -111,12 +111,12 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	}
 	if (i == 0)
 	{
-	 	if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
+		if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
 			g_exit_st = WEXITSTATUS(g_exit_st);
 		else if (WIFSIGNALED(g_exit_st))
 			g_exit_st = 128 + WTERMSIG(g_exit_st);
 		else if (WIFSTOPPED(g_exit_st))
-			g_exit_st = 128 + WSTOPSIG(g_exit_st);	
+			g_exit_st = 128 + WSTOPSIG(g_exit_st);
 		check_exit_status();
 	}
 	ft_signals(DEFAULT);

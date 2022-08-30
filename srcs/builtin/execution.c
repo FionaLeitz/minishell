@@ -81,6 +81,5 @@ int	ft_execute(t_token *token, t_params *params)
 	ft_pipe(token, params, pid, pipe_fd);
 	free(pid);
 	free(pipe_fd);
-//	return (0);
 	return (g_exit_st);
 }

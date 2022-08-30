@@ -112,15 +112,8 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 		if (line && ft_strcmp(line, del) == 0)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
-		{
 			new = write_hd_expand(line, fd, params);
-<<<<<<< HEAD
-			printf("new line = %s\n", new);
-		}
-		else if(line)
-=======
 		else if (line)
->>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
 			new = ft_strdup(line);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);

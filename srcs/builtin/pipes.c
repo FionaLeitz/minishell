@@ -43,6 +43,7 @@ static void	in_child(t_token *tok, t_params *par, t_pipe_fd *pipe_fd, int i)
 {
 	t_token	*new;
 
+	ft_signals(COMMAND);
 	make_dup(tok, pipe_fd, i);
 	new = tok;
 	while (new)
@@ -82,7 +83,6 @@ static void	clean_child(t_params *params, int *pid, t_pipe_fd *pipe_fd)
 static void	get_exit_st(int i, int *pid)
 {
 	int	save;
-	//int	status;
 
 	save = 0;
 	while (save <= i)
@@ -92,7 +92,7 @@ static void	get_exit_st(int i, int *pid)
 		else if (WIFSIGNALED(g_exit_st))
 			g_exit_st = 128 + WTERMSIG(g_exit_st);
 		else if (WIFSTOPPED(g_exit_st))
-			g_exit_st = 128 + WSTOPSIG(g_exit_st);	
+			g_exit_st = 128 + WSTOPSIG(g_exit_st);
 	}
 }
 
@@ -111,7 +111,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		check_child(pid[i]);
 		if (pid[i] == 0)
 		{
-			ft_signals(COMMAND);
+			// ft_signals(COMMAND);
 			in_child(token, params, pipe_fd, i);
 			clean_child(params, pid, pipe_fd);
 		}

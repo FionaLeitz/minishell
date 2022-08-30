@@ -49,7 +49,7 @@ void	ft_sig_quit(int signal)
 		//exit(g_exit_st);
 	}
 }
-	
+
 //handles the signals depending on mode
 void	ft_signals(t_sig_mode mode)
 {
@@ -78,13 +78,14 @@ void	ft_signals(t_sig_mode mode)
 	//printf("SIGNAL 3 : %d ==== MODE : %d\n", g_exit_st, mode);
 }
 
-//checks the exit status of process(if interrupted by signal), returns the error message
+//checks the exit status of process(if interrupted by signal)
+//returns the error message
 void	check_exit_status(void)
 {
 	if (g_exit_st == (128 | SIGQUIT))
-	 	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	else if (g_exit_st == (128 | SIGSEGV))
-	    	ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
+		ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
 	//else if (g_exit_st == (128 | SIGINT))
-    	//	ft_putchar_fd('\n', STDERR_FILENO);
+		//	ft_putchar_fd('\n', STDERR_FILENO);
 }
