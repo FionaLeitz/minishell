@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/25 14:22:20 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:32:01 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *pathnam
 	}
 	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
 		g_exit_st = WEXITSTATUS(g_exit_st);
-	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 2)
+	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st))
 	{
 		g_exit_st = 130;
 		return (1);
@@ -98,8 +98,8 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 	
 	line = NULL;
 	new = NULL;
+	//char *tmp = NULL;
 	ft_signals(HEREDOC);
-	dprintf(1, "exit status in child = %d\n", g_exit_st);
 	while (1)
 	{
 		line = readline("> ");
@@ -109,11 +109,14 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 			break ;
 		}
 		if (!line && g_exit_st == 130)
-			return (2);
+			return (-1);
 		if (line && ft_strcmp(line, del) == 0)
 			break ;
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
+		{
 			new = write_hd_expand(line, fd, params);
+			printf("new line = %s\n", new);
+		}
 		else if(line)
 			new = ft_strdup(line);
 		ft_putstr_fd(new, fd);

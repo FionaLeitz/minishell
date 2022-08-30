@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/25 13:18:42 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/30 10:30:27 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	ft_signals(t_sig_mode mode)
 	{
 		signal(SIGINT, ft_sig_int);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTERM, SIG_IGN);
 	}
 	else if (mode == HEREDOC)
 	{	
@@ -77,17 +78,13 @@ void	ft_signals(t_sig_mode mode)
 	//printf("SIGNAL 3 : %d ==== MODE : %d\n", g_exit_st, mode);
 }
 
-//checks the exit status of process, returns the error message
-void    check_exit_status(void)
+//checks the exit status of process(if interrupted by signal), returns the error message
+void	check_exit_status(void)
 {
-    	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 3)
-	{
-        ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-		g_exit_st = 131;
-	}
-    	else if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st) == 2)
-	{
-        ft_putchar_fd('\n', STDERR_FILENO);
-		g_exit_st = 130;
-	}
+	if (g_exit_st == (128 | SIGQUIT))
+	 	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	else if (g_exit_st == (128 | SIGSEGV))
+	    	ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
+	//else if (g_exit_st == (128 | SIGINT))
+    	//	ft_putchar_fd('\n', STDERR_FILENO);
 }

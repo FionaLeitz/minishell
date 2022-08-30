@@ -87,8 +87,14 @@ static void	get_exit_st(int i, int *pid)
 	save = 0;
 	while (save <= i)
 	{
-		if ((0 < waitpid(pid[save++], &g_exit_st, 0)) && (WIFEXITED(g_exit_st)))
+		// if ((0 < waitpid(pid[save++], &g_exit_st, 0)) && (WIFEXITED(g_exit_st)))
+		// 	g_exit_st = WEXITSTATUS(g_exit_st);
+		if (0 < waitpid(pid[save++], &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
 			g_exit_st = WEXITSTATUS(g_exit_st);
+		else if (WIFSIGNALED(g_exit_st))
+			g_exit_st = 128 + WTERMSIG(g_exit_st);
+		else if (WIFSTOPPED(g_exit_st))
+			g_exit_st = 128 + WSTOPSIG(g_exit_st);	
 	}
 }
 
@@ -119,6 +125,7 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		token = token->next;
 	}
 	get_exit_st(i, pid);
+	check_exit_status();
 	ft_signals(DEFAULT);
 	return (0);
 }

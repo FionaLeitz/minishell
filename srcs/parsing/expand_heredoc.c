@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 11:42:13 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/18 11:07:50 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/29 20:22:43 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ char	*in_replace_hd(char *str, int s, char *line, int *i)
 		tmp = ft_memmove(tmp, line, s);
 		tmp = ft_strcat(tmp, str);
 		tmp = ft_strcat(tmp, &line[i[0]]);
-		//line = strcpy(line, tmp);
 		line = ft_strdup(tmp);
 		free(tmp);
 		i[0] = s + ft_strlen(str) - 1;
@@ -76,10 +75,11 @@ char	*expand_heredoc(char *line, t_params *params)
 	int	s;
 	int	quote;
 	char	*new;
-	char	*tmp;	
+	char	*tmp;
 
 	i = 0;
 	quote = 0;
+	new = NULL;
 	while(line[i] != '\0')
 	{
 		if (line[i] == '\"')
@@ -88,18 +88,23 @@ char	*expand_heredoc(char *line, t_params *params)
 			jump_quotes_hd(line, &i);
 		if (line[i] == '$')
 		{
+			printf("line in the beg = %s\n", line);
 			s = i++;
+			printf("s = %d\n", s);
 			while(line[i] && ft_space(line[i]) != 0 && line[i] != '\''
 				&& line[i] != '\"' && line[i] != '$')
 				i++;
 			tmp = rep_hd(params, &line[s + 1], i - s - 1, quote);
-			//printf("tmp in expand hd= %s\n", tmp);
+			printf("tmp = %s\n", tmp);
+			//new = ft_strjoin(new,tmp);
 			new = in_replace_hd(tmp, s, line, &i);
+			printf("new = %s\n", new);
+			printf("line = %s\n", line);
+			printf("boucle est terminee\n");
+			printf("-------------------------\n");
 		}
 		i++;
 	}
-	//printf("line = %s\n", new);
 	return (new);
 }
-
 
