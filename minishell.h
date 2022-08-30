@@ -186,8 +186,8 @@ int			count_red(t_data *data, t_token *token);
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
 int			in_del_quote(char *str, int j);
-void		del_quotes_redir(t_token *token);
-void		del_quotes(t_token *token);
+int			del_quotes_redir(t_token *token);
+int			del_quotes(t_token *token);
 //args_start.c
 int			ft_count_words(t_data *data, char *s);
 int			in_create_tab(char *str, int *i);

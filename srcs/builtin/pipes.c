@@ -87,8 +87,6 @@ static void	get_exit_st(int i, int *pid)
 	save = 0;
 	while (save <= i)
 	{
-		// if ((0 < waitpid(pid[save++], &g_exit_st, 0)) && (WIFEXITED(g_exit_st)))
-		// 	g_exit_st = WEXITSTATUS(g_exit_st);
 		if (0 < waitpid(pid[save++], &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
 			g_exit_st = WEXITSTATUS(g_exit_st);
 		else if (WIFSIGNALED(g_exit_st))

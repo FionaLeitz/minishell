@@ -73,5 +73,5 @@ void	ft_exit_d(t_data *data, t_params *params)
 	write(1, "\n", 1);
 	free_params(params);
 	free_struct(data);
-	exit(0);
+	exit(g_exit_st);
 }

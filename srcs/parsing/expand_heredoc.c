@@ -14,17 +14,17 @@
 
 static void	jump_quotes_hd(char *str, int *i)
 {
-	char quote;
+	char	quote;
 
 	quote = str[i[0]];
 	i[0]++;
-	while(str[i[0]] != '\0' && str[i[0]] != quote)
+	while (str[i[0]] != '\0' && str[i[0]] != quote)
 		i[0]++;
 }
 
-char *rep_hd(t_params *params, char *str, int size, int quote)
+char	*rep_hd(t_params *params, char *str, int size, int quote)
 {
-	int	count;
+	int		count;
 	char	*tmp;
 
 	tmp = NULL;
@@ -34,9 +34,10 @@ char *rep_hd(t_params *params, char *str, int size, int quote)
 	if (str[0] == '?' && (ft_space(str[1] == 0) || str[1] == '\0'))
 		return (ft_itoa(g_exit_st));
 	count = -1;
-	while(params->env[++count])
+	while (params->env[++count])
 	{
-		if (ft_strncmp(params->env[count], str, size) == 0 && params->env[count][size] == '=')
+		if (ft_strncmp(params->env[count], str, size) == 0
+			&& params->env[count][size] == '=')
 			return (&params->env[count][size + 1]);
 	}
 	return (NULL);
@@ -44,7 +45,7 @@ char *rep_hd(t_params *params, char *str, int size, int quote)
 
 char	*in_replace_hd(char *str, int s, char *line, int *i)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = NULL;
 	if (str == NULL)
@@ -55,7 +56,7 @@ char	*in_replace_hd(char *str, int s, char *line, int *i)
 	else
 	{
 		tmp = malloc(sizeof(char) * (s + ft_strlen(str)
-			+ ft_strlen(&line[i[0]]) + 1));
+					+ ft_strlen(&line[i[0]]) + 1));
 		if (tmp == NULL)
 			return (NULL);
 		ft_bzero(tmp, s + ft_strlen(str) + ft_strlen(&line[i[0]]) + 1);
@@ -71,16 +72,20 @@ char	*in_replace_hd(char *str, int s, char *line, int *i)
 
 char	*expand_heredoc(char *line, t_params *params)
 {
-	int	i;
-	int	s;
-	int	quote;
+	int		i;
+	int		s;
+	int		quote;
 	char	*new;
 	char	*tmp;
 
-	i = 0;
+	i = -1;
 	quote = 0;
+<<<<<<< HEAD
 	new = NULL;
 	while(line[i] != '\0')
+=======
+	while (line[++i] != '\0')
+>>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
 	{
 		if (line[i] == '\"')
 			quote++;
@@ -90,6 +95,7 @@ char	*expand_heredoc(char *line, t_params *params)
 		{
 			printf("line in the beg = %s\n", line);
 			s = i++;
+<<<<<<< HEAD
 			printf("s = %d\n", s);
 			while(line[i] && ft_space(line[i]) != 0 && line[i] != '\''
 				&& line[i] != '\"' && line[i] != '$')
@@ -97,14 +103,22 @@ char	*expand_heredoc(char *line, t_params *params)
 			tmp = rep_hd(params, &line[s + 1], i - s - 1, quote);
 			printf("tmp = %s\n", tmp);
 			//new = ft_strjoin(new,tmp);
+=======
+			while (line[i] && ft_space(line[i]) != 0 && line[i] != '\''
+				&& line[i] != '\"' && line[i] != '$')
+				i++;
+			tmp = rep_hd(params, &line[s + 1], i - s - 1, quote);
+>>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
 			new = in_replace_hd(tmp, s, line, &i);
 			printf("new = %s\n", new);
 			printf("line = %s\n", line);
 			printf("boucle est terminee\n");
 			printf("-------------------------\n");
 		}
-		i++;
 	}
 	return (new);
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a

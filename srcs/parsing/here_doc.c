@@ -13,11 +13,11 @@
 #include "../../minishell.h"
 
 //used to create a new here_doc name each time hd1, hd2, etc...
-char *hd_name(void)
+char	*hd_name(void)
 {
 	char	*pathname;
-	int	i;
-	int	fd_exist;
+	int		i;
+	int		fd_exist;
 	char	*tmp;
 
 	i = 1;
@@ -29,7 +29,7 @@ char *hd_name(void)
 		free(tmp);
 		fd_exist = open(pathname, O_RDONLY);
 		if (fd_exist == -1)
-			break;
+			break ;
 		close(fd_exist);
 		fd_exist = 0;
 		++i;
@@ -37,10 +37,10 @@ char *hd_name(void)
 	return (pathname);
 }
 
-static int	fork_heredoc(char *delim, int *utils, t_params *params, char *pathname)
+static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 {
-	pid_t		pid;
-	
+	pid_t	pid;
+
 	pid = fork();
 	check_child(pid);
 	if (pid == 0)
@@ -49,8 +49,8 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *pathnam
 		close(utils[0]);
 		free_struct(params->data);
 		free_params(params);
-		free(pathname);
-		exit(g_exit_st);	
+		free(path);
+		exit(g_exit_st);
 	}
 	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
 		g_exit_st = WEXITSTATUS(g_exit_st);
@@ -65,10 +65,10 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *pathnam
 //main fct of here_doc, check delimiter, creates heredoc in child(fork) 
 int	ft_here_doc(char *delim, t_params *params)
 {
-	char	*pathname;
-	int		utils[2];
+	char		*pathname;
+	int			utils[2];
 	char		*delim_tmp;
-	int 		child;
+	int			child;
 
 	g_exit_st = 0;
 	delim_tmp = delim;
@@ -76,7 +76,7 @@ int	ft_here_doc(char *delim, t_params *params)
 	if (delim_quotes(delim) == 1)
 		delim = del_quotes_hd(delim);
 	else
-		delim = delim_tmp; 
+		delim = delim_tmp;
 	pathname = hd_name();
 	utils[0] = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
@@ -89,13 +89,12 @@ int	ft_here_doc(char *delim, t_params *params)
 	return (utils[0]);
 }
 
-
 //fct to get the line of the here_doc with readline as in prompt
 int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
 	char	*line;
 	char	*new;
-	
+
 	line = NULL;
 	new = NULL;
 	//char *tmp = NULL;
@@ -115,47 +114,47 @@ int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 		if (ft_if_char(line, '$') == 0 && quotes == 0)
 		{
 			new = write_hd_expand(line, fd, params);
+<<<<<<< HEAD
 			printf("new line = %s\n", new);
 		}
 		else if(line)
+=======
+		else if (line)
+>>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
 			new = ft_strdup(line);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
-		free(new);	
+		free(new);
 	}
 	return (0);
 }
-	
+
 char	*write_hd_expand(char *line, int fd, t_params *params)
 {
-	int	i;
-	int	save;
+	int		i;
+	int		save;
 	char	*tmp;
-	char 	*new;
+	char	*new;
 	char	*buff;
-	
+
 	(void)fd;
 	i = 0;
 	save = 0;
 	tmp = NULL;
 	new = NULL;
 	buff = NULL;
-	while(line[i] != '\0')
+	while (line[i] != '\0')
 	{
-		if(line[i] == '$')
+		if (line[i] == '$')
 		{	
 			save = i;
-			//printf("save = %d, i = %d \n", save, i);
 			tmp = expand_heredoc(&line[i], params);
-			//printf("tmp $ = %s\n", tmp);
 			if (tmp == NULL)
 				new = &line[save - i];
 			else
 			{	
 				buff = ft_strndup(&line[save - i], save);
-				//printf("buff = %s\n", buff);
 				new = ft_strjoin(buff, tmp);
-				//printf("new = %s\n", new);
 			}
 		}
 		i++;
