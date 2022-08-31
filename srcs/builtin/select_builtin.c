@@ -132,6 +132,8 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 // select if built-in
 void	ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd)
 {
+	if (token->fds[0] == -1 || token->fds[1] == -1)
+		return ;
 	if (token->args[0] == NULL)
 		return ;
 	if (ft_strncmp(token->args[0], "cd", 3) == 0)

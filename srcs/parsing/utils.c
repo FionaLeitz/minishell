@@ -26,8 +26,8 @@ int	check_fd(int fd)
 {
 	if (fd == -1)
 	{
-		perror("Open:");
-		g_exit_st = 127;
+		perror("Open");
+		g_exit_st = 1;
 	}
 	return (-1);
 }
