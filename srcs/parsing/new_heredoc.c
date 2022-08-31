@@ -40,7 +40,6 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 				break;
 			if (line)
 				new = write_hd(tmp, fd, quotes, params);
-//			dprintf(2, "new = -%s-\n", new);
 		}
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
@@ -75,7 +74,6 @@ char	*expand_env_in_heredoc(char *str, t_params *params, int size)
 	char	buff[12];
 
 	tmp = NULL;
-	//dprintf(2, "ce que l'on veut remplacer : -%s-\nsize = %d\n", str, size);
 	if (size == 0)
  		return (ft_strdup("$"));
 	if (str[0] == '?' && (ft_space(str[0] == 0) || str[0] == '\0'))
@@ -109,11 +107,8 @@ char	*replace_var_heredoc(char *str, int first, char *line, int *i)
 		ft_bzero(tmp, first + ft_strlen(str)
 			+ ft_strlen(&line[i[0]]) + 1);
 		tmp = ft_memmove(tmp, line, first);
-		//dprintf(2, "tmp1 = -%s-\n", tmp);
 		tmp = ft_strcat(tmp, str);
-		//dprintf(2, "tmp2 = -%s-\n", tmp);
 		tmp = ft_strcat(tmp, &line[i[0]]);
-		//dprintf(2, "tmp3 = -%s-\n", tmp);
 		free(line);
 		line = tmp;
 		i[0] = first + ft_strlen(str) - 1;
@@ -131,17 +126,16 @@ char	*expand_heredoc(char *line, t_params *params, int *i)
 	first = i[0];
 	tmp = NULL;
 	i[0]++;
-//	dprintf(2, "line[i[0]] = -%s-\n", &line[i[0]]);
 	while (line[i[0]] != '$' && line[i[0]] != '\0' && line[i[0]] != '\'' && line[i[0]] != '\"'
 		&& (ft_space(line[i[0]]) != 0))
 	{
 		count++;
 		i[0]++;
+		if (line[i[0] - 1] == '?')
+			break ;
 	}
 	tmp = expand_env_in_heredoc(&line[first + 1], params, count);
-//	dprintf(2, "tmp = %s\n", tmp);
 	line = replace_var_heredoc(tmp, first, line, i);
-	//dprintf(2, "line = %s\n", line);
 	return(line);
 }
 

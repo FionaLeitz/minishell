@@ -31,7 +31,7 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/parsing/dollar_fct.c			\
 	srcs/parsing/here_doc.c				\
 	srcs/parsing/free.c					\
-	srcs/parsing/new_heredoc.c		\
+	srcs/parsing/new_heredoc.c			\
 	srcs/parsing/heredoc_utils.c		\
 	srcs/builtin/cd.c					\
 	srcs/builtin/echo.c					\
