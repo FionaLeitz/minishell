@@ -26,9 +26,12 @@ char	first_redir(char *str, t_data *data)
 
 	redir = str[data->i];
 	data->i++;
-	if (str[data->i] == '\0')
+	if (str[data->i] == '\0' || str[data->i] == '|')
 	{
-		print_error_redir("newline", '\0');
+		if (str[data->i] == '|')
+			print_error_redir("\0", '|');
+		else
+			print_error_redir("newline", '\0');
 		return (-1);
 	}
 	if (str[data->i] == '<' || str[data->i] == '>')
@@ -59,6 +62,8 @@ int	check_redir(t_data *data)
 			data->i++;
 		if (data->trimmed[data->i] == '\0')
 			return (print_error_redir("newline", '\0'));
+		if (data->trimmed[data->i] == '|')
+			return (print_error_redir("\0", '|'));
 		if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
 			return (print_error_redir("\0", redir));
 	}
