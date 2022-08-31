@@ -141,7 +141,7 @@ void		ft_sig_heredoc(int signal);
 void		ft_signals(t_sig_mode mode);
 void		check_exit_status(void);
 //here_doc.c
-char	*hd_name(void);
+char		*hd_name(void);
 int			ft_here_doc(char *str, t_params *params);
 //int		ft_wait_hd(pid_t pid);
 int			get_hd_line(char *del, int fd, int quotes, t_params *params);
@@ -175,8 +175,7 @@ int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
 int			get_fd_input(char *pathname, char *red);
 int			get_fd_output(char *pathname, char *red);
-void		ft_redirection(char **str, t_params *params, t_data *data,
-				t_token *token);
+void		ft_redirection(char **str, t_params *params, t_token *token);
 //redirection.c
 char		first_redir(char *str, t_data *data);
 int			check_redir(t_data *data);
@@ -206,8 +205,6 @@ char	*expand_env_in_heredoc(char *str, t_params *params, int size);
 char	*expand_heredoc(char *line, t_params *params, int *i);
 
 #endif
-
-// ""''echo hola""'''' que""'' tal""''
 
 // alias minishell='valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=.ignore_readline ./minishell'
 // alias minishell='valgrind --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline ./minishell'

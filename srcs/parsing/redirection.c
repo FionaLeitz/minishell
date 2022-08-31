@@ -65,55 +65,69 @@ int	check_redir(t_data *data)
 	return (0);
 }
 
+static void	locate_redir(t_data *data, t_token *token)
+{
+	char	quote;
+
+	while (token->value[data->i] != '>' && token->value[data->i] != '<')
+	{
+		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
+		{
+			quote = token->value[data->i];
+			data->i++;
+			while (token->value[data->i] != quote)
+				data->i++;
+		}
+		data->i++;
+	}
+}
+
+static void	suppress_useless(t_data *data, t_token *token)
+{
+	int		tmp;
+	char	quote;
+
+	tmp = 0;
+	while (ft_space(token->value[data->i]) == 0)
+	{
+		data->i++;
+		tmp++;
+	}
+	ft_memcpy(&token->value[data->i - tmp], &token->value[data->i],
+		ft_strlen(&token->value[data->i]) + 1);
+	data->i -= tmp;
+	while (token->value[data->i] != '\0' && ft_space(
+			token->value[data->i]) != 0 && token->value[data->i] != '>'
+		&& token->value[data->i] != '<')
+	{
+		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
+		{
+			quote = token->value[data->i];
+			data->i++;
+			while (token->value[data->i] != quote)
+				data->i++;
+		}
+		data->i++;
+	}
+}
+
 // in count_red, create char **red (redirection's list)
 int	get_red(t_data *data, t_token *token, int count)
 {
 	int		j;
 	int		save;
-	char	quote;
-	int		tmp;
 
 	j = 0;
 	data->i = 0;
 	token->red[count] = NULL;
 	while (j < count)
 	{
-		while (token->value[data->i] != '>' && token->value[data->i] != '<')
-		{
-			if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
-			{
-				quote = token->value[data->i];
-				data->i++;
-				while (token->value[data->i] != quote)
-					data->i++;
-			}
-			data->i++;
-		}
+		locate_redir(data, token);
 		save = data->i;
 		data->i++;
 		if (token->value[data->i] == '>' || token->value[data->i] == '<')
 			data->i++;
-		tmp = 0;
-		while (ft_space(token->value[data->i]) == 0)
-		{
-			data->i++;
-			tmp++;
-		}
-		ft_memcpy(&token->value[data->i - tmp], &token->value[data->i], ft_strlen(&token->value[data->i]) + 1);
-		data->i -= tmp;
-		while (token->value[data->i] != '\0' && ft_space(
-				token->value[data->i]) != 0 && token->value[data->i] != '>'
-			&& token->value[data->i] != '<')
-		{
-			if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
-			{
-				quote = token->value[data->i];
-				data->i++;
-				while (token->value[data->i] != quote)
-					data->i++;
-			}
-			data->i++;
-		}
+		suppress_useless(data, token);
 		token->red[j] = ft_strndup(&token->value[save], data->i - save);
 		ft_memcpy(&token->value[save], &token->value[data->i],
 			ft_strlen(&token->value[data->i]) + 1);
@@ -135,8 +149,7 @@ int	count_red(t_data *data, t_token *token)
 	{
 		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
 		{
-			quote = token->value[data->i];
-			data->i++;
+			quote = token->value[data->i++];
 			while (token->value[data->i] != quote)
 				data->i++;
 		}
@@ -149,9 +162,7 @@ int	count_red(t_data *data, t_token *token)
 		data->i++;
 	}
 	token->red = malloc(sizeof(char *) * (count + 1));
-	if (token->red == NULL)
-		return (-1);
-	if (get_red(data, token, count) != 0)
+	if (token->red == NULL || get_red(data, token, count) != 0)
 		return (-1);
 	return (0);
 }

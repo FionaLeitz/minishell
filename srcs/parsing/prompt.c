@@ -33,57 +33,71 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
+void	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
+{
+	char	*s;
+
+	while (token)
+	{
+		token->fds[0] = 0;
+		token->fds[1] = 1;
+		s = ft_strtrim(token->value, " \t\n\v\f\r");
+		free(token->value);
+		token->value = s;
+		f(data, token);
+		token = token->next;
+	}
+}
+
 // start separating pipes
 void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
-	char	*s;
 
 	first_pipe_cut(data);
 	tmp = data->head;
-	while (tmp)
-	{
-		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
-		free(tmp->value);
-		tmp->value = s;
-		tmp = tmp->next;
-	}
+	in_cut(data, tmp, count_red);
 	tmp = data->head;
-	while (tmp)
-	{
-		count_red(data, tmp);
-		tmp = tmp->next;
-	}
+	replace_var(tmp, data, params);
 	tmp = data->head;
-	if (replace_var(tmp, data, params) == -1)
-	{
-		printf("ERROR REPLACE_VAR\n");
-		return ;
-	}
-	tmp = data->head;
-	while (tmp)
-	{
-		s = ft_strtrim(tmp->value, " \t\n\v\f\r");
-		free(tmp->value);
-		tmp->value = s;
-		create_tab(data, tmp);
-		tmp = tmp->next;
-	}
+	in_cut(data, tmp, create_tab);
 	tmp = data->head;
 	del_quotes(tmp);
 	tmp = data->head;
 	while (tmp)
 	{
-		ft_redirection(tmp->red, params, data, tmp);
+		ft_redirection(tmp->red, params, tmp);
 		tmp = tmp->next;
 	}
 }
 
-void	modify_line(t_data *data)
+static int	modify_line(t_data *data, int nbr)
+{
+	int	save;
+
+	save = 0;
+	while (ft_space(data->trimmed[data->i]) == 0)
+	{
+		data->i++;
+		nbr++;
+	}
+	while (ft_space(data->trimmed[data->i]) != 0)
+	{
+		save = data->i;
+		if (data->trimmed[data->i] == '\''
+			|| data->trimmed[data->i] == '\"')
+			jump_quotes(data->trimmed, data);
+		else
+			data->i++;
+		nbr += data->i - save;
+	}
+	return (nbr);
+}
+
+static void	only_heredocs(t_data *data)
 {
 	int	save;
 	int	save2;
-	int	save3;
 
 	data->i -= 1;
 	data->trimmed[data->i] = '\0';
@@ -98,22 +112,7 @@ void	modify_line(t_data *data)
 			ft_memcpy(&data->trimmed[save], &data->trimmed[data->i],
 				ft_strlen(&data->trimmed[data->i]) + 1);
 			data->i = save + 2;
-			while (ft_space(data->trimmed[data->i]) == 0)
-			{
-				data->i++;
-				save2++;
-			}
-			while (ft_space(data->trimmed[data->i]) != 0)
-			{
-				save3 = data->i;
-				if (data->trimmed[data->i] == '\'' ||
-					data->trimmed[data->i] == '\"')
-					jump_quotes(data->trimmed, data);
-				else
-					data->i++;
-				save2 += data->i - save3;
-			}
-			save += save2;
+			save += modify_line(data, save2);
 		}
 		data->i++;
 	}
@@ -135,7 +134,8 @@ int	print_prompt(t_data *data, t_params *params)
 			ft_exit_d(data, params);
 		if (syntax_check(data) != 0)
 		{
-		 	modify_line(data);
+			only_heredocs(data);
+			dprintf(2, "data->trimmed = -%s-\n", data->trimmed);
 			g_exit_st = 2;
 		}
 		ft_cut(data, params);

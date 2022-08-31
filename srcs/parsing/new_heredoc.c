@@ -13,16 +13,6 @@
 
 #include "../../minishell.h"
 
-/*static void jump_quotes_hd(char *str, int *i)
-{
-	char quote;
-
-	quote = str[i[0]];
-	i[0]++;
-	while (str[i[0]] != '\0' && str[i[0]] != quote)
-		i[0]++;
-}*/
-
 // fct to get the line of the here_doc with readline as in prompt
 int get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
