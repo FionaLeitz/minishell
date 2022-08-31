@@ -149,7 +149,7 @@ char		*write_hd_expand(char *line, int fd, t_params *params);
 //expand_heredoc.c
 char		*rep_hd(t_params *params, char *str, int size, int quote);
 char		*in_replace_hd(char *str, int s, char *line, int *i);
-char		*expand_heredoc(char *line, t_params *params);
+//char		*expand_heredoc(char *line, t_params *params);
 //heredoc_utils.c
 int			ft_if_char(char *str, char c);
 char		*ft_strncpy(char *dest, char *src, unsigned int n);
@@ -198,6 +198,12 @@ int			check_fd(int fd);
 int			check_child(int pid);
 void		ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
+
+//new_heredoc.c
+int		get_hd_line(char *del, int fd, int quotes, t_params *params);
+char	*write_hd(char *line, int fd, int quotes, t_params *params);
+char	*expand_env_in_heredoc(char *str, t_params *params, int size);
+char	*expand_heredoc(char *line, t_params *params, int *i);
 
 #endif
 

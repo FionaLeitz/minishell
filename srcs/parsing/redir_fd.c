@@ -41,7 +41,6 @@ int	get_fd_output(char *pathname, char *red)
 void	ft_redirection(char **str, t_params *params, t_data *data, t_token *token)
 {
 	int	i;
-//	(void)params;
 	(void)data;
 
 	token->fds[0] = 0;

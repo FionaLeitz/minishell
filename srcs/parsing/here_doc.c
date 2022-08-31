@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 15:44:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/29 17:32:01 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/08/30 12:05:47 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,74 +90,70 @@ int	ft_here_doc(char *delim, t_params *params)
 }
 
 //fct to get the line of the here_doc with readline as in prompt
-int	get_hd_line(char *del, int fd, int quotes, t_params *params)
-{
-	char	*line;
-	char	*new;
+// int	get_hd_line(char *del, int fd, int quotes, t_params *params)
+// {
+// 	char	*line;
+// 	char	*new;
 
-	line = NULL;
-	new = NULL;
-	//char *tmp = NULL;
-	ft_signals(HEREDOC);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line && g_exit_st != 130)
-		{
-			print_error_heredoc(del, fd);
-			break ;
-		}
-		if (!line && g_exit_st == 130)
-			return (-1);
-		if (line && ft_strcmp(line, del) == 0)
-			break ;
-		if (ft_if_char(line, '$') == 0 && quotes == 0)
-		{
-			new = write_hd_expand(line, fd, params);
-<<<<<<< HEAD
-			printf("new line = %s\n", new);
-		}
-		else if(line)
-=======
-		else if (line)
->>>>>>> dad9c212689baca2b14b5ad5f55c0601c20d519a
-			new = ft_strdup(line);
-		ft_putstr_fd(new, fd);
-		ft_putstr_fd("\n", fd);
-		free(new);
-	}
-	return (0);
-}
+// 	line = NULL;
+// 	new = NULL;
+// 	//char *tmp = NULL;
+// 	ft_signals(HEREDOC);
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line && g_exit_st != 130)
+// 		{
+// 			print_error_heredoc(del, fd);
+// 			break ;
+// 		}
+// 		if (!line && g_exit_st == 130)
+// 			return (-1);
+// 		if (line && ft_strcmp(line, del) == 0)
+// 			break ;
+// 		if (ft_if_char(line, '$') == 0 && quotes == 0)
+// 		{
+// 			new = write_hd_expand(line, fd, params);
+// 			printf("new line = %s\n", new);
+// 		}
+// 		else if (line)
+// 			new = ft_strdup(line);
+// 		ft_putstr_fd(new, fd);
+// 		ft_putstr_fd("\n", fd);
+// 		free(new);
+// 	}
+// 	return (0);
+// }
 
-char	*write_hd_expand(char *line, int fd, t_params *params)
-{
-	int		i;
-	int		save;
-	char	*tmp;
-	char	*new;
-	char	*buff;
+// char	*write_hd_expand(char *line, int fd, t_params *params)
+// {
+// 	int		i;
+// 	int		save;
+// 	char	*tmp;
+// 	char	*new;
+// 	char	*buff;
 
-	(void)fd;
-	i = 0;
-	save = 0;
-	tmp = NULL;
-	new = NULL;
-	buff = NULL;
-	while (line[i] != '\0')
-	{
-		if (line[i] == '$')
-		{	
-			save = i;
-			tmp = expand_heredoc(&line[i], params);
-			if (tmp == NULL)
-				new = &line[save - i];
-			else
-			{	
-				buff = ft_strndup(&line[save - i], save);
-				new = ft_strjoin(buff, tmp);
-			}
-		}
-		i++;
-	}
-	return (new);
-}
+// 	(void)fd;
+// 	i = 0;
+// 	save = 0;
+// 	tmp = NULL;
+// 	new = NULL;
+// 	buff = NULL;
+// 	while (line[i] != '\0')
+// 	{
+// 		if (line[i] == '$')
+// 		{	
+// 			save = i;
+// 			tmp = expand_heredoc(&line[i], params);
+// 			if (tmp == NULL)
+// 				new = &line[save - i];
+// 			else
+// 			{	
+// 				buff = ft_strndup(&line[save - i], save);
+// 				new = ft_strjoin(buff, tmp);
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (new);
+// }
