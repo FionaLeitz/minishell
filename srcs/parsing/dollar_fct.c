@@ -17,10 +17,9 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 {
 	int		count;
 
-	if ((quote[1] == 0 && (ft_space(str[1]) == 0 || str[1] == '\0'))
-		|| (quote[0] % 2 != 0 && str[0] == '\"'))
+	if ((quote[1] == 0 || (quote[0] % 2 != 0 && str[0] == '\"')) && str[0] != '\"' && str[0] != '\'')
 		return ("$");
-	if (str[0] == '?' && (ft_space(str[1]) == 0 || str[1] == '\0'))
+	if (str[0] == '?'/* && (ft_space(str[1]) == 0 || str[1] == '\0')*/)
 	{
 		ft_itoa_no_malloc(g_exit_st, buff);
 		return (buff);
@@ -74,28 +73,38 @@ static int	if_dollar(t_token *token, t_data *data, t_params *par, int *quote)
 	while (token->value[data->i] && ft_space(token->value[data->i])
 		!= 0 && token->value[data->i] != '\'' && token->value[
 			data->i] != '\"' && token->value[data->i] != '$')
+	{
 		data->i++;
+		if (token->value[data->i - 1] == '?')
+			break ;
+	}
 	quote[1] = data->i - s - 1;
-	str = rep(par->env, &token->value[s + 1], quote, buff);
-	if (in_replace(str, s, token, data) == -1)
-		return (-1);
+	if (quote[0] % 2 == 0)
+	{
+		str = rep(par->env, &token->value[s + 1], quote, buff);
+		if (in_replace(str, s, token, data) == -1)
+			return (-1);
+	}
 	return (0);
 }
 
 // find $
 int	replace_var(t_token *token, t_data *data, t_params *params)
 {
-	int		quote[2];
+	int		quote[3];
 
 	while (token)
 	{
 		quote[0] = 0;
+		quote[2] = 0;
 		data->i = -1;
 		while (token->value[++data->i])
 		{
 			if (token->value[data->i] == '\"')
+				quote[2]++;
+			if (token->value[data->i] == '\'' && quote[2] % 2 == 0)
 				quote[0]++;
-			if (token->value[data->i] == '\'' && quote[0] % 2 == 0)
+			if (token->value[data->i] == '\'' && quote[0] % 2 != 0)
 				jump_quotes(token->value, data);
 			if (token->value[data->i] == '$')
 			{
