@@ -70,7 +70,7 @@ static void	command_no(t_token *token, t_params *params, int *old_fd)
 {
 	write(2, "minishell: ", 11);
 	write(2, token->args[0], ft_strlen(token->args[0]));
-	write(2, " : command not found\n", 21);
+	write(2, ": command not found\n", 20);
 	g_exit_st = 127;
 	free_params(params);
 	free(params->data->trimmed);
@@ -104,7 +104,14 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	if (pid == 0)
 	{
 		ft_signals(COMMAND);
-		if (access(token->args[0], F_OK | X_OK) == -1)
+		if (access(token->args[0], F_OK | X_OK) != -1)
+		{
+			write(2, "minishell: ", 11);
+			write(2, token->args[0], ft_strlen(token->args[0]));
+			write(2, ": Is a directory\n", 18);
+			exit (126);
+		}
+		if (token->args[0][0] != '\0')
 			get_path(token->args, params);
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd);
