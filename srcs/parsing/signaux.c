@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 10:53:47 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/30 10:30:27 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/01 10:28:49 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	ft_sig_int(int signal)
 		rl_redisplay();
 		g_exit_st = 130;
 	}
-	//printf("SIGNAL 2 : %d\n", g_exit_st);
 }
 
 //handles ctrl-c in heredoc
@@ -46,36 +45,37 @@ void	ft_sig_quit(int signal)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		g_exit_st = 131;
-		//exit(g_exit_st);
 	}
 }
 
 //handles the signals depending on mode
 void	ft_signals(t_sig_mode mode)
 {
-	//printf("SIGNAL 1 : %d ==== MODE : %d\n", g_exit_st, mode);
 	if (mode == DEFAULT)
 	{
 		signal(SIGINT, ft_sig_int);
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGTERM, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
 	}
 	else if (mode == HEREDOC)
 	{	
 		signal(SIGINT, ft_sig_heredoc);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
 	}
 	else if (mode == MUTE)
 	{
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
 	}
 	else if (mode == COMMAND)
 	{
 		signal(SIGINT, ft_sig_int);
 		signal(SIGQUIT, ft_sig_quit);
+		signal(SIGTSTP, SIG_IGN);
 	}
-	//printf("SIGNAL 3 : %d ==== MODE : %d\n", g_exit_st, mode);
 }
 
 //checks the exit status of process(if interrupted by signal)
@@ -86,6 +86,6 @@ void	check_exit_status(void)
 		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	else if (g_exit_st == (128 | SIGSEGV))
 		ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
-	//else if (g_exit_st == (128 | SIGINT))
-		//	ft_putchar_fd('\n', STDERR_FILENO);
+	else if (g_exit_st == (128 | SIGINT))
+			ft_putchar_fd('\n', STDERR_FILENO);
 }
