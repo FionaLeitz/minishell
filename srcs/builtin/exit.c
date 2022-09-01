@@ -6,11 +6,38 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:41:48 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/15 14:44:38 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:03:26 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+static int	ft_check_long_long(char *nb)
+{
+	char 	*long_long;
+	int	i;
+
+	i = 0;
+	if (nb[0] == '-')
+	{
+		long_long = "-9223372036854775808";
+		i = 1; 
+	}
+	else 
+		long_long = "9223372036854775807";
+	if (ft_strlen(nb) >= ft_strlen(&long_long[i]))
+	{
+		while (nb[i])
+		{
+			if (nb[i] > long_long[i])// || (ft_isdigit(nb[i]) == 0))
+				return (-1);
+			i++;
+		}
+		return (0);
+	}
+	else
+		return (0);
+}
 
 // check if arguments are numbers
 static int	in_exit(char **arg)
@@ -23,7 +50,7 @@ static int	in_exit(char **arg)
 	{
 		if (arg[1][i] == '+' || arg[1][i] == '-')
 			i++;
-		if (ft_isdigit(arg[1][i]) == 0)
+		if (ft_isdigit(arg[1][i]) == 0 || ft_check_long_long(arg[1]) == -1)
 		{
 			ft_printf("minishell: exit: %s: numeric argument required\n",
 				arg[1]);
