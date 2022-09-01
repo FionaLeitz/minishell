@@ -18,8 +18,11 @@ static int	in_exit(char **arg)
 	int	i;
 
 	i = -1;
+	
 	while (arg[1][++i])
 	{
+		if (arg[1][i] == '+' || arg[1][i] == '-')
+			i++;
 		if (ft_isdigit(arg[1][i]) == 0)
 		{
 			ft_printf("minishell: exit: %s: numeric argument required\n",

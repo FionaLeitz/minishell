@@ -6,7 +6,7 @@
 /*   By: fleitz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 09:30:11 by fleitz            #+#    #+#             */
-/*   Updated: 2022/08/30 10:32:59 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/01 10:13:03 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,8 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 			g_exit_st = WEXITSTATUS(g_exit_st);
 		else if (WIFSIGNALED(g_exit_st))
 			g_exit_st = 128 + WTERMSIG(g_exit_st);
-		else if (WIFSTOPPED(g_exit_st))
-			g_exit_st = 128 + WSTOPSIG(g_exit_st);
+	//	else if (WIFSTOPPED(g_exit_st))
+	//		g_exit_st = 128 + WSTOPSIG(g_exit_st);
 		check_exit_status();
 	}
 	ft_signals(DEFAULT);
