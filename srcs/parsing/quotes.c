@@ -46,10 +46,18 @@ int	check_quotes(t_data *data)
 int	in_del_quote(char *str, int j)
 {
 	char	quote;
+//	int		i;
 
 	quote = str[j];
+/////////////////////////////////////////////////////////////////
+	// i = j + 1;
+	// while (str[i] && str[i] != quote)
+	// 	i++;
+	// if (str[i] != quote)
+	// 	return (j + 1);
+/////////////////////////////////////////////////////////////////
 	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
-	while (str[j] != quote)
+	while (str[j] && str[j] != quote)
 		j++;
 	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
 	return (j);

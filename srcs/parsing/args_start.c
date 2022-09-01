@@ -28,8 +28,10 @@ int	ft_count_words(t_data *data, char *s)
 			{
 				quote = s[data->i];
 				data->i++;
-				while (s[data->i] != quote)
+				while (s[data->i] && s[data->i] != quote)
 					data->i++;
+				if (s[data->i] == '\0')
+					break ;
 			}
 			data->i++;
 		}
@@ -55,13 +57,14 @@ int	in_create_tab(char *str, int *i)
 			quote = str[i[0]];
 			count++;
 			i[0]++;
-			while (str[i[0]] != quote)
+			while (str[i[0]] && str[i[0]] != quote)
 			{
 				count++;
 				i[0]++;
 			}
 		}
-		i[0]++;
+		if (str[i[0]])
+			i[0]++;
 		count++;
 	}
 	return (count);
