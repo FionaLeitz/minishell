@@ -40,8 +40,23 @@ static int	get_path(char **arg, t_params *params)
 {
 	int		i;
 	char	**path;
+	struct stat *test;
 
 	i = 0;
+	if (arg[0][0] == '\0')
+		return (0);
+	test = malloc(sizeof(struct stat));
+	if (stat(arg[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
+	{
+		free(test);
+		return (126);
+	}
+	else if (access(arg[0], F_OK | X_OK) != -1)
+	{
+		free(test);
+		return (0);
+	}
+	free(test);
 	while (params->env[i] && ft_strncmp(params->env[i], "PATH=", 5) != 0)
 		i++;
 	if (params->env[i] == NULL)
@@ -66,12 +81,22 @@ static int	get_path(char **arg, t_params *params)
 }
 
 // if command not found
-static void	command_no(t_token *token, t_params *params, int *old_fd)
+static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
 {
-	write(2, "minishell: ", 11);
-	write(2, token->args[0], ft_strlen(token->args[0]));
-	write(2, ": command not found\n", 20);
-	g_exit_st = 127;
+	if (i == 1)
+	{
+		write(2, "minishell: ", 11);
+		write(2, token->args[0], ft_strlen(token->args[0]));
+		write(2, ": Is a directory\n", 18);
+		g_exit_st = 126;
+	}
+	else
+	{
+		write(2, "minishell: ", 11);
+		write(2, token->args[0], ft_strlen(token->args[0]));
+		write(2, ": command not found\n", 20);
+		g_exit_st = 127;
+	}
 	free_params(params);
 	free(params->data->trimmed);
 	free(token->value);
@@ -104,17 +129,10 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	if (pid == 0)
 	{
 		ft_signals(COMMAND);
-		if (access(token->args[0], F_OK | X_OK) != -1)
-		{
-			write(2, "minishell: ", 11);
-			write(2, token->args[0], ft_strlen(token->args[0]));
-			write(2, ": Is a directory\n", 18);
-			exit (126);
-		}
-		if (token->args[0][0] != '\0')
-			get_path(token->args, params);
+		if (get_path(token->args, params) == 126)
+			command_no(token, params, old_fd, 1);
 		execve(token->args[0], token->args, params->env);
-		command_no(token, params, old_fd);
+		command_no(token, params, old_fd, 0);
 	}
 	if (i == 0)
 	{
@@ -145,7 +163,7 @@ void	ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd)
 	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
 		g_exit_st = ft_pwd(token->args);
 	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
-		g_exit_st = ft_exit(token->args);
+		g_exit_st = ft_exit(token->args, i);
 	else if (ft_strncmp(token->args[0], "export", 7) == 0)
 		g_exit_st = ft_export(token->args, params);
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)

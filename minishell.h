@@ -97,7 +97,7 @@ int			new_env(char *arg, t_params *params);
 // execution.c
 int			ft_execute(t_token *token, t_params *params);
 // exit.c
-int			ft_exit(char **arg);
+int			ft_exit(char **arg, int i);
 // export.c
 int			ft_export(char **arg, t_params *params);
 t_export	*create_export(char **env);

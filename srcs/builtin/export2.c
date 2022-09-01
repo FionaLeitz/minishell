@@ -99,9 +99,12 @@ void	print_export(t_params *params)
 	tmp = params->export;
 	while (params->export)
 	{
-		ft_printf("%s", params->export->name);
-		if (params->export->value[0] != '\0')
+		if (params->export->name[0] != '\0')
+		{
+			ft_printf("declare -x %s", params->export->name);
+//		if (params->export->value[0] != '\0')
 			ft_printf("=\"%s\"", &params->export->value[1]);
+		}
 		if (params->export->name[0] != '\0')
 			ft_printf("\n");
 		params->export = params->export->next;

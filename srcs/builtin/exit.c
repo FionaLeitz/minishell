@@ -32,11 +32,12 @@ static int	in_exit(char **arg)
 }
 
 // exit with error messages
-int	ft_exit(char **arg)
+int	ft_exit(char **arg, int i)
 {
 	long int	n;
 
-	ft_printf("exit\n");
+	if (i == 0)
+		ft_printf("exit\n");
 	n = 0;
 	if (arg[1])
 	{

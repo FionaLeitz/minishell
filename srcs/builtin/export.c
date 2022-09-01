@@ -121,25 +121,30 @@ static void	new_export(char *arg, t_params *params)
 // check if arguments
 int	ft_export(char **arg, t_params *params)
 {
-	int		count;
+	int	count;
+	int	ret;
 
+	ret = 0;
 	if (arg[1] == NULL)
 	{
 		print_export(params);
-		return (0);
+		return (ret);
 	}
 	count = 0;
 	while (arg[++count])
 	{
 		if (arg[count][0] == '=' || arg[count][0] == '-'
 			|| arg[count][0] == '\0')
+		{
 			printf("minishell: export: `%s': not a valid identifier\n",
 				arg[count]);
+			ret = 1;
+		}
 		else
 		{
 			new_env(arg[count], params);
 			new_export(arg[count], params);
 		}
 	}
-	return (0);
+	return (ret);
 }
