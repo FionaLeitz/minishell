@@ -129,6 +129,7 @@ void		init_data(t_data *data);
 void		init_token(t_token *token);
 //prompt.c
 int			syntax_check(t_data *data);
+void		replace_quotes(char *str);
 void		ft_cut(t_data *data, t_params *params);
 int			print_prompt(t_data *data, t_params *params);
 //free.c

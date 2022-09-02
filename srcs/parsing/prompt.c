@@ -49,12 +49,34 @@ void	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
 	}
 }
 
+void	replace_quotes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == -1)
+			str[i] = '\'';
+		else if (str[i] == -2)
+			str[i] = '\"';
+		i++;
+	}
+}
+
+static void	give_tab(char **tab)
+{
+	int	i;
+
+	i = -1;
+	while (tab[++i])
+		replace_quotes(tab[i]);
+}
+
 // start separating pipes
 void	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
-	int		i;
-	int		j;
 
 	first_pipe_cut(data);
 	tmp = data->head;
@@ -69,41 +91,8 @@ void	ft_cut(t_data *data, t_params *params)
 	while (tmp)
 	{
 		ft_redirection(tmp->red, params, tmp);
-		tmp = tmp->next;
-	}
-	tmp = data->head;
-	while (tmp)
-	{
-		i = 0;
-		while (tmp->args[i])
-		{
-			j = 0;
-			dprintf(2, "args before = -%s-\n", tmp->args[i]);
-			while (tmp->args[i][j])
-			{
-				if (tmp->args[i][j] == -1)
-					tmp->args[i][j] = '\'';
-				else if (tmp->args[i][j] == -2)
-					tmp->args[i][j] = '\"';
-				j++;
-			}
-			dprintf(2, "args = -%s-\n", tmp->args[i]);
-			i++;
-		}
-		i = 0;
-		while (tmp->red[i])
-		{
-			j = 0;
-			while (tmp->red[i][j])
-			{
-				if (tmp->red[i][j] == -1)
-					tmp->red[i][j] = '\'';
-				else if (tmp->red[i][j] == -2)
-					tmp->red[i][j] = '\"';
-				j++;
-			}
-			i++;
-		}
+		give_tab(tmp->args);
+		give_tab(tmp->red);
 		tmp = tmp->next;
 	}
 }
@@ -172,7 +161,6 @@ int	print_prompt(t_data *data, t_params *params)
 		if (syntax_check(data) != 0)
 		{
 			only_heredocs(data);
-			dprintf(2, "data->trimmed = -%s-\n", data->trimmed);
 			g_exit_st = 2;
 		}
 		ft_cut(data, params);
