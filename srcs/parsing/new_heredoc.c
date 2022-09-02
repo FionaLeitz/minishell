@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 09:58:48 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/31 11:17:53 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/02 10:56:38 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 			if (line)
 				new = write_hd(tmp, fd, quotes, params);
 		}
+		replace_quotes(new);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
 //		free(line);
