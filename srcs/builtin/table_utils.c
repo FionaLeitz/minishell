@@ -16,11 +16,22 @@
 void	print_table(char **table)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (table[i])
 	{
-		ft_printf(table[i]);
+		j = -1;
+		while (table[i][++j])
+		{
+			if (table[i][j] == -1)
+				ft_printf("\'");
+			else if (table[i][j] == -2)
+				ft_printf("\"");
+			else
+				ft_printf("%c", table[i][j]);
+		}
+//		ft_printf(table[i]);
 		if (table[i][0] != '\0')
 			ft_printf("\n");
 		i++;

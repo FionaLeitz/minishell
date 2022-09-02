@@ -93,6 +93,7 @@ int	new_env(char *arg, t_params *params)
 {
 	int		count;
 	int		l;
+	int		i;
 
 	l = 0;
 	while (arg[l] != '\0' && arg[l] != '=')
@@ -100,6 +101,18 @@ int	new_env(char *arg, t_params *params)
 	if (arg[l] == '\0')
 		return (0);
 	l++;
+////////////////////////////////////////////////////
+	i = l;
+	while (arg[i])
+	{
+		if (arg[i] == '\'')
+			arg[i] = -1;
+		else if (arg[i] == '\"')
+			arg[i] = -2;
+		i++;
+	}
+	dprintf(2, "when exported : %s\n", arg);
+////////////////////////////////////////////////////
 	count = -1;
 	while (params->env[++count])
 	{
