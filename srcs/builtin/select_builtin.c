@@ -60,7 +60,10 @@ static int	get_path(char **arg, t_params *params)
 	while (params->env[i] && ft_strncmp(params->env[i], "PATH=", 5) != 0)
 		i++;
 	if (params->env[i] == NULL)
-		return (-1);
+	{
+		ft_printf("minishell: %s: No such file or directory\n", arg[0]);
+		exit (127);
+	}
 	path = ft_split(&params->env[i][5], ':');
 	if (path == NULL)
 		return (-1);
@@ -133,6 +136,7 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 			command_no(token, params, old_fd, 1);
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd, 0);
+//		}
 	}
 	if (i == 0)
 	{
