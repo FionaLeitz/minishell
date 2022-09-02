@@ -88,6 +88,9 @@ static int	if_dollar(t_token *token, t_data *data, t_params *par, int *quote)
 	return (0);
 }
 
+
+// echo " $A ' $B " ' $C " $D ' $E ' " $F ' " ' $G ' $H "
+
 // find $
 int	replace_var(t_token *token, t_data *data, t_params *params)
 {
@@ -105,12 +108,17 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 			if (token->value[data->i] == '\'' && quote[2] % 2 == 0)
 				quote[0]++;
 			if (token->value[data->i] == '\'' && quote[0] % 2 != 0)
+			{
 				jump_quotes(token->value, data);
+				quote[0]++;
+			}
 			if (token->value[data->i] == '$')
 			{
 				if (if_dollar(token, data, params, quote) != 0)
 					return (-1);
 			}
+			dprintf(2, "str[%d] = %s\n", data->i, &token->value[data->i]);
+			dprintf(2, "quote[0] (\') = %d\nquote[2] (\") = %d\n", quote[0], quote[2]);
 		}
 		token = token->next;
 	}
