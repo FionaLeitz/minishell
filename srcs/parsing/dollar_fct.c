@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 11:42:33 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/03 11:42:39 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/02 11:40:03 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 				if (if_dollar(token, data, params, quote) != 0)
 					return (-1);
 			}
-			dprintf(2, "str[%d] = %s\n", data->i, &token->value[data->i]);
-			dprintf(2, "quote[0] (\') = %d\nquote[2] (\") = %d\n", quote[0], quote[2]);
 		}
 		token = token->next;
 	}
