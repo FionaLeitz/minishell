@@ -31,7 +31,6 @@ void	print_table(char **table)
 			else
 				ft_printf("%c", table[i][j]);
 		}
-//		ft_printf(table[i]);
 		if (table[i][0] != '\0')
 			ft_printf("\n");
 		i++;

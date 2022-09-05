@@ -33,6 +33,7 @@ char	**ft_get_env(char **envp)
 			free_table(env);
 			ft_printf("Error malloc\n");
 		}
+		replace_quotes2(env[count]);
 		count++;
 	}
 	env[count] = NULL;

@@ -19,7 +19,7 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 
 	if ((quote[1] == 0 || (quote[0] % 2 != 0 && str[0] == '\"')) && str[0] != '\"' && str[0] != '\'')
 		return ("$");
-	if (str[0] == '?'/* && (ft_space(str[1]) == 0 || str[1] == '\0')*/)
+	if (str[0] == '?')
 	{
 		ft_itoa_no_malloc(g_exit_st, buff);
 		return (buff);
@@ -87,9 +87,6 @@ static int	if_dollar(t_token *token, t_data *data, t_params *par, int *quote)
 	}
 	return (0);
 }
-
-
-// echo " $A ' $B " ' $C " $D ' $E ' " $F ' " ' $G ' $H "
 
 // find $
 int	replace_var(t_token *token, t_data *data, t_params *params)
