@@ -79,6 +79,8 @@ static int	ft_end_cd(int i, int j, char **env, char *path)
 		oldpath = ft_strjoin("OLD", env[i]);
 	else
 		oldpath = ft_strdup("\0");
+	if (oldpath == NULL)
+		return (-1);
 	if (j != -1)
 	{
 		free(env[j]);

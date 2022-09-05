@@ -20,7 +20,7 @@ int	get_fd_input(char *pathname, char *red)
 	if (ft_strcmp(red, "<") == 0)
 	{
 		fd = open(pathname, O_RDONLY);
-		check_fd(fd);
+		check_fd(fd, pathname);
 	}
 	return (fd);
 }
@@ -34,7 +34,7 @@ int	get_fd_output(char *pathname, char *red)
 		fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	else if (ft_strcmp (red, ">>") == 0)
 		fd = open(pathname, O_CREAT | O_RDWR | O_APPEND, 00664);
-	check_fd(fd);
+	check_fd(fd, pathname);
 	return (fd);
 }
 
@@ -63,5 +63,7 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 			else
 				token->fds[0] = get_fd_input(&str[i][1], "<");
 		}
+		if (token->fds[0] == -1 || token->fds[1] == -1)
+			return ;
 	}
 }

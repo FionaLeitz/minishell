@@ -88,12 +88,27 @@ static int	if_replace(char *arg, t_params *params, int count)
 	return (0);
 }
 
+void	replace_quotes2(char *str)
+{
+	int	i;
+
+i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			str[i] = -1;
+		else if (str[i] == '\"')
+			str[i] = -2;
+		i++;
+	}
+}
+
 // if export, make new environment
 int	new_env(char *arg, t_params *params)
 {
 	int		count;
 	int		l;
-	int		i;
+//	int		i;
 
 	l = 0;
 	while (arg[l] != '\0' && arg[l] != '=')
@@ -101,7 +116,8 @@ int	new_env(char *arg, t_params *params)
 	if (arg[l] == '\0')
 		return (0);
 	l++;
-	i = l;
+	replace_quotes2(&arg[l]);
+/*	i = l;
 	while (arg[i])
 	{
 		if (arg[i] == '\'')
@@ -110,7 +126,7 @@ int	new_env(char *arg, t_params *params)
 			arg[i] = -2;
 		i++;
 	}
-	count = -1;
+*/	count = -1;
 	while (params->env[++count])
 	{
 		if (ft_strncmp(arg, params->env[count], l - 2) == 0

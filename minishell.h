@@ -94,6 +94,7 @@ int			ft_echo(char **arg);
 // env.c
 int			ft_env(char **arg, t_params *params);
 int			new_env(char *arg, t_params *params);
+void		replace_quotes2(char *str);
 // execution.c
 int			ft_execute(t_token *token, t_params *params);
 // exit.c
@@ -194,7 +195,7 @@ int			in_create_tab(char *str, int *i);
 int			create_tab(t_data *data, t_token *token);
 //utils.c
 int			ft_space(char c);
-int			check_fd(int fd);
+int			check_fd(int fd, char *red);
 int			check_child(int pid);
 void		ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
@@ -216,11 +217,3 @@ char	*expand_heredoc(char *line, t_params *params, int *i);
 // ...
 // obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
 // }
-
-/*			while (tmp2)
-			{
-				close((pipe_fd[i].raw[0]));
-				close((pipe_fd[i].raw[1]));
-				i++;
-				tmp2 = tmp2->next;
-			}*/

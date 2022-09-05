@@ -165,7 +165,6 @@ int	print_prompt(t_data *data, t_params *params)
 		}
 		ft_cut(data, params);
 		tmp = data->head;
-
 		ft_execute(tmp, params);
 		free_struct(data);
 	}

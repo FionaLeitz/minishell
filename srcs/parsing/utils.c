@@ -22,11 +22,12 @@ int	ft_space(char c)
 }
 
 //fd protection
-int	check_fd(int fd)
+int	check_fd(int fd, char *red)
 {
 	if (fd == -1)
 	{
-		perror("Open");
+		ft_printf("Minishell: %s:", red);
+		perror(" ");
 		g_exit_st = 1;
 	}
 	return (-1);
@@ -57,9 +58,6 @@ void	ft_shlvl(char **envp)
 	while (ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
 	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
-//	tmp = NULL;
-//	while (ft_strncmp("SHLVL", envp[i], 5))
-//		i++;
 	tmp = ft_strndup(envp[i], 6);
 	free(envp[i]);
 	envp[i] = ft_strjoin(tmp, shlvl);
