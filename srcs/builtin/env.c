@@ -35,8 +35,9 @@ static int	make_new_env(int count, int l, t_params *params, char *arg)
 	new_env = malloc(sizeof(char *) * (count + 2));
 	if (new_env == NULL)
 	{
-		free_table(params->env);
-		return (1);
+		errno = ENOMEM;
+		ft_putstr_fd("Out of memory in export\n", 2);
+		return (-1);
 	}
 	count = -1;
 	while (params->env[++count])
@@ -44,8 +45,10 @@ static int	make_new_env(int count, int l, t_params *params, char *arg)
 	new_env[count] = ft_strdup(arg);
 	if (new_env[count] == NULL)
 	{
-		free_table(params->env);
-		return (1);
+		free(new_env);
+		errno = ENOMEM;
+		ft_putstr_fd("Out of memory in export\n", 2);
+		return (-1);
 	}
 	if (new_env[count][l - 2] == '+')
 		ft_memmove(&new_env[count][l - 2], &new_env[count][l - 1],
@@ -64,8 +67,9 @@ static int	if_concat(char *arg, t_params *params, int n)
 	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[n])));
 	if (tmp == NULL)
 	{
-		free_table(params->env);
-		return (1);
+		errno = ENOMEM;
+		ft_putstr_fd("Out of memory in export\n", 2);
+		return (-1);
 	}
 	tmp[0] = '\0';
 	ft_strcat(tmp, params->env[n]);
@@ -82,8 +86,9 @@ static int	if_replace(char *arg, t_params *params, int count)
 	params->env[count] = ft_strdup(arg);
 	if (params->env[count] == NULL)
 	{
-		free_table(params->env);
-		return (1);
+		errno = ENOMEM;
+		ft_putstr_fd("Out of memory in export\n", 2);
+		return (-1);
 	}
 	return (0);
 }
@@ -92,7 +97,7 @@ void	replace_quotes2(char *str)
 {
 	int	i;
 
-i = 0;
+	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '\'')
@@ -108,7 +113,6 @@ int	new_env(char *arg, t_params *params)
 {
 	int		count;
 	int		l;
-//	int		i;
 
 	l = 0;
 	while (arg[l] != '\0' && arg[l] != '=')
@@ -117,16 +121,7 @@ int	new_env(char *arg, t_params *params)
 		return (0);
 	l++;
 	replace_quotes2(&arg[l]);
-/*	i = l;
-	while (arg[i])
-	{
-		if (arg[i] == '\'')
-			arg[i] = -1;
-		else if (arg[i] == '\"')
-			arg[i] = -2;
-		i++;
-	}
-*/	count = -1;
+	count = -1;
 	while (params->env[++count])
 	{
 		if (ft_strncmp(arg, params->env[count], l - 2) == 0

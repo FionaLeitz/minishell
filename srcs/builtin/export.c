@@ -43,7 +43,13 @@ t_export	*create_export(char **env)
 
 	export = new_element(env[0]);
 	if (export == NULL)
+	{
+		set_error_malloc("export\n");
+	// {
+	// 	errno = ENOMEM;
+	// 	ft_putstr_fd("Out of memory in creating export\n", 2);
 		return (NULL);
+	}
 	if (env[0] == NULL)
 		return (export);
 	tmp = export;
@@ -74,6 +80,13 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 	{
 		str = malloc(sizeof(char) * (ft_strlen(&arg[limit])
 					+ ft_strlen(tmp->value)));
+		if (str == NULL)
+			return (set_error_malloc("export\n"));
+		// {
+		// 	errno = ENOMEM;
+		// 	ft_putstr_fd("Out of memory in export\n", 2);
+		// 	return (-1);
+		// }
 		str[0] = '\0';
 		ft_strcat(str, tmp->value);
 		ft_strcat(str, &arg[limit + 1]);
@@ -85,17 +98,19 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 	{
 		free(tmp->value);
 		tmp->value = ft_strdup(&arg[limit]);
+			return (set_error_malloc("export\n"));
 		return (1);
 	}
 	return (0);
 }
 
 // create if needed
-static void	new_export(char *arg, t_params *params)
+static int	new_export(char *arg, t_params *params)
 {
 	t_export	*tmp;
 	t_export	*tmp2;
 	int			limit;
+	int			ret;
 
 	limit = 0;
 	while (arg[limit] != '\0' && arg[limit] != '=')
@@ -104,18 +119,24 @@ static void	new_export(char *arg, t_params *params)
 	tmp2 = NULL;
 	while (tmp)
 	{
-		if (in_new_export(arg, tmp, limit) == 1)
-			return ;
+		ret = in_new_export(arg, tmp, limit);
+		if (ret == -1)
+			return (-1);
+		if (ret == 1)
+			return (0);
 		else if (ft_strncmp(arg, tmp->name, limit) < 0)
 		{
-			place_new(arg, tmp, tmp2, params);
-			return ;
+			if (place_new(arg, tmp, tmp2, params) == -1)
+				return (-1);
+			return (0);
 		}
 		tmp2 = tmp;
 		tmp = tmp->next;
 	}
 	tmp2->next = new_element(arg);
-	return ;
+	if (tmp2->next == NULL)
+		return (set_error_malloc("export\n"));
+	return (0);
 }
 
 // check if arguments
@@ -142,8 +163,10 @@ int	ft_export(char **arg, t_params *params)
 		}
 		else
 		{
-			new_env(arg[count], params);
-			new_export(arg[count], params);
+			if (new_env(arg[count], params) == -1)
+				return (-1);
+			if (new_export(arg[count], params) == -1)
+				return (-1);
 		}
 	}
 	return (ret);

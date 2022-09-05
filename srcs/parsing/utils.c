@@ -12,6 +12,14 @@
 
 #include "../../minishell.h"
 
+int	set_error_malloc(char *str)
+{
+	errno = ENOMEM;
+	ft_putstr_fd("Out of memory in ", 2);
+	ft_putstr_fd(str, 2);
+	return (-1);
+}
+
 // return 0 if c is white space, else return -1
 int	ft_space(char c)
 {

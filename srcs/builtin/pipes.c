@@ -111,7 +111,6 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		check_child(pid[i]);
 		if (pid[i] == 0)
 		{
-			// ft_signals(COMMAND);
 			in_child(token, params, pipe_fd, i);
 			clean_child(params, pid, pipe_fd);
 		}

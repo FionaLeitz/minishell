@@ -27,6 +27,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <error.h>
 
 # define PROMPT "Minishell> "
 
@@ -103,7 +104,7 @@ int			ft_exit(char **arg, int i);
 int			ft_export(char **arg, t_params *params);
 t_export	*create_export(char **env);
 // export2.c
-void		place_new(char *arg, t_export *new, t_export *new2,
+int			place_new(char *arg, t_export *new, t_export *new2,
 				t_params *params);
 void		*free_export(t_export *export);
 t_export	*new_element(char *str);
@@ -194,6 +195,7 @@ int			ft_count_words(t_data *data, char *s);
 int			in_create_tab(char *str, int *i);
 int			create_tab(t_data *data, t_token *token);
 //utils.c
+int			set_error_malloc(char *str);
 int			ft_space(char c);
 int			check_fd(int fd, char *red);
 int			check_child(int pid);

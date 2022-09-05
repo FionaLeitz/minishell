@@ -72,7 +72,7 @@ char	*del_quotes_hd(char *delim)
 	{
 		if (delim[i] == '\'' || delim[i] == '\"')
 			i = in_del_quote_hd(delim, i);
-		printf("%d\n", i);
+		ft_printf("%d\n", i);
 		if (delim[i] == '\0')
 			break ;
 		if (delim[i] == '\'' || delim[i] == '\"')
@@ -87,7 +87,7 @@ int	in_del_quote_hd(char *str, int i)
 	char	quote;
 
 	quote = str[i];
-	printf("quote = (%c)\n", quote);
+//	printf("quote = (%c)\n", quote);
 	ft_memcpy(&str[i], &str[i + 1], ft_strlen(&str[i + 1]) + 1);
 	while (str[i] != quote)
 		i++;
