@@ -145,6 +145,13 @@ static void	only_heredocs(t_data *data)
 	data->trimmed[save] = '\0';
 }
 
+int	ft_get_out(t_data *data)
+{
+	free_struct(data);
+	rl_clear_history();
+	return (12);
+}
+
 // give the prompt, get readline, parses and execution's fonctions
 int	print_prompt(t_data *data, t_params *params)
 {
@@ -165,10 +172,10 @@ int	print_prompt(t_data *data, t_params *params)
 		}
 		ft_cut(data, params);
 		tmp = data->head;
-		ft_execute(tmp, params);
+		if (ft_execute(tmp, params) == -1)
+			return (ft_get_out(data));
 		free_struct(data);
 	}
-	free_params(params);
 	rl_clear_history();
 	return (0);
 }
