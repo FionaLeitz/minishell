@@ -89,7 +89,8 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 		tmp->value = str;
 		return (1);
 	}
-	if (ft_strncmp(arg, tmp->name, limit) == 0 && tmp->name[limit + 1] == '\0')
+	if ((int)ft_strlen(tmp->name) > limit && ft_strncmp(arg, tmp->name,
+		limit) == 0 && tmp->name[limit + 1] == '\0')
 	{
 		free(tmp->value);
 		tmp->value = ft_strdup(&arg[limit]);
@@ -135,6 +136,21 @@ static int	new_export(char *arg, t_params *params)
 	return (0);
 }
 
+static int	ft_invalid(char *str)
+{
+	int	i;
+
+	if (str[0] == '=' || str[0] == '-' || str[0] == '\0')
+		return (-1);
+	i = -1;
+	while (str[++i] && str[i] != '=')
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			return (-1);
+	}
+	return (0);
+}
+
 // check if arguments
 int	ft_export(char **arg, t_params *params)
 {
@@ -150,11 +166,11 @@ int	ft_export(char **arg, t_params *params)
 	count = 0;
 	while (arg[++count])
 	{
-		if (arg[count][0] == '=' || arg[count][0] == '-'
-			|| arg[count][0] == '\0')
+		if (ft_invalid(arg[count]) == -1)
 		{
-			printf("minishell: export: `%s': not a valid identifier\n",
-				arg[count]);
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(arg[count], 2);
+			ft_putstr_fd("\': not a valid identifier\n", 2);
 			ret = 1;
 		}
 		else
