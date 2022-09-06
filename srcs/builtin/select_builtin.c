@@ -17,20 +17,22 @@ static int	error_path(char **path, int	*i, char *arg)
 {
 	char	*tmp;
 
+	(void)arg;
 	tmp = ft_strcat_malloc(path[i[0]], "/");
 	if (tmp == NULL)
 	{
 		free_table(path);
-		return (-1);
+		return (set_error_malloc("execution\n"));
 	}
 	free(path[i[0]]);
 	path[i[0]] = ft_strcat_malloc(tmp, arg);
 	free(tmp);
 	if (path[i[0]] == NULL)
 	{
+		while (path[++i[0]])
+			free(path[i[0]]);
 		free_table(path);
-		free_table(&path[i[0] + 1]);
-		return (-1);
+		return (set_error_malloc("execution\n"));
 	}
 	return (0);
 }
@@ -38,28 +40,26 @@ static int	error_path(char **path, int	*i, char *arg)
 // get path of command if not built-in
 static int	get_path(char **arg, t_params *params)
 {
-	int		i;
-	char	**path;
+	int			i;
+	char		**path;
 	struct stat *test;
 
 	i = 0;
 	if (arg[0][0] == '\0')
 		return (0);
 	test = malloc(sizeof(struct stat));
+	if (test == NULL)
+		return (set_error_malloc("execution\n"));
 	if (stat(arg[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
 	{
 		free(test);
 		return (126);
 	}
-	else if (access(arg[0], F_OK | X_OK) != -1)
-	{
-		free(test);
-		return (0);
-	}
 	free(test);
+	if (access(arg[0], F_OK | X_OK) != -1)
+		return (0);
 	while (params->env[i] && ft_strncmp(params->env[i], "PATH=", 5) != 0)
 		i++;
-	
 	if (params->env[i] == NULL)
 	{
 		ft_printf("minishell: %s: No such file or directory\n", arg[0]);
@@ -67,7 +67,7 @@ static int	get_path(char **arg, t_params *params)
 	}
 	path = ft_split(&params->env[i][5], ':');
 	if (path == NULL)
-		return (-1);
+		return set_error_malloc("execution\n");
 	i = -1;
 	while (path[++i])
 	{
@@ -77,6 +77,8 @@ static int	get_path(char **arg, t_params *params)
 		{
 			free(arg[0]);
 			arg[0] = ft_strdup(path[i]);
+			if (arg[0] == NULL)
+				set_error_malloc("execution\n");
 			break ;
 		}
 	}
@@ -127,14 +129,17 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	{
 		ft_signals(MUTE);
 		pid = fork();
-		if (pid < 0)
+		if (check_child(pid) == -1)
 			return ;
+
 	}
 	if (pid == 0)
 	{
 		ft_signals(COMMAND);
 		if (get_path(token->args, params) == 126)
 			command_no(token, params, old_fd, 1);
+		if (errno == 12)
+			return ;
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd, 0);
 	}

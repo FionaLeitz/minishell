@@ -132,7 +132,7 @@ void		init_token(t_token *token);
 //prompt.c
 int			syntax_check(t_data *data);
 void		replace_quotes(char *str);
-void		ft_cut(t_data *data, t_params *params);
+int			ft_cut(t_data *data, t_params *params);
 int			print_prompt(t_data *data, t_params *params);
 //free.c
 void		free_struct(t_data *data);
@@ -168,8 +168,8 @@ int			check_string(t_data *data);
 int			first_pipe_cut(t_data *data);
 //fct_list.c
 t_token		*new_node(char *value);
-void		push_front(t_data *data, char *value);
-void		push_back(t_data *data, char *value);
+int			push_front(t_data *data, char *value);
+int			push_back(t_data *data, char *value);
 int			ft_size(t_token *lst);
 //dollar_fct.c
 char		*rep(char **env, char *str, int *quote, char *buff);
@@ -199,13 +199,13 @@ int			set_error_malloc(char *str);
 int			ft_space(char c);
 int			check_fd(int fd, char *red);
 int			check_child(int pid);
-void		ft_shlvl(char **envp);
+int			ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
 
 //new_heredoc.c
 int		get_hd_line(char *del, int fd, int quotes, t_params *params);
 char	*write_hd(char *line, int fd, int quotes, t_params *params);
-char	*expand_env_in_heredoc(char *str, t_params *params, int size);
+char	*expand_env_in_heredoc(char *str, t_params *params, int size, char *buff);
 char	*expand_heredoc(char *line, t_params *params, int *i);
 
 #endif

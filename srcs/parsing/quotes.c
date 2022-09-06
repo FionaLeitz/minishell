@@ -46,16 +46,8 @@ int	check_quotes(t_data *data)
 int	in_del_quote(char *str, int j)
 {
 	char	quote;
-//	int		i;
 
 	quote = str[j];
-/////////////////////////////////////////////////////////////////
-	// i = j + 1;
-	// while (str[i] && str[i] != quote)
-	// 	i++;
-	// if (str[i] != quote)
-	// 	return (j + 1);
-/////////////////////////////////////////////////////////////////
 	ft_memcpy(&str[j], &str[j + 1], ft_strlen(&str[j + 1]) + 1);
 	while (str[j] && str[j] != quote)
 		j++;
@@ -63,7 +55,7 @@ int	in_del_quote(char *str, int j)
 	return (j);
 }
 
-static void	in_del_quotes_redir(char *str)
+static int	in_del_quotes_redir(char *str)
 {
 	int		j;
 	char	*tmp;
@@ -74,6 +66,8 @@ static void	in_del_quotes_redir(char *str)
 	if (ft_space(str[j]) == 0 || ft_space(str[ft_strlen(str) - 1]) == 0)
 	{
 		tmp = malloc(sizeof(char) * ft_strlen(str) + 3);
+		if (tmp == NULL)
+			return (set_error_malloc("parse\n"));
 		ft_bzero(tmp, ft_strlen(str) + 3);
 		tmp[0] = str[0];
 		tmp[1] = str[1];
@@ -83,6 +77,7 @@ static void	in_del_quotes_redir(char *str)
 		free(str);
 		str = tmp;
 	}
+	return (0);
 }
 
 // find suppressable quotes in redirections
@@ -108,7 +103,8 @@ int	del_quotes_redir(t_token *token)
 				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
 					j--;
 			}
-			in_del_quotes_redir(token->red[i]);
+			if (in_del_quotes_redir(token->red[i]) == -1)
+				return (-1);
 		}
 		token = token->next;
 	}

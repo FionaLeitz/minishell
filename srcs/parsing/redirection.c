@@ -134,6 +134,8 @@ int	get_red(t_data *data, t_token *token, int count)
 			data->i++;
 		suppress_useless(data, token);
 		token->red[j] = ft_strndup(&token->value[save], data->i - save);
+		if (token->red[j] == NULL)
+			return (set_error_malloc("parse\n"));
 		ft_memcpy(&token->value[save], &token->value[data->i],
 			ft_strlen(&token->value[data->i]) + 1);
 		data->i = save;
@@ -167,7 +169,9 @@ int	count_red(t_data *data, t_token *token)
 		data->i++;
 	}
 	token->red = malloc(sizeof(char *) * (count + 1));
-	if (token->red == NULL || get_red(data, token, count) != 0)
+	if (token->red == NULL)
+		return (set_error_malloc("parse\n"));
+	if (get_red(data, token, count) == -1)
 		return (-1);
 	return (0);
 }

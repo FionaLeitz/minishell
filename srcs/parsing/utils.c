@@ -46,7 +46,7 @@ int	check_child(int pid)
 {
 	if (pid < 0)
 	{
-		perror("Fork:");
+		perror("Fork");
 		g_exit_st = 127;
 		return (-1);
 	}
@@ -54,7 +54,7 @@ int	check_child(int pid)
 }
 
 //increments SHLVL variable
-void	ft_shlvl(char **envp)
+int	ft_shlvl(char **envp)
 {
 	int		i;
 	char	shlvl[12];
@@ -62,14 +62,19 @@ void	ft_shlvl(char **envp)
 
 	i = 0;
 	if (envp == NULL)
-		return ;
+		return (0);
 	while (ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
 	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
 	tmp = ft_strndup(envp[i], 6);
+	if (tmp == NULL)
+		return (set_error_malloc("creating env\n"));
 	free(envp[i]);
 	envp[i] = ft_strjoin(tmp, shlvl);
 	free(tmp);
+	if (envp[i] == NULL)
+		return (set_error_malloc("creating env\n"));
+	return (0);
 }
 
 // handles ctrl-d

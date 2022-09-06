@@ -36,10 +36,14 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 		else
 		{
 			tmp = ft_strdup(line);
+			if (tmp == NULL)
+				return (set_error_malloc("heredoc\n"));
 			if (line && ft_strcmp(line, del) == 0)
 				break;
 			if (line)
 				new = write_hd(tmp, fd, quotes, params);
+			if (new == NULL)
+				return (-1);
 		}
 		replace_quotes(new);
 		ft_putstr_fd(new, fd);
@@ -63,30 +67,32 @@ char	*write_hd(char *line, int fd, int quotes, t_params *params)
 	{
 		if (line[i] == '$' && quotes == 0)
 			line = expand_heredoc(line, params, &i);
+		if (line == NULL)
+			return (NULL);
 		i++;
 	}
 	return(line);
 }
 
-char	*expand_env_in_heredoc(char *str, t_params *params, int size)
+char	*expand_env_in_heredoc(char *str, t_params *params, int size, char *buff)
 {
 	int count;
 	char *tmp;
-	char	buff[12];
+
 
 	tmp = NULL;
 	if (size == 0)
- 		return (ft_strdup("$"));
+ 		return ("$");
 	if (str[0] == '?' && (ft_space(str[0] == 0) || str[0] == '\0'))
 	{
 		ft_itoa_no_malloc(g_exit_st, buff);
-		return (ft_strdup(buff));
+		return (buff);
 	}
 	count = -1;
 	while (params->env[++count])
 	{
 		if (ft_strncmp(params->env[count], str, size) == 0 && params->env[count][size] == '=')
-			return (ft_strdup(&params->env[count][size + 1]));
+			return (&params->env[count][size + 1]);
 	}
 	return (NULL);
 }
@@ -104,7 +110,10 @@ char	*replace_var_heredoc(char *str, int first, char *line, int *i)
 	{
 		tmp = malloc(sizeof(char) * (first + ft_strlen(str) + ft_strlen(&line[i[0]]) + 1));
 		if (tmp == NULL)
+		{
+			set_error_malloc("parse\n");
 			return (NULL);
+		}
 		ft_bzero(tmp, first + ft_strlen(str)
 			+ ft_strlen(&line[i[0]]) + 1);
 		tmp = ft_memmove(tmp, line, first);
@@ -119,9 +128,10 @@ char	*replace_var_heredoc(char *str, int first, char *line, int *i)
 
 char	*expand_heredoc(char *line, t_params *params, int *i)
 {
-	int	 count;
+	int		 count;
 	int		first;
-	char *tmp;
+	char	*tmp;
+	char	buff[12];
 
 	count = 0;
 	first = i[0];
@@ -135,8 +145,8 @@ char	*expand_heredoc(char *line, t_params *params, int *i)
 		if (line[i[0] - 1] == '?')
 			break ;
 	}
-	tmp = expand_env_in_heredoc(&line[first + 1], params, count);
+	tmp = expand_env_in_heredoc(&line[first + 1], params, count, buff);
 	line = replace_var_heredoc(tmp, first, line, i);
-	return(line);
+	return (line);
 }
 

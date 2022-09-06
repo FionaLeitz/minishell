@@ -19,24 +19,13 @@ int	place_new(char *arg, t_export *new, t_export *new2, t_params *params)
 	{
 		params->export = new_element(arg);
 		if (params->export == NULL)
-		{
 			return (set_error_malloc("export\n"));
-		// {
-		// 	errno = ENOMEM;
-		// 	ft_putstr_fd("Out of memory in export\n", 2);
-		// 	return (-1);
-		}
 		params->export->next = new;
 		return (0);
 	}
 	new2->next = new_element(arg);
 	if (new2->next == NULL)
 		return (set_error_malloc("export\n"));
-	// {
-	// 	errno = ENOMEM;
-	// 	ft_putstr_fd("Out of memory in export\n", 2);
-	// 	return (-1);
-	// }
 	new2->next->next = new;
 	return (0);
 }
@@ -84,7 +73,6 @@ t_export	*new_element(char *str)
 
 	element = malloc(sizeof(t_export));
 	if (element == NULL)
-		
 		return (NULL);
 	ft_bzero(element, sizeof(t_export));
 	count = empty_str(str, element);

@@ -74,11 +74,13 @@ int	first_pipe_cut(t_data *data)
 		}
 		else if (data->trimmed[data->i] == '|')
 		{
-			push_back(data, ft_strndup(&data->trimmed[count], data->i - count));
+			if (push_back(data, ft_strndup(&data->trimmed[count], data->i - count)) == -1)
+				return (-1);			
 			count = data->i + 1;
 		}
 		data->i++;
 	}
-	push_back(data, ft_strdup(&data->trimmed[count]));
+	if (push_back(data, ft_strdup(&data->trimmed[count])) == -1)
+		return (-1);
 	return (0);
 }

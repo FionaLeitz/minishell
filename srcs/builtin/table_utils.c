@@ -43,6 +43,8 @@ void	free_table(char **table)
 	int	i;
 
 	i = 0;
+	if (table == NULL)
+		return ;
 	while (table[i])
 	{
 		free(table[i]);

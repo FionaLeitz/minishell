@@ -26,11 +26,23 @@ int	main(int ac, char **av, char **envp)
 	//in this case returns 1, otherwise => 0 end errno's set
 	if (isatty(0) == 0 || isatty(1) == 0)
 		return (0);
+	params.export = NULL;
 	params.env = ft_get_env(envp);
-	ft_shlvl(params.env);
-	params.export = create_export(params.env);
 	if (errno == 12)
 		return (12);
+	if (params.env[0] != NULL)
+		ft_shlvl(params.env);
+	if (errno == 12)
+	{
+		free_params(&params);
+		return (12);
+	}
+	params.export = create_export(params.env);
+	if (errno == 12)
+	{
+		free_params(&params);
+		return (12);
+	}
 	if (ac != 1)
 		ft_putstr_fd("This minishell does not take arguments\n", 2);
 	else

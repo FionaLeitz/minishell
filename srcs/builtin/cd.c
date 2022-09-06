@@ -80,11 +80,7 @@ static int	ft_end_cd(int i, int j, char **env, char *path)
 	else
 		oldpath = ft_strdup("\0");
 	if (oldpath == NULL)
-	{
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory in cd\n", 2);
-		return (-1);
-	}
+		return (set_error_malloc("cd\n"));
 	if (j != -1)
 	{
 		free(env[j]);

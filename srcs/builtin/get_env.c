@@ -23,7 +23,10 @@ char	**ft_get_env(char **envp)
 		count++;
 	env = malloc(sizeof(char *) * (count + 1));
 	if (env == NULL)
-		ft_printf("Error malloc\n");
+	{
+		set_error_malloc("creating env\n");
+		return (NULL);
+	}
 	count = 0;
 	while (envp[count])
 	{
@@ -31,7 +34,8 @@ char	**ft_get_env(char **envp)
 		if (env[count] == NULL)
 		{
 			free_table(env);
-			ft_printf("Error malloc\n");
+			set_error_malloc("creating env\n");
+			return (NULL);
 		}
 		replace_quotes2(env[count]);
 		count++;

@@ -50,7 +50,7 @@ int	in_replace(char *str, int s, t_token *token, t_data *data)
 		tmp = malloc(sizeof(char) * (s + ft_strlen(str)
 					+ ft_strlen(&token->value[data->i]) + 1));
 		if (tmp == NULL)
-			return (-1);
+			return (set_error_malloc("expand\n"));
 		ft_bzero(tmp, s + ft_strlen(str)
 			+ ft_strlen(&token->value[data->i]) + 1);
 		tmp = ft_memmove(tmp, token->value, s);
@@ -111,7 +111,7 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 			}
 			if (token->value[data->i] == '$')
 			{
-				if (if_dollar(token, data, params, quote) != 0)
+				if (if_dollar(token, data, params, quote) == -1)
 					return (-1);
 			}
 		}
