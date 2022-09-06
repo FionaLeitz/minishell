@@ -45,11 +45,15 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	check_child(pid);
 	if (pid == 0)
 	{
-		get_hd_line(delim, utils[0], utils[1], params);
+// pas sure de ce return -1 ???
+		if (get_hd_line(delim, utils[0], utils[1], params) == -1)
+			return (-1);
 		close(utils[0]);
 		free_struct(params->data);
 		free_params(params);
 		free(path);
+		if (errno == 12)
+			exit(12);
 		exit(g_exit_st);
 	}
 	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
@@ -81,6 +85,9 @@ int	ft_here_doc(char *delim, t_params *params)
 	utils[0] = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
 	child = fork_heredoc(delim, utils, params, pathname);
+	if (errno == 12)
+		return (-1);
+	check_child(child);
 	ft_signals(DEFAULT);
 	close(utils[0]);
 	utils[0] = get_fd_input(pathname, "<");

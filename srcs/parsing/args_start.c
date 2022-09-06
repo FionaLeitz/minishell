@@ -84,7 +84,7 @@ int	create_tab(t_data *data, t_token *token)
 	k = ft_count_words(data, token->value);
 	token->args = malloc(sizeof(char *) * (k + 1));
 	if (!token->args)
-		return (-1);
+		return (set_error_malloc("parse\n"));
 	token->args[k] = NULL;
 	while (j < k)
 	{
@@ -92,7 +92,11 @@ int	create_tab(t_data *data, t_token *token)
 		count = in_create_tab(token->value, &i);
 		if (ft_space(token->value[i]) == 0
 			|| token->value[i] == '\0')
+		{
 			token->args[j++] = ft_strndup(&token->value[tmp], count);
+			if (token->args[j - 1] == NULL)
+				return (set_error_malloc("parse\n"));
+		}
 		while (token->value[i] != '\0' && ft_space(
 				token->value[i]) == 0)
 			i++;

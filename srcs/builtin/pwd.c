@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// TO DO DEMANDER POUR 4096 !!!
 // print curent working directory
 int	ft_pwd(char **arg)
 {
@@ -21,6 +22,8 @@ int	ft_pwd(char **arg)
 	(void)arg;
 	getcwd(path, 4095);
 	path2 = ft_strdup(path);
+	if (path2 == NULL)
+		set_error_malloc("pwd\n");
 	if (path2 == NULL)
 	{
 		ft_putstr_fd("error retrieving current directory: ", 2);

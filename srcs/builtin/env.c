@@ -34,11 +34,7 @@ static int	make_new_env(int count, int l, t_params *params, char *arg)
 
 	new_env = malloc(sizeof(char *) * (count + 2));
 	if (new_env == NULL)
-	{
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory in export\n", 2);
-		return (-1);
-	}
+		return (set_error_malloc("export\n"));
 	count = -1;
 	while (params->env[++count])
 		new_env[count] = params->env[count];
@@ -46,9 +42,7 @@ static int	make_new_env(int count, int l, t_params *params, char *arg)
 	if (new_env[count] == NULL)
 	{
 		free(new_env);
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory in export\n", 2);
-		return (-1);
+		return (set_error_malloc("export\n"));
 	}
 	if (new_env[count][l - 2] == '+')
 		ft_memmove(&new_env[count][l - 2], &new_env[count][l - 1],
@@ -66,11 +60,7 @@ static int	if_concat(char *arg, t_params *params, int n)
 
 	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[n])));
 	if (tmp == NULL)
-	{
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory in export\n", 2);
-		return (-1);
-	}
+		return (set_error_malloc("export\n"));
 	tmp[0] = '\0';
 	ft_strcat(tmp, params->env[n]);
 	ft_strcat(tmp, arg);
@@ -85,11 +75,7 @@ static int	if_replace(char *arg, t_params *params, int count)
 	free(params->env[count]);
 	params->env[count] = ft_strdup(arg);
 	if (params->env[count] == NULL)
-	{
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory in export\n", 2);
-		return (-1);
-	}
+		return (set_error_malloc("export\n"));
 	return (0);
 }
 

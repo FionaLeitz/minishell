@@ -33,7 +33,7 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
-void	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
+int	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
 {
 	char	*s;
 
@@ -44,9 +44,11 @@ void	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
 		s = ft_strtrim(token->value, " \t\n\v\f\r");
 		free(token->value);
 		token->value = s;
-		f(data, token);
+		if (f(data, token) == -1)
+			return (-1);
 		token = token->next;
 	}
+	return (0);
 }
 
 void	replace_quotes(char *str)
@@ -74,19 +76,24 @@ static void	give_tab(char **tab)
 }
 
 // start separating pipes
-void	ft_cut(t_data *data, t_params *params)
+int	ft_cut(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
-	first_pipe_cut(data);
+	if (first_pipe_cut(data) == -1)
+		return (-1);
 	tmp = data->head;
-	in_cut(data, tmp, count_red);
+	if (in_cut(data, tmp, count_red) == -1)
+		return (-1);
 	tmp = data->head;
-	replace_var(tmp, data, params);
+	if (replace_var(tmp, data, params) == -1)
+		return (-1);
 	tmp = data->head;
-	in_cut(data, tmp, create_tab);
+	if (in_cut(data, tmp, create_tab) == -1)
+		return (-1);
 	tmp = data->head;
-	del_quotes(tmp);
+	if (del_quotes(tmp) == -1)
+		return (-1);
 	tmp = data->head;
 	while (tmp)
 	{
@@ -95,6 +102,7 @@ void	ft_cut(t_data *data, t_params *params)
 		give_tab(tmp->red);
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 static int	modify_line(t_data *data, int nbr)
@@ -149,6 +157,7 @@ int	ft_get_out(t_data *data)
 {
 	free_struct(data);
 	rl_clear_history();
+	g_exit_st = 12;
 	return (12);
 }
 
@@ -158,6 +167,7 @@ int	print_prompt(t_data *data, t_params *params)
 	t_token	*tmp;
 
 	params->data = data;
+	init_data(data);
 	while (1)
 	{
 		init_data(data);
@@ -170,7 +180,8 @@ int	print_prompt(t_data *data, t_params *params)
 			only_heredocs(data);
 			g_exit_st = 2;
 		}
-		ft_cut(data, params);
+		if (ft_cut(data, params) == -1)
+			return (ft_get_out(data));
 		tmp = data->head;
 		if (ft_execute(tmp, params) == -1)
 			return (ft_get_out(data));

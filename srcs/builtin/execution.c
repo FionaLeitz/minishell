@@ -24,9 +24,7 @@ static int	create_pipe(t_pipe_fd *pipe_fd, int *pid, int nbr, int nbr2)
 			close(pipe_fd[nbr2].raw[1]);
 		}
 		free(pipe_fd);
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory creating child\n", 2);
-		return (-1);
+		return (set_error_malloc("creating child\n"));
 	}
 	return (0);
 }
@@ -71,18 +69,12 @@ int	ft_execute(t_token *token, t_params *params)
 	nbr = ft_size(token);
 	pid = malloc(sizeof(int) * nbr);
 	if (pid == NULL)
-	{
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory creating child\n", 2);
-		return (-1);
-	}
+		set_error_malloc("creating child\n");
 	pipe_fd = malloc(sizeof(t_pipe_fd) * nbr);
 	if (pipe_fd == NULL)
 	{
 		free(pid);
-		errno = ENOMEM;
-		ft_putstr_fd("Out of memory in export\n", 2);
-		return (-1);
+		return (set_error_malloc("creating child\n"));
 	}
 	nbr2 = nbr;
 	while (--nbr >= 0)

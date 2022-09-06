@@ -19,7 +19,11 @@ t_token	*new_node(char *value)
 
 	new = malloc(sizeof(t_token));
 	if (!new)
+	{
+		set_error_malloc("parse\n");
 		return (NULL);
+	}
+	init_token(new);
 	new->value = value;
 	new->next = NULL;
 	new->prev = NULL;
@@ -27,38 +31,44 @@ t_token	*new_node(char *value)
 }
 
 // create new element and place in first position on the list
-void	push_front(t_data *data, char *value)
+int	push_front(t_data *data, char *value)
 {	
 	t_token	*new;
 
 	new = new_node(value);
+	if (new == NULL)
+		return (-1);
 	if (data->head == NULL)
 	{
 		data->head = new;
-		return ;
+		return (0);
 	}
 	data->head->prev = new;
 	new->next = data->head;
 	data->head = new;
+	return (0);
 }
 
 // create new element and place in last position on the list
-void	push_back(t_data *data, char *value)
+int	push_back(t_data *data, char *value)
 {
 	t_token	*new;
 	t_token	*tmp;
 
 	new = new_node(value);
+	if (new == NULL)
+		return (-1);
 	tmp = data->head;
 	if (data->head == NULL)
 	{
 		data->head = new;
-		return ;
+		return (0);
 	}
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = new;
 	new->prev = tmp;
+	return (0);
 }
 
 // get the number of element

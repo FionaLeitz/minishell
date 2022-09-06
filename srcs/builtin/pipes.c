@@ -108,7 +108,8 @@ int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	{
 		ft_signals(MUTE);
 		pid[++i] = fork();
-		check_child(pid[i]);
+		if (check_child(pid[i]) == -1)
+			return (-1);
 		if (pid[i] == 0)
 		{
 			in_child(token, params, pipe_fd, i);

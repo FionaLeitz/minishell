@@ -87,5 +87,5 @@ void	check_exit_status(void)
 	else if (g_exit_st == (128 | SIGSEGV))
 		ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
 	else if (g_exit_st == (128 | SIGINT))
-			ft_putchar_fd('\n', STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
 }

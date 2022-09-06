@@ -45,9 +45,6 @@ t_export	*create_export(char **env)
 	if (export == NULL)
 	{
 		set_error_malloc("export\n");
-	// {
-	// 	errno = ENOMEM;
-	// 	ft_putstr_fd("Out of memory in creating export\n", 2);
 		return (NULL);
 	}
 	if (env[0] == NULL)
@@ -58,7 +55,10 @@ t_export	*create_export(char **env)
 	{
 		export->next = new_element(env[count]);
 		if (export->next == NULL)
+		{
+			set_error_malloc("creating export\n");
 			return (free_export(tmp));
+		}
 		export = export->next;
 	}
 	export = tmp;
@@ -82,11 +82,6 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 					+ ft_strlen(tmp->value)));
 		if (str == NULL)
 			return (set_error_malloc("export\n"));
-		// {
-		// 	errno = ENOMEM;
-		// 	ft_putstr_fd("Out of memory in export\n", 2);
-		// 	return (-1);
-		// }
 		str[0] = '\0';
 		ft_strcat(str, tmp->value);
 		ft_strcat(str, &arg[limit + 1]);
@@ -98,6 +93,7 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 	{
 		free(tmp->value);
 		tmp->value = ft_strdup(&arg[limit]);
+		if (tmp->value == NULL)
 			return (set_error_malloc("export\n"));
 		return (1);
 	}
