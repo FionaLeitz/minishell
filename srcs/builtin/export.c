@@ -89,8 +89,8 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 		tmp->value = str;
 		return (1);
 	}
-	if ((int)ft_strlen(tmp->name) > limit && ft_strncmp(arg, tmp->name,
-		limit) == 0 && tmp->name[limit + 1] == '\0')
+	if ((int)ft_strlen(tmp->name) >= limit && ft_strncmp(arg, tmp->name, limit) == 0
+			&& tmp->name[limit] == '\0')
 	{
 		free(tmp->value);
 		tmp->value = ft_strdup(&arg[limit]);
