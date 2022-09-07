@@ -108,7 +108,7 @@ void	print_export(t_params *params)
 		{
 			ft_printf("declare -x %s=\"", params->export->name);
 			i = 0;
-			while (params->export->value[++i])
+			while (params->export->value[i] && params->export->value[++i])
 			{
 				if (params->export->value[i] == -1)
 					ft_printf("\'");
