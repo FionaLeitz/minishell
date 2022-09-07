@@ -13,6 +13,7 @@
 #include "../../minishell.h"
 
 // check arguments and chdir changethe curant working directory
+// changer printf
 static int	ft_error_cd(char **arg)
 {
 	if (arg[1] == NULL)
@@ -108,7 +109,11 @@ int	ft_cd(char **arg, t_params *params)
 	}
 	i = ft_find(params->env, "PWD=", 4);
 	j = ft_find(params->env, "OLDPWD=", 7);
-	getcwd(path, 4095);
+	if (getcwd(path, 4095) == NULL)
+	{
+		perror("Minishell: chdir: error retrieving current directory: getcwd: cannot access parent directories");
+		return (1);
+	}
 	if (i == -1 && j == -1)
 		return (0);
 	return (ft_end_cd(i, j, params->env, path));
