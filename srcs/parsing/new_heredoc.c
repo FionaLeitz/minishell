@@ -20,9 +20,10 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 	char *new;
 	char	*tmp;
 	
-	line = ft_strdup("\0");
+//	line = ft_strdup("\0");
 	new = NULL;
-	while (line)
+//	while (line)
+	while (1)
 	{
 		ft_signals(HEREDOC);
 		line = readline("> ");
@@ -37,7 +38,11 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 		{
 			tmp = ft_strdup(line);
 			if (tmp == NULL)
-				return (set_error_malloc("heredoc\n"));
+			{
+//				free(line);
+				set_error_malloc("heredoc\n");
+				return (1);
+			}
 			if (line && ft_strcmp(line, del) == 0)
 				break;
 			if (line)
