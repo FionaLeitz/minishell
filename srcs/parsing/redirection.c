@@ -68,7 +68,10 @@ int	check_redir(t_data *data)
 		if (data->trimmed[data->i] == '|')
 			return (print_error_redir("\0", '|'));
 		if (data->trimmed[data->i] == '<' || data->trimmed[data->i] == '>')
+		{
+			dprintf(2, "string -%s-\n", &data->trimmed[data->i]);
 			return (print_error_redir("\0", redir));
+		}
 	}
 	return (0);
 }

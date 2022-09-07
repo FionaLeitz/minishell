@@ -58,6 +58,7 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 		{
 			if (token->fds[0] != 0)
 				close(token->fds[0]);
+//			dprintf(2, "delim = -%s-\n", &str[i][2]);
 			if (str[i][1] == '<')
 				token->fds[0] = ft_here_doc(&str[i][2], params);
 			else
