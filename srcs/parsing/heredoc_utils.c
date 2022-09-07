@@ -92,29 +92,3 @@ int	in_del_quote_hd(char *str, int i)
 	ft_memcpy(&str[i], &str[i + 1], ft_strlen(&str[i + 1]) + 1);
 	return (i);
 }
-
-char	*ft_strjoin_char(char *s1, char c)
-{
-	char	*dest;
-	int		i;
-
-	i = 0;
-	if (!s1)
-	{
-		s1 = malloc(sizeof(char) * 1);
-		s1[0] = '\0';
-	}
-	dest = ft_calloc(sizeof(char), (ft_strlen(s1) + 2));
-	if (!dest)
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		dest[i] = s1[i];
-		i++;
-	}
-	dest[i] = c;
-	i++;
-	dest[i] = '\0';
-	free(s1);
-	return (dest);
-}

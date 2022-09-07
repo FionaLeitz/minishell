@@ -163,7 +163,6 @@ int			delim_quotes(char *delim);
 int			check_delim(char *delim);
 void		print_error_heredoc(char *str, int fd);
 char		*del_quotes_hd(char *delim);
-char		*ft_strjoin_char(char *s1, char c);
 int			in_del_quote_hd(char *str, int i);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
