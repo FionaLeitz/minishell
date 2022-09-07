@@ -110,6 +110,10 @@ static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
 	free(params->data->pipe_fd);
 	free_struct(params->data);
 	free_params(params);
+	if (token->fds[0] != 0)
+		close(token->fds[0]);
+	if (token->fds[1] != 1)
+		close(token->fds[1]);
 	if (old_fd != NULL)
 	{
 		close(old_fd[0]);
@@ -144,6 +148,10 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 		execve(token->args[0], token->args, params->env);
 		command_no(token, params, old_fd, 0);
 	}
+	if (token->fds[0] != 0)
+		close(token->fds[0]);
+	if (token->fds[1] != 1)
+		close(token->fds[1]);
 	if (i == 0)
 	{
 		if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))

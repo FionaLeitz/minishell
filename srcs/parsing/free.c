@@ -12,6 +12,19 @@
 
 #include "../../minishell.h"
 
+void	free_exit(t_params *params, t_data *data, int *old_fd)
+{
+	if (old_fd != NULL)
+	{
+		close(old_fd[0]);
+		close(old_fd[1]);
+	}
+	free(data->pid);
+	free(data->pipe_fd);
+	free_struct(data);
+	free_params(params);
+}
+
 // free data
 void	free_struct(t_data *data)
 {

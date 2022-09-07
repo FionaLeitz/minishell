@@ -185,6 +185,15 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		if (ft_execute(tmp, params) == -1)
 			return (ft_get_out(data));
+		tmp = data->head;
+		while (tmp)
+		{
+			if (tmp->fds[0] !=0)
+				close(tmp->fds[0]);
+			if (tmp->fds[1] != 1)
+				close(tmp->fds[1]);
+			tmp = tmp->next;
+		}
 		free_struct(data);
 	}
 	rl_clear_history();
