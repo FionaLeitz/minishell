@@ -14,8 +14,13 @@
 
 static void	free_exit(t_params *params, t_data *data, int *old_fd)
 {
-	close(old_fd[0]);
-	close(old_fd[1]);
+	if (old_fd != NULL)
+	{
+		close(old_fd[0]);
+		close(old_fd[1]);
+	}
+	free(data->pid);
+	free(data->pipe_fd);
 	free_struct(data);
 	free_params(params);
 }

@@ -18,6 +18,8 @@ void	init_data(t_data *data)
 	data->input = NULL;
 	data->trimmed = NULL;
 	data->head = NULL;
+	data->pid = NULL;
+	data->pipe_fd = NULL;
 	data->i = 0;
 }
 
