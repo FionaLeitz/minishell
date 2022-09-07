@@ -110,12 +110,12 @@ static int	modify_line(t_data *data, int nbr)
 	int	save;
 
 	save = 0;
-	while (ft_space(data->trimmed[data->i]) == 0)
+	while (data->trimmed[data->i] != '\0' && ft_space(data->trimmed[data->i]) == 0)
 	{
 		data->i++;
 		nbr++;
 	}
-	while (ft_space(data->trimmed[data->i]) != 0)
+	while (data->trimmed[data->i] != '\0' && ft_space(data->trimmed[data->i]) != 0)
 	{
 		save = data->i;
 		if (data->trimmed[data->i] == '\''
@@ -185,15 +185,15 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		if (ft_execute(tmp, params) == -1)
 			return (ft_get_out(data));
-		tmp = data->head;
-		while (tmp)
-		{
-			if (tmp->fds[0] !=0)
-				close(tmp->fds[0]);
-			if (tmp->fds[1] != 1)
-				close(tmp->fds[1]);
-			tmp = tmp->next;
-		}
+		// tmp = data->head;
+		// while (tmp)
+		// {
+		// 	if (tmp->fds[0] !=0)
+		// 		close(tmp->fds[0]);
+		// 	if (tmp->fds[1] != 1)
+		// 		close(tmp->fds[1]);
+		// 	tmp = tmp->next;
+		// }
 		free_struct(data);
 	}
 	rl_clear_history();

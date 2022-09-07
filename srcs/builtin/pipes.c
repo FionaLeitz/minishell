@@ -25,6 +25,8 @@ static void	make_dup(t_token *token, t_pipe_fd *pipe_fd, int i)
 	{
 		dup2(token->fds[0], 0);
 		close((token->fds[0]));
+		if (i != 0)
+			close((pipe_fd[i - 1].raw[0]));
 	}
 	if (token->fds[1] != 1)
 	{
@@ -70,6 +72,10 @@ static void	clean_child(t_params *params, int *pid, t_pipe_fd *pipe_fd)
 	while (token != NULL)
 	{
 		tmp = token;
+		if (tmp->fds[0] > 0)
+			close(tmp->fds[0]);
+		if (tmp->fds[1] != 1 && tmp->fds[1] >= 0)
+			close(tmp->fds[1]);
 		free(tmp->value);
 		free_table(tmp->args);
 		free_table(tmp->red);
