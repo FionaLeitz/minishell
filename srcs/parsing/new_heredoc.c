@@ -44,15 +44,20 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 				return (1);
 			}
 			if (line && ft_strcmp(line, del) == 0)
+			{
+				free(tmp);
 				break;
+			}
 			if (line)
 				new = write_hd(tmp, fd, quotes, params);
+//			free(tmp);
 			if (new == NULL)
 				return (-1);
 		}
 		replace_quotes(new);
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
+		free(new);
 //		free(line);
 //		free(tmp);
 	}
@@ -76,7 +81,9 @@ char	*write_hd(char *line, int fd, int quotes, t_params *params)
 			return (NULL);
 		i++;
 	}
-	return(line);
+	new = ft_strdup(line);
+	free(line);
+	return(new);
 }
 
 char	*expand_env_in_heredoc(char *str, t_params *params, int size, char *buff)
@@ -116,7 +123,7 @@ char	*replace_var_heredoc(char *str, int first, char *line, int *i)
 		tmp = malloc(sizeof(char) * (first + ft_strlen(str) + ft_strlen(&line[i[0]]) + 1));
 		if (tmp == NULL)
 		{
-			set_error_malloc("parse\n");
+			set_error_malloc("heredoc\n");
 			return (NULL);
 		}
 		ft_bzero(tmp, first + ft_strlen(str)
@@ -136,6 +143,7 @@ char	*expand_heredoc(char *line, t_params *params, int *i)
 	int		 count;
 	int		first;
 	char	*tmp;
+	char	*tmp2;
 	char	buff[12];
 
 	count = 0;
@@ -151,7 +159,7 @@ char	*expand_heredoc(char *line, t_params *params, int *i)
 			break ;
 	}
 	tmp = expand_env_in_heredoc(&line[first + 1], params, count, buff);
-	line = replace_var_heredoc(tmp, first, line, i);
-	return (line);
+	tmp2 = replace_var_heredoc(tmp, first, line, i);
+	return (tmp2);
 }
 

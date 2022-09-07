@@ -92,6 +92,8 @@ static int	get_path(char **arg, t_params *params)
 // if command not found
 static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
 {
+	t_token	*tmp;
+
 	if (i == 1)
 	{
 		write(2, "minishell: ", 11);
@@ -106,14 +108,19 @@ static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
 		write(2, ": command not found\n", 20);
 		g_exit_st = 127;
 	}
+	tmp = params->data->head;
+	while (tmp)
+	{
+		if (tmp->fds[0] != 0)
+			close(tmp->fds[0]);
+		if (tmp->fds[1] != 1)
+			close(tmp->fds[1]);
+		tmp = tmp->next;
+	}
 	free(params->data->pid);
 	free(params->data->pipe_fd);
 	free_struct(params->data);
 	free_params(params);
-	if (token->fds[0] != 0)
-		close(token->fds[0]);
-	if (token->fds[1] != 1)
-		close(token->fds[1]);
 	if (old_fd != NULL)
 	{
 		close(old_fd[0]);

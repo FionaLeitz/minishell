@@ -31,4 +31,6 @@ void	init_token(t_token *token)
 	token->red = NULL;
 	token->next = NULL;
 	token->prev = NULL;
+	token->fds[0] = 0;
+	token->fds[1] = 1;
 }

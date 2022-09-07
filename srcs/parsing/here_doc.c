@@ -25,8 +25,18 @@ char	*hd_name(void)
 	while (fd_exist != -1)
 	{
 		tmp = ft_itoa(i);
+		if (tmp == NULL)
+		{
+			set_error_malloc("heredoc\n");
+			return (NULL);
+		}
 		pathname = ft_strjoin("/tmp/hd", tmp);
 		free(tmp);
+		if (pathname == NULL)
+		{
+			set_error_malloc("heredoc\n");
+			return (NULL);
+		}
 		fd_exist = open(pathname, O_RDONLY);
 		if (fd_exist == -1)
 			break ;
@@ -42,7 +52,8 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	pid_t	pid;
 
 	pid = fork();
-	check_child(pid);
+	if (check_child(pid) == -1)
+		return (-1);
 	if (pid == 0)
 	{
 		if (get_hd_line(delim, utils[0], utils[1], params) == 1)
@@ -81,6 +92,12 @@ int	ft_here_doc(char *delim, t_params *params)
 	else
 		delim = delim_tmp;
 	pathname = hd_name();
+	if (pathname == NULL)
+	{
+		close(STDIN_FILENO);
+		free_exit(params, params->data, NULL);
+		exit (12);
+	}
 	utils[0] = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
 	child = fork_heredoc(delim, utils, params, pathname);
