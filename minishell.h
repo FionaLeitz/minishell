@@ -77,6 +77,8 @@ typedef struct s_data
 	int				i;
 	int				fd_in;
 	int				fd_out;
+	int				*pid;
+	t_pipe_fd		*pipe_fd;
 	struct s_token	*head;
 }					t_data;
 

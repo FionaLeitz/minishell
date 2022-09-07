@@ -62,7 +62,9 @@ static int	get_path(char **arg, t_params *params)
 		i++;
 	if (params->env[i] == NULL)
 	{
-		ft_printf("minishell: %s: No such file or directory\n", arg[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(arg[0], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit (127);
 	}
 	path = ft_split(&params->env[i][5], ':');
@@ -86,6 +88,7 @@ static int	get_path(char **arg, t_params *params)
 	return (0);
 }
 
+
 // if command not found
 static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
 {
@@ -103,12 +106,10 @@ static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
 		write(2, ": command not found\n", 20);
 		g_exit_st = 127;
 	}
+	free(params->data->pid);
+	free(params->data->pipe_fd);
+	free_struct(params->data);
 	free_params(params);
-	free(params->data->trimmed);
-	free(token->value);
-	free_table(token->args);
-	free_table(token->red);
-	free(token);
 	if (old_fd != NULL)
 	{
 		close(old_fd[0]);

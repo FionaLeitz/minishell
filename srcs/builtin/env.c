@@ -17,7 +17,9 @@ int	ft_env(char **arg, t_params *params)
 {
 	if (arg[1] != NULL)
 	{
-		ft_printf("env: ‘%s’: too many arguments\n", arg[1]);
+		ft_putstr_fd("env: ‘", 2);
+		ft_putstr_fd(arg[1], 2);
+		ft_putstr_fd("’: too many arguments\n", 2);
 		return (127);
 	}
 	if (params->env == NULL)

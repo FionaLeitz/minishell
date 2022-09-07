@@ -20,12 +20,12 @@ int	syntax_check(t_data *data)
 	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
 	if (check_quotes(data) == -1)
 	{
-		printf("minishell: quotes are unclosed\n");
+		ft_putstr_fd("minishell: quotes are unclosed\n", 2);
 		return (2);
 	}
 	if (data->trimmed[0] == '|')
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		return (2);
 	}
 	if (check_string(data) == -1)

@@ -15,7 +15,10 @@
 // print different redirection error
 static int	print_error_redir(char *str, char c)
 {
-	printf("minishell: syntax error near unexpected token `%s%c'\n", str, c);
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("\'\n", 2);
 	return (-1);
 }
 
