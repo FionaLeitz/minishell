@@ -12,6 +12,14 @@
 
 #include "../../minishell.h"
 
+static void	free_exit(t_params *params, t_data *data, int *old_fd)
+{
+	close(old_fd[0]);
+	close(old_fd[1]);
+	free_struct(data);
+	free_params(params);
+}
+
 static int	ft_check_long_long(char *nb)
 {
 	char 	*long_long;
@@ -40,7 +48,7 @@ static int	ft_check_long_long(char *nb)
 }
 
 // check if arguments are numbers
-static int	in_exit(char **arg)
+static int	in_exit(char **arg, t_params *params, int *old_fd)
 {
 	int	i;
 
@@ -55,6 +63,7 @@ static int	in_exit(char **arg)
 			ft_printf("minishell: exit: %s: numeric argument required\n",
 				arg[1]);
 			g_exit_st = 2;
+			free_exit(params, params->data, old_fd);
 			exit(2);
 		}
 	}
@@ -62,7 +71,7 @@ static int	in_exit(char **arg)
 }
 
 // exit with error messages
-int	ft_exit(char **arg, int i)
+int	ft_exit(char **arg, int i, t_params *params, int *old_fd)
 {
 	long int	n;
 
@@ -71,7 +80,7 @@ int	ft_exit(char **arg, int i)
 	n = 0;
 	if (arg[1])
 	{
-		in_exit(arg);
+		in_exit(arg, params, old_fd);
 		n = ft_atol(arg[1]);
 	}
 	if (arg[1] != NULL && arg[2] != NULL)
@@ -81,5 +90,6 @@ int	ft_exit(char **arg, int i)
 		return (1);
 	}
 	g_exit_st = n;
+	free_exit(params, params->data, old_fd);
 	exit(g_exit_st);
 }

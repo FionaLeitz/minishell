@@ -47,6 +47,10 @@ static int	only_one(t_token *token, t_params *params)
 		close(token->fds[1]);
 	}
 	ft_select_builtin(token, params, 0, old_fd);
+	if (token->fds[0] != 0)
+		close(token->fds[0]);
+	if (token->fds[0] != 1)
+		close(token->fds[1]);
 	dup2(old_fd[0], 0);
 	dup2(old_fd[1], 1);
 	close(old_fd[0]);
@@ -74,13 +78,29 @@ int	ft_execute(t_token *token, t_params *params)
 	if (pipe_fd == NULL)
 	{
 		free(pid);
+		if (token->fds[0] != 0)
+			close(token->fds[0]);
+		if (token->fds[0] != 1)
+			close(token->fds[1]);
 		return (set_error_malloc("creating child\n"));
 	}
 	nbr2 = nbr;
 	while (--nbr >= 0)
+	{
 		if (create_pipe(pipe_fd, pid, nbr, nbr2) == -1)
+		{
+			if (token->fds[0] != 0)
+				close(token->fds[0]);
+			if (token->fds[0] != 1)
+				close(token->fds[1]);
 			return (-1);
+		}
+	}
 	ft_pipe(token, params, pid, pipe_fd);
+	if (token->fds[0] != 0)
+		close(token->fds[0]);
+	if (token->fds[0] != 1)
+		close(token->fds[1]);
 	free(pid);
 	free(pipe_fd);
 	return (g_exit_st);

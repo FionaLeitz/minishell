@@ -172,7 +172,7 @@ void	ft_select_builtin(t_token *token, t_params *params, int i, int *old_fd)
 	else if (ft_strncmp(token->args[0], "pwd", 4) == 0)
 		g_exit_st = ft_pwd(token->args);
 	else if (ft_strncmp(token->args[0], "exit", 5) == 0)
-		g_exit_st = ft_exit(token->args, i);
+		g_exit_st = ft_exit(token->args, i, params, old_fd);
 	else if (ft_strncmp(token->args[0], "export", 7) == 0)
 		g_exit_st = ft_export(token->args, params);
 	else if (ft_strncmp(token->args[0], "unset", 6) == 0)
