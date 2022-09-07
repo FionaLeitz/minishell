@@ -17,7 +17,7 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 {
 	int		count;
 
-	if ((quote[1] == 0 || (quote[0] % 2 != 0 && str[0] == '\"')) && str[0] != '\"' && str[0] != '\'')
+	if ((quote[1] == 0 && (str[0] != '\"' && str[0] != '\'')) || (quote[2] % 2 != 0 && quote[1] == 0))
 		return ("$");
 	if (str[0] == '?')
 	{

@@ -97,10 +97,6 @@ int	ft_execute(t_token *token, t_params *params)
 		}
 	}
 	ft_pipe(token, params, pid, pipe_fd);
-	if (token->fds[0] != 0)
-		close(token->fds[0]);
-	if (token->fds[0] != 1)
-		close(token->fds[1]);
 	free(pid);
 	free(pipe_fd);
 	return (g_exit_st);
