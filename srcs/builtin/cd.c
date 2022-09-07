@@ -13,22 +13,23 @@
 #include "../../minishell.h"
 
 // check arguments and chdir changethe curant working directory
-// changer printf
 static int	ft_error_cd(char **arg)
 {
 	if (arg[1] == NULL)
 	{
-		ft_printf("minishell: cd: not enough arguments\n");
+		ft_putstr_fd("minishell: cd: not enough arguments\n", 2);
 		return (1);
 	}
 	if (arg[2] != NULL)
 	{
-		ft_printf("minishell: cd: too many arguments\n");
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (1);
 	}
 	if (chdir(arg[1]) == -1)
 	{
-		ft_printf("minishell: cd: %s: %s\n", arg[1], strerror(errno));
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(arg[1], 2);
+		perror(": ");
 		return (1);
 	}
 	return (0);

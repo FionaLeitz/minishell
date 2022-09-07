@@ -65,19 +65,17 @@ int	ft_execute(t_token *token, t_params *params)
 {
 	int			nbr;
 	int			nbr2;
-	int			*pid;
-	t_pipe_fd	*pipe_fd;
 
 	if (token->next == NULL && token->prev == NULL)
 		return (only_one(token, params));
 	nbr = ft_size(token);
-	pid = malloc(sizeof(int) * nbr);
-	if (pid == NULL)
+	params->data->pid = malloc(sizeof(int) * nbr);
+	if (params->data->pid == NULL)
 		set_error_malloc("creating child\n");
-	pipe_fd = malloc(sizeof(t_pipe_fd) * nbr);
-	if (pipe_fd == NULL)
+	params->data->pipe_fd = malloc(sizeof(t_pipe_fd) * nbr);
+	if (params->data->pipe_fd == NULL)
 	{
-		free(pid);
+		free(params->data->pid);
 		if (token->fds[0] != 0)
 			close(token->fds[0]);
 		if (token->fds[0] != 1)
@@ -87,7 +85,7 @@ int	ft_execute(t_token *token, t_params *params)
 	nbr2 = nbr;
 	while (--nbr >= 0)
 	{
-		if (create_pipe(pipe_fd, pid, nbr, nbr2) == -1)
+		if (create_pipe(params->data->pipe_fd, params->data->pid, nbr, nbr2) == -1)
 		{
 			if (token->fds[0] != 0)
 				close(token->fds[0]);
@@ -96,8 +94,8 @@ int	ft_execute(t_token *token, t_params *params)
 			return (-1);
 		}
 	}
-	ft_pipe(token, params, pid, pipe_fd);
-	free(pid);
-	free(pipe_fd);
+	ft_pipe(token, params, params->data->pid, params->data->pipe_fd);
+	free(params->data->pid);
+	free(params->data->pipe_fd);
 	return (g_exit_st);
 }

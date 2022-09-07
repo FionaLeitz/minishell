@@ -60,8 +60,9 @@ static int	in_exit(char **arg, t_params *params, int *old_fd)
 			i++;
 		if (ft_isdigit(arg[1][i]) == 0 || ft_check_long_long(arg[1]) == -1)
 		{
-			ft_printf("minishell: exit: %s: numeric argument required\n",
-				arg[1]);
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(arg[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 			g_exit_st = 2;
 			free_exit(params, params->data, old_fd);
 			exit(2);
@@ -76,7 +77,7 @@ int	ft_exit(char **arg, int i, t_params *params, int *old_fd)
 	long int	n;
 
 	if (i == 0)
-		ft_printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 	n = 0;
 	if (arg[1])
 	{
@@ -85,7 +86,7 @@ int	ft_exit(char **arg, int i, t_params *params, int *old_fd)
 	}
 	if (arg[1] != NULL && arg[2] != NULL)
 	{
-		ft_printf("minisehll: exit: too many arguments\n");
+		ft_putstr_fd("minisehll: exit: too many arguments\n", 2);
 		g_exit_st = 1;
 		return (1);
 	}

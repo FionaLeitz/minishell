@@ -43,7 +43,7 @@ int	check_string(t_data *data)
 				data->i++;
 			if (data->trimmed[data->i] == '|' || data->trimmed[data->i] == '\0')
 			{
-				printf("minishell: syntax error near unexpected token `|'\n");
+				ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 				return (-1);
 			}
 		}
