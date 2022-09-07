@@ -133,9 +133,9 @@ static void	only_heredocs(t_data *data)
 	int	save;
 	int	save2;
 
+	g_exit_st = 2;
 	data->i -= 1;
-	data->trimmed[data->i] = '\0';
-	data->trimmed[data->i + 1] = '\0';
+	ft_bzero(&data->trimmed[data->i], ft_strlen(&data->trimmed[data->i]));
 	data->i = 0;
 	save = 0;
 	while (data->trimmed[data->i])
@@ -144,8 +144,13 @@ static void	only_heredocs(t_data *data)
 		if (data->trimmed[data->i] == '<' && data->trimmed[data->i + 1] == '<')
 		{
 			ft_memcpy(&data->trimmed[save], &data->trimmed[data->i],
-				ft_strlen(&data->trimmed[data->i]) + 1);
+				ft_strlen(&data->trimmed[data->i]) + 2);
 			data->i = save + 2;
+			if (data->trimmed[data->i] == '\0')
+			{
+				data->trimmed[0] = '\0';
+				return ;
+			}
 			save += modify_line(data, save2);
 		}
 		data->i++;
@@ -176,10 +181,7 @@ int	print_prompt(t_data *data, t_params *params)
 		if (!data->input)
 			ft_exit_d(data, params);
 		if (syntax_check(data) != 0)
-		{
 			only_heredocs(data);
-			g_exit_st = 2;
-		}
 		if (ft_cut(data, params) == -1)
 			return (ft_get_out(data));
 		tmp = data->head;
