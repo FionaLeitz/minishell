@@ -112,7 +112,8 @@ int	ft_cd(char **arg, t_params *params)
 	j = ft_find(params->env, "OLDPWD=", 7);
 	if (getcwd(path, 4095) == NULL)
 	{
-		perror("Minishell: chdir: error retrieving current directory: getcwd: cannot access parent directories");
+		perror("Minishell: chdir: error retrieving current directory: \
+			getcwd: cannot access parent directories");
 		return (1);
 	}
 	if (i == -1 && j == -1)

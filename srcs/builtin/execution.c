@@ -85,7 +85,8 @@ int	ft_execute(t_token *token, t_params *params)
 	nbr2 = nbr;
 	while (--nbr >= 0)
 	{
-		if (create_pipe(params->data->pipe_fd, params->data->pid, nbr, nbr2) == -1)
+		if (create_pipe(params->data->pipe_fd,
+				params->data->pid, nbr, nbr2) == -1)
 		{
 			if (token->fds[0] > 0)
 				close(token->fds[0]);
