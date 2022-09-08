@@ -175,7 +175,8 @@ int			push_back(t_data *data, char *value);
 int			ft_size(t_token *lst);
 //dollar_fct.c
 char		*rep(char **env, char *str, int *quote, char *buff);
-int			in_replace(char *str, int s, t_token *token, t_data *data);
+int			in_replace(char *str, int s, char **str_value, t_data *data);
+int			if_dollar(char **str_value, t_data *data, t_params *par, int *quote);
 int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
 int			get_fd_input(char *pathname, char *red);
@@ -190,8 +191,8 @@ int			count_red(t_data *data, t_token *token);
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
 int			in_del_quote(char *str, int j);
-int			del_quotes_redir(t_token *token);
-int			del_quotes(t_token *token);
+int			del_quotes_redir(t_token *token, t_params *params);
+int			del_quotes(t_token *token, t_params *params);
 //args_start.c
 int			ft_count_words(t_data *data, char *s);
 int			in_create_tab(char *str, int *i);

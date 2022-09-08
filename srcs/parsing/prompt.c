@@ -92,11 +92,15 @@ int	ft_cut(t_data *data, t_params *params)
 	if (in_cut(data, tmp, create_tab) == -1)
 		return (-1);
 	tmp = data->head;
-	if (del_quotes(tmp) == -1)
+	if (del_quotes(tmp, params) == -1)
 		return (-1);
 	tmp = data->head;
 	while (tmp)
 	{
+		// printf("------------------ args : ----------------\n");
+		// print_table(tmp->args);
+		// printf("------------------ red : ----------------\n");
+		// print_table(tmp->red);
 		ft_redirection(tmp->red, params, tmp);
 		give_tab(tmp->args);
 		give_tab(tmp->red);

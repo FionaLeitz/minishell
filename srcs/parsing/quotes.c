@@ -77,11 +77,40 @@ static int	in_del_quotes_redir(char *str)
 		free(str);
 		str = tmp;
 	}
+	replace_quotes(str);
+	return (0);
+}
+
+// find $ in redirection
+int	replace_var_redir(char **str, t_data *data, t_params *params)
+{
+	int		quote[3];
+
+	quote[0] = 0;
+	quote[2] = 0;
+	data->i = -1;
+	while (str[0][++data->i])
+	{
+		if (str[0][data->i] == '\"')
+			quote[2]++;
+		if (str[0][data->i] == '\'' && quote[2] % 2 == 0)
+			quote[0]++;
+		if (str[0][data->i] == '\'' && quote[0] % 2 != 0)
+		{
+			jump_quotes(str[0], data);
+			quote[0]++;
+		}
+		if (str[0][data->i] == '$')
+		{
+			if (if_dollar(str, data, params, quote) == -1)
+				return (-1);
+		}
+	}
 	return (0);
 }
 
 // find suppressable quotes in redirections
-int	del_quotes_redir(t_token *token)
+int	del_quotes_redir(t_token *token, t_params *params)
 {
 	int		i;
 	int		j;
@@ -91,6 +120,7 @@ int	del_quotes_redir(t_token *token)
 		i = -1;
 		while (token->red[++i])
 		{
+			replace_var_redir(&token->red[i], params->data, params);
 			j = -1;
 			while (token->red[i][++j] != '\0')
 			{
@@ -106,13 +136,14 @@ int	del_quotes_redir(t_token *token)
 			if (in_del_quotes_redir(token->red[i]) == -1)
 				return (-1);
 		}
+//		replace_quotes(token->red[i]);
 		token = token->next;
 	}
 	return (0);
 }
 
 // find suppressable quotes
-int	del_quotes(t_token *token)
+int	del_quotes(t_token *token, t_params *params)
 {
 	t_token	*tmp;
 	int		i;
@@ -138,5 +169,6 @@ int	del_quotes(t_token *token)
 		tmp = tmp->next;
 	}
 	tmp = token;
-	return (del_quotes_redir(tmp));
+//	return (0);
+	return (del_quotes_redir(tmp, params));
 }
