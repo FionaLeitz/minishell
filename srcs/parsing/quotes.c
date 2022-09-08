@@ -120,7 +120,8 @@ int	del_quotes_redir(t_token *token, t_params *params)
 		i = -1;
 		while (token->red[++i])
 		{
-			replace_var_redir(&token->red[i], params->data, params);
+			if (!(token->red[i][0] == '<' && token->red[i][1] == '<'))
+				replace_var_redir(&token->red[i], params->data, params);
 			j = -1;
 			while (token->red[i][++j] != '\0')
 			{
