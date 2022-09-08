@@ -32,7 +32,8 @@ void	ft_sig_heredoc(int signal)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
-		close(STDIN_FILENO);
+		if (STDIN_FILENO != -1)
+			close(STDIN_FILENO);
 		g_exit_st = 130;
 	}
 }

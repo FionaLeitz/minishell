@@ -13,6 +13,15 @@
 
 #include "../../minishell.h"
 
+void	free_in_heredoc(t_params *params, int fd)
+{
+	close(fd);
+	dup2(params->old_fd[0], 0);
+	close(params->old_fd[0]);
+	free_struct(params->data);
+	free_params(params);
+}
+
 // fct to get the line of the here_doc with readline as in prompt
 int get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
@@ -20,28 +29,30 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 	char *new;
 	char	*tmp;
 	
-//	line = ft_strdup("\0");
 	new = NULL;
-//	while (line)
+
 	while (1)
 	{
 		ft_signals(HEREDOC);
 		line = readline("> ");
 		if (!line && g_exit_st != 130)
 		{
-			print_error_heredoc(del, fd);
-			break;
+//			free_in_heredoc(params, fd);
+			print_error_heredoc(del, fd, params);
+//			break;
 		}
 		if (!line && g_exit_st == 130)
-			return (-1);
+		{
+			free_in_heredoc(params, fd);
+			exit(130);
+		}
 		else
 		{
 			tmp = ft_strdup(line);
 			if (tmp == NULL)
 			{
-//				free(line);
 				set_error_malloc("heredoc\n");
-				return (1);
+				return (-1);
 			}
 			if (line && ft_strcmp(line, del) == 0)
 			{
@@ -50,7 +61,6 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 			}
 			if (line)
 				new = write_hd(tmp, fd, quotes, params);
-//			free(tmp);
 			if (new == NULL)
 				return (-1);
 		}
@@ -58,8 +68,6 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 		ft_putstr_fd(new, fd);
 		ft_putstr_fd("\n", fd);
 		free(new);
-//		free(line);
-//		free(tmp);
 	}
 	return (0);
 }

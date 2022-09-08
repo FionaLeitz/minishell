@@ -50,18 +50,23 @@ char	*hd_name(void)
 static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 {
 	pid_t	pid;
+	int		test;
 
 	pid = fork();
 	if (check_child(pid) == -1)
 		return (-1);
 	if (pid == 0)
 	{
-		if (get_hd_line(delim, utils[0], utils[1], params) == 1)
+		free(path);
+		test = get_hd_line(delim, utils[0], utils[1], params);
+		if (test == -1)
 			return (-1);
-		close(utils[0]);
+		if (test == -2)
+			return (-2);
+		if (utils[0] != -1)
+			close(utils[0]);
 		free_struct(params->data);
 		free_params(params);
-		free(path);
 		if (errno == 12)
 			exit(12);
 		exit(g_exit_st);
@@ -109,9 +114,14 @@ int	ft_here_doc(char *delim, t_params *params)
 		free_exit(params, params->data, NULL);
 		exit (12);
 	}
-	check_child(child);
+	if (check_child(child) == -1)
+	{
+		free(pathname);
+		return (-1);
+	}
 	ft_signals(DEFAULT);
-	close(utils[0]);
+	if (utils[0] != -1)
+		close(utils[0]);
 	utils[0] = get_fd_input(pathname, "<");
 	unlink(pathname);
 	free(pathname);

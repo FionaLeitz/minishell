@@ -45,10 +45,9 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 	i = -1;
 	while (str[++i])
 	{
-		// replace_var_redir(&str[i], params->data, params);
 		if (str[i][0] == '>')
 		{
-			if (token->fds[1] != 1)
+			if (token->fds[1] != 1 && token->fds[1] != -1)
 				close(token->fds[1]);
 			if (str[i][1] == '>')
 				token->fds[1] = get_fd_output(&str[i][2], ">>");
@@ -57,14 +56,22 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 		}
 		if (str[i][0] == '<')
 		{
-			if (token->fds[0] != 0)
+			if (token->fds[0] >0)
 				close(token->fds[0]);
 			if (str[i][1] == '<')
+			{
+				params->old_fd[0] = dup(0);
 				token->fds[0] = ft_here_doc(&str[i][2], params);
+			}
 			else
 				token->fds[0] = get_fd_input(&str[i][1], "<");
 		}
 		if (token->fds[0] == -1 || token->fds[1] == -1)
-			return ;
+			break ;
+	}
+	if (params->old_fd[0] != -1)
+	{
+		dup2(params->old_fd[0], 0);
+		close(params->old_fd[0]);
 	}
 }

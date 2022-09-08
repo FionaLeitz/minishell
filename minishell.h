@@ -87,6 +87,7 @@ typedef struct s_params
 	char			**env;
 	t_export		*export;
 	t_data			*data;
+	int				old_fd[2];
 }					t_params;
 
 // BUILT-IN
@@ -161,7 +162,7 @@ int			ft_if_char(char *str, char c);
 char		*ft_strncpy(char *dest, char *src, unsigned int n);
 int			delim_quotes(char *delim);
 int			check_delim(char *delim);
-void		print_error_heredoc(char *str, int fd);
+void		print_error_heredoc(char *str, int fd, t_params *params);
 char		*del_quotes_hd(char *delim);
 int			in_del_quote_hd(char *str, int i);
 //parse.c
@@ -206,6 +207,7 @@ int			ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
 
 //new_heredoc.c
+void	free_in_heredoc(t_params *params, int fd);
 int		get_hd_line(char *del, int fd, int quotes, t_params *params);
 char	*write_hd(char *line, int fd, int quotes, t_params *params);
 char	*expand_env_in_heredoc(char *str, t_params *params, int size, char *buff);
