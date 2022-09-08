@@ -14,22 +14,22 @@
 
 static int	ft_check_long_long(char *nb)
 {
-	char 	*long_long;
-	int	i;
+	char	*long_long;
+	int		i;
 
 	i = 0;
 	if (nb[0] == '-')
 	{
 		long_long = "-9223372036854775808";
-		i = 1; 
+		i = 1;
 	}
-	else 
+	else
 		long_long = "9223372036854775807";
 	if (ft_strlen(nb) >= ft_strlen(&long_long[i]))
 	{
 		while (nb[i])
 		{
-			if (nb[i] > long_long[i])// || (ft_isdigit(nb[i]) == 0))
+			if (nb[i] > long_long[i])
 				return (-1);
 			i++;
 		}
@@ -45,7 +45,6 @@ static int	in_exit(char **arg, t_params *params, int *old_fd)
 	int	i;
 
 	i = -1;
-	
 	while (arg[1][++i])
 	{
 		if (arg[1][i] == '+' || arg[1][i] == '-')
