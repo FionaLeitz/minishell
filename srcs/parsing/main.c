@@ -20,6 +20,8 @@ int	main(int ac, char **av, char **envp)
 	t_data		data;
 	t_params	params;
 
+	params.old_fd[0] = -1;
+	params.old_fd[1] = -1;
 	(void)av;
 	errno = 0;
 	//tests whether fd is an open fd referring to a terminal,

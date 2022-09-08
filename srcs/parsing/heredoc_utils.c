@@ -52,14 +52,14 @@ int	check_delim(char *delim)
 	return (quotes);
 }
 
-void	print_error_heredoc(char *str, int fd)
+void	print_error_heredoc(char *str, int fd, t_params *params)
 {
 	ft_putstr_fd("minishell: warning: ", 2);
 	ft_putstr_fd("here-document at line delimited by end-of-file", 2);
 	ft_putstr_fd(" (wanted '", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("')\n", 2);
-	close(fd);
+	free_in_heredoc(params, fd);
 	exit(0);
 }
 

@@ -132,7 +132,6 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 		pid = fork();
 		if (check_child(pid) == -1)
 			return ;
-
 	}
 	if (pid == 0)
 	{

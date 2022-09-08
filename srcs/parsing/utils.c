@@ -44,6 +44,8 @@ int	check_fd(int fd, char *red)
 //child protection when forking
 int	check_child(int pid)
 {
+	if (pid == -2)
+		return (-1);
 	if (pid < 0)
 	{
 		perror("Fork");
