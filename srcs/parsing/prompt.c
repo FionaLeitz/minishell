@@ -97,10 +97,6 @@ int	ft_cut(t_data *data, t_params *params)
 	tmp = data->head;
 	while (tmp)
 	{
-		// printf("------------------ args : ----------------\n");
-		// print_table(tmp->args);
-		// printf("------------------ red : ----------------\n");
-		// print_table(tmp->red);
 		ft_redirection(tmp->red, params, tmp);
 		give_tab(tmp->args);
 		give_tab(tmp->red);

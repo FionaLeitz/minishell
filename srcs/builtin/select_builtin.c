@@ -37,8 +37,33 @@ static int	error_path(char **path, int	*i, char *arg)
 	return (0);
 }
 
+static void	free_command_no(t_params *params, int *old_fd)
+{
+	t_token	*tmp;
+
+	tmp = params->data->head;
+	while (tmp)
+	{
+		if (tmp->fds[0] > 0)
+			close(tmp->fds[0]);
+		if (tmp->fds[1] != 1 && tmp->fds[1] >= 0)
+			close(tmp->fds[1]);
+		tmp = tmp->next;
+	}
+	free(params->data->pid);
+	free(params->data->pipe_fd);
+	free_struct(params->data);
+	free_params(params);
+	if (old_fd != NULL)
+	{
+		close(old_fd[0]);
+		close(old_fd[1]);
+	}
+	exit(g_exit_st);
+}
+
 // get path of command if not built-in
-static int	get_path(char **arg, t_params *params)
+static int	get_path(char **arg, t_token *token, t_params *params, int *old_fd)
 {
 	int			i;
 	char		**path;
@@ -53,7 +78,11 @@ static int	get_path(char **arg, t_params *params)
 	if (stat(arg[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
 	{
 		free(test);
-		return (126);
+		write(2, "minishell: ", 11);
+		write(2, token->args[0], ft_strlen(token->args[0]));
+		write(2, ": Is a directory\n", 18);
+		g_exit_st = 126;
+		free_command_no(params, old_fd);
 	}
 	free(test);
 	if (access(arg[0], F_OK | X_OK) != -1)
@@ -65,7 +94,8 @@ static int	get_path(char **arg, t_params *params)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(arg[0], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		exit (127);
+		g_exit_st = 127;
+		free_command_no(params, old_fd);
 	}
 	path = ft_split(&params->env[i][5], ':');
 	if (path == NULL)
@@ -88,47 +118,6 @@ static int	get_path(char **arg, t_params *params)
 	return (0);
 }
 
-
-// if command not found
-static void	command_no(t_token *token, t_params *params, int *old_fd, int i)
-{
-	t_token	*tmp;
-
-	if (i == 1)
-	{
-		write(2, "minishell: ", 11);
-		write(2, token->args[0], ft_strlen(token->args[0]));
-		write(2, ": Is a directory\n", 18);
-		g_exit_st = 126;
-	}
-	else
-	{
-		write(2, "minishell: ", 11);
-		write(2, token->args[0], ft_strlen(token->args[0]));
-		write(2, ": command not found\n", 20);
-		g_exit_st = 127;
-	}
-	tmp = params->data->head;
-	while (tmp)
-	{
-		if (tmp->fds[0] > 0)
-			close(tmp->fds[0]);
-		if (tmp->fds[1] != 1 && tmp->fds[1] >= 0)
-			close(tmp->fds[1]);
-		tmp = tmp->next;
-	}
-	free(params->data->pid);
-	free(params->data->pipe_fd);
-	free_struct(params->data);
-	free_params(params);
-	if (old_fd != NULL)
-	{
-		close(old_fd[0]);
-		close(old_fd[1]);
-	}
-	exit(g_exit_st);
-}
-
 // execve if not built-in
 static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 {
@@ -148,17 +137,16 @@ static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
 	if (pid == 0)
 	{
 		ft_signals(COMMAND);
-		if (get_path(token->args, params) == 126)
-			command_no(token, params, old_fd, 1);
+		get_path(token->args, token, params, old_fd);
 		if (errno == 12)
 			return ;
 		execve(token->args[0], token->args, params->env);
-		command_no(token, params, old_fd, 0);
+		write(2, "minishell: ", 11);
+		write(2, token->args[0], ft_strlen(token->args[0]));
+		write(2, ": command not found\n", 20);
+		g_exit_st = 127;
+		free_command_no(params, old_fd);
 	}
-	// if (token->fds[0] != 0)
-	// 	close(token->fds[0]);
-	// if (token->fds[1] != 1)
-	// 	close(token->fds[1]);
 	if (i == 0)
 	{
 		if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))

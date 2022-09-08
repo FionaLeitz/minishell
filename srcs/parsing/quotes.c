@@ -137,7 +137,6 @@ int	del_quotes_redir(t_token *token, t_params *params)
 			if (in_del_quotes_redir(token->red[i]) == -1)
 				return (-1);
 		}
-//		replace_quotes(token->red[i]);
 		token = token->next;
 	}
 	return (0);
@@ -170,6 +169,5 @@ int	del_quotes(t_token *token, t_params *params)
 		tmp = tmp->next;
 	}
 	tmp = token;
-//	return (0);
 	return (del_quotes_redir(tmp, params));
 }
