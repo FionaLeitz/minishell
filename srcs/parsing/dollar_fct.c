@@ -35,54 +35,54 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 }
 
 // replace $
-int	in_replace(char *str, int s, t_token *token, t_data *data)
+int	in_replace(char *str, int s, char **str_value, t_data *data)
 {
 	char	*tmp;
 
 	if (str == NULL)
 	{
-		ft_memmove(&token->value[s], &token->value[data->i],
-			ft_strlen(&token->value[data->i]) + 1);
+		ft_memmove(&str_value[0][s], &str_value[0][data->i],
+			ft_strlen(&str_value[0][data->i]) + 1);
 		data->i = s - 1;
 	}
 	else
 	{
 		tmp = malloc(sizeof(char) * (s + ft_strlen(str)
-					+ ft_strlen(&token->value[data->i]) + 1));
+					+ ft_strlen(&str_value[0][data->i]) + 1));
 		if (tmp == NULL)
 			return (set_error_malloc("expand\n"));
 		ft_bzero(tmp, s + ft_strlen(str)
-			+ ft_strlen(&token->value[data->i]) + 1);
-		tmp = ft_memmove(tmp, token->value, s);
+			+ ft_strlen(&str_value[0][data->i]) + 1);
+		tmp = ft_memmove(tmp, str_value[0], s);
 		tmp = ft_strcat(tmp, str);
-		tmp = ft_strcat(tmp, &token->value[data->i]);
-		free(token->value);
-		token->value = tmp;
+		tmp = ft_strcat(tmp, &str_value[0][data->i]);
+		free(str_value[0]);
+		str_value[0] = tmp;
 		data->i = s + ft_strlen(str) - 1;
 	}
 	return (0);
 }
 
-static int	if_dollar(t_token *token, t_data *data, t_params *par, int *quote)
+int	if_dollar(char **str_value, t_data *data, t_params *par, int *quote)
 {
 	int		s;
 	char	*str;
 	char	buff[12];
 
 	s = data->i++;
-	while (token->value[data->i] && ft_space(token->value[data->i])
-		!= 0 && token->value[data->i] != '\'' && token->value[
-			data->i] != '\"' && token->value[data->i] != '$')
+	while (str_value[0][data->i] && ft_space(str_value[0][data->i])
+		!= 0 && str_value[0][data->i] != '\'' && str_value[0][
+			data->i] != '\"' && str_value[0][data->i] != '$')
 	{
 		data->i++;
-		if (token->value[data->i - 1] == '?')
+		if (str_value[0][data->i - 1] == '?')
 			break ;
 	}
 	quote[1] = data->i - s - 1;
 	if (quote[0] % 2 == 0)
 	{
-		str = rep(par->env, &token->value[s + 1], quote, buff);
-		if (in_replace(str, s, token, data) == -1)
+		str = rep(par->env, &str_value[0][s + 1], quote, buff);
+		if (in_replace(str, s, &str_value[0], data) == -1)
 			return (-1);
 	}
 	return (0);
@@ -111,7 +111,7 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 			}
 			if (token->value[data->i] == '$')
 			{
-				if (if_dollar(token, data, params, quote) == -1)
+				if (if_dollar(&token->value, data, params, quote) == -1)
 					return (-1);
 			}
 		}
