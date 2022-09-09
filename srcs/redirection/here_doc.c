@@ -81,18 +81,6 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	return (0);
 }
 
-// note if quotes in delimiter
-static void	check_quote_delim(char *delim)
-{
-	char	*delim_tmp;
-
-	delim_tmp = delim;
-	if (delim_quotes(delim) == 1)
-		delim = del_quotes_hd(delim);
-	else
-		delim = delim_tmp;
-}
-
 // check error in ft_here_doc
 static int	verify_error(char *pathname, t_params *params, int child)
 {

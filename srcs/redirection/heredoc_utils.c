@@ -26,32 +26,6 @@ int	ft_if_char(char *str, char c)
 	return (-1);
 }
 
-int	delim_quotes(char *delim)
-{
-	int	i;
-
-	i = 0;
-	while (delim[i])
-	{
-		if (delim[i] == '\'' || delim[i] == '\"')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	check_delim(char *delim)
-{
-	int	quotes;
-
-	quotes = 0;
-	if (delim_quotes(delim) == 0)
-		quotes = 0;
-	else if (delim_quotes(delim) == 1)
-		quotes = 1;
-	return (quotes);
-}
-
 void	print_error_heredoc(char *str, int fd, t_params *params)
 {
 	ft_putstr_fd("minishell: warning: ", 2);
@@ -61,34 +35,4 @@ void	print_error_heredoc(char *str, int fd, t_params *params)
 	ft_putstr_fd("')\n", 2);
 	free_in_heredoc(params, fd);
 	exit(0);
-}
-
-char	*del_quotes_hd(char *delim)
-{
-	int	i;
-
-	i = 0;
-	while (delim[i] != '\0')
-	{
-		if (delim[i] == '\'' || delim[i] == '\"')
-			i = in_del_quote_hd(delim, i);
-		if (delim[i] == '\0')
-			break ;
-		if (delim[i] == '\'' || delim[i] == '\"')
-			i--;
-		i++;
-	}
-	return (delim);
-}
-
-int	in_del_quote_hd(char *str, int i)
-{
-	char	quote;
-
-	quote = str[i];
-	ft_memcpy(&str[i], &str[i + 1], ft_strlen(&str[i + 1]) + 1);
-	while (str[i] != quote)
-		i++;
-	ft_memcpy(&str[i], &str[i + 1], ft_strlen(&str[i + 1]) + 1);
-	return (i);
 }

@@ -17,10 +17,14 @@ _ORANGE=$'\033[38;2;255;165;0m
 
 NAME  = minishell
 
-SRCS =	srcs/builtin/cd.c				\
+SRCS =	main.c 							\
+		prompt.c 							\
+		signals.c 							\
+	srcs/builtin/cd.c					\
 	srcs/builtin/create_export.c		\
 	srcs/builtin/echo.c					\
-	srcs/builtin/exit.c					\
+	srcs/builtin/env.c 					\
+	srcs/builtin/exit.c 				\
 	srcs/builtin/export.c				\
 	srcs/builtin/export2.c				\
 	srcs/builtin/get_env.c				\
@@ -35,6 +39,7 @@ SRCS =	srcs/builtin/cd.c				\
 	srcs/parsing/parse.c 				\
 	srcs/parsing/quotes.c 				\
 	srcs/parsing/redirection.c 			\
+	srcs/redirection/here_doc_delim.c 	\
 	srcs/redirection/here_doc.c 		\
 	srcs/redirection/heredoc_utils.c 	\
 	srcs/redirection/new_heredoc.c 		\
@@ -44,9 +49,7 @@ SRCS =	srcs/builtin/cd.c				\
 	srcs/utils/init.c 					\
 	srcs/utils/table_utils.c 			\
 	srcs/utils/utils.c 					\
-	main.c 								\
-	prompt.c 							\
-	signals.c 							\
+	
 
 OBJS	= ${SRCS:.c=.o}
 

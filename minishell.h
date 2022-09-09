@@ -140,7 +140,7 @@ void		replace_quotes(char *str);
 int			ft_cut(t_data *data, t_params *params);
 int			print_prompt(t_data *data, t_params *params);
 //free.c
-int		free_exit(t_params *params, t_data *data, int *old_fd);
+int			free_exit(t_params *params, t_data *data, int *old_fd);
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
 //signaux.c
@@ -159,14 +159,7 @@ char		*write_hd_expand(char *line, int fd, t_params *params);
 char		*rep_hd(t_params *params, char *str, int size, int quote);
 char		*in_replace_hd(char *str, int s, char *line, int *i);
 //char		*expand_heredoc(char *line, t_params *params);
-//heredoc_utils.c
-int			ft_if_char(char *str, char c);
-char		*ft_strncpy(char *dest, char *src, unsigned int n);
-int			delim_quotes(char *delim);
-int			check_delim(char *delim);
-void		print_error_heredoc(char *str, int fd, t_params *params);
-char		*del_quotes_hd(char *delim);
-int			in_del_quote_hd(char *str, int i);
+
 //parse.c
 void		jump_quotes(char *str, t_data *data);
 int			check_string(t_data *data);
@@ -201,6 +194,17 @@ int			del_quotes(t_token *token, t_params *params);
 int			ft_count_words(t_data *data, char *s);
 int			in_create_tab(char *str, int *i);
 int			create_tab(t_data *data, t_token *token);
+
+//REDIRECTION
+//here_doc_delim.c
+int			delim_quotes(char *delim);
+int			check_delim(char *delim);
+char		*del_quotes_hd(char *delim);
+void		check_quote_delim(char *delim);
+//heredoc_utils.c
+int			ft_if_char(char *str, char c);
+void		print_error_heredoc(char *str, int fd, t_params *params);
+//UTILS
 //utils.c
 void		*error_malloc_return(char *str, void *ptr);
 int			set_error_malloc(char *str);
