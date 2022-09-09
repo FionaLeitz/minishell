@@ -22,7 +22,8 @@ int	ft_pwd(char **arg)
 	(void)arg;
 	if (getcwd(path, 4095) == NULL)
 	{
-		perror("Minishell: pwd: error retrieving current directory: getcwd: cannot access parent directories");
+		perror("Minishell: pwd: error retrieving current directory: getcwd: \
+		cannot access parent directories");
 		return (1);
 	}
 	path2 = ft_strdup(path);

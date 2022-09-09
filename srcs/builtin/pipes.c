@@ -105,11 +105,9 @@ static void	get_exit_st(int i, int *pid)
 // create childs
 int	ft_pipe(t_token *token, t_params *params, int *pid, t_pipe_fd *pipe_fd)
 {
-	int		i;
-	t_token	*tmp;
+	int	i;
 
 	i = -1;
-	tmp = token;
 	while (token)
 	{
 		ft_signals(MUTE);
