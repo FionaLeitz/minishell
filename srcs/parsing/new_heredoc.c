@@ -34,11 +34,7 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 		ft_signals(HEREDOC);
 		line = readline("> ");
 		if (!line && g_exit_st != 130)
-		{
-//			free_in_heredoc(params, fd);
 			print_error_heredoc(del, fd, params);
-//			break;
-		}
 		if (!line && g_exit_st == 130)
 		{
 			free_in_heredoc(params, fd);

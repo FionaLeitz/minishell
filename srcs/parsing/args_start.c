@@ -97,8 +97,8 @@ int	create_tab(t_data *data, t_token *token)
 			if (token->args[j - 1] == NULL)
 				return (set_error_malloc("parse\n"));
 		}
-		while (token->value[i] != '\0' && ft_space(
-				token->value[i]) == 0)
+		while (token->value[i] != '\0'
+			&& ft_space(token->value[i]) == 0)
 			i++;
 	}
 	return (0);

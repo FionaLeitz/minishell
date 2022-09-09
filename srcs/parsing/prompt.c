@@ -130,14 +130,14 @@ static int	modify_line(t_data *data, int nbr)
 	return (nbr);
 }
 
-static void if_str_null(char *str, int i)
-{
-	if (str[i] == '\0')
-	{
-		str[i] == '\0';
-		return ;
-	}
-}
+// static void if_str_null(char *str, int i)
+// {
+// 	if (str[i] == '\0')
+// 	{
+// 		str[i] = '\0';
+// 		return ;
+// 	}
+// }
 
 
 static void	only_heredocs(t_data *data)
