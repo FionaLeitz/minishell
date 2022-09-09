@@ -90,29 +90,33 @@ typedef struct s_params
 	int				old_fd[2];
 }					t_params;
 
+
+
+
+void		replace_quotes2(char *str);
 // BUILT-IN
 // cd.c
 int			ft_cd(char **arg, t_params *params);
 // echo.c
 int			ft_echo(char **arg);
 // env.c
-int			ft_env(char **arg, t_params *params);
 int			new_env(char *arg, t_params *params);
-void		replace_quotes2(char *str);
+// print.c
+int			ft_env(char **arg, t_params *params);
+int			print_export(t_params *params);
 // execution.c
 int			ft_execute(t_token *token, t_params *params);
-void		*error_malloc_return(char *str, void *ptr);
 // exit.c
 int			ft_exit(char **arg, int i, t_params *params, int *old_fd);
+// create_export.c
+t_export	*create_export(char **env);
 // export.c
 int			ft_export(char **arg, t_params *params);
-t_export	*create_export(char **env);
 // export2.c
 int			place_new(char *arg, t_export *new, t_export *new2,
 				t_params *params);
 void		*free_export(t_export *export);
 t_export	*new_element(char *str);
-int			print_export(t_params *params);
 // get_env.c
 char		**ft_get_env(char **envp);
 // pipes.c
@@ -201,6 +205,7 @@ int			ft_count_words(t_data *data, char *s);
 int			in_create_tab(char *str, int *i);
 int			create_tab(t_data *data, t_token *token);
 //utils.c
+void		*error_malloc_return(char *str, void *ptr);
 int			set_error_malloc(char *str);
 int			ft_space(char c);
 int			check_fd(int fd, char *red);

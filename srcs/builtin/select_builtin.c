@@ -37,6 +37,7 @@ static int	error_path(char **path, int	*i, char *arg)
 	return (0);
 }
 
+// free all if error with command
 static void	free_command_no(t_params *params, int *old_fd)
 {
 	t_token	*tmp;
@@ -62,6 +63,7 @@ static void	free_command_no(t_params *params, int *old_fd)
 	exit(g_exit_st);
 }
 
+// check if command is a directory
 static int	path_directory(char	**arg, t_token *tok, t_params *par, int *fd)
 {
 	struct stat	*test;
@@ -82,6 +84,7 @@ static int	path_directory(char	**arg, t_token *tok, t_params *par, int *fd)
 	return (0);
 }
 
+// find potential command
 static int	find_path(char **arg, t_params *params, int i)
 {
 	char	**path;
@@ -107,7 +110,7 @@ static int	find_path(char **arg, t_params *params, int i)
 	return (0);
 }
 
-// get path of command if not built-in
+// check if command can be found
 static int	get_path(char **arg, t_token *token, t_params *params, int *old_fd)
 {
 	int	i;
@@ -134,6 +137,7 @@ static int	get_path(char **arg, t_token *token, t_params *params, int *old_fd)
 	return (0);
 }
 
+// execute command and write error if does not work
 static int	execute_command(t_token *token, t_params *params, int *old_fd)
 {
 	ft_signals(COMMAND);

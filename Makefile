@@ -34,6 +34,8 @@ SRCS =	srcs/parsing/main.c				\
 	srcs/parsing/new_heredoc.c			\
 	srcs/parsing/heredoc_utils.c		\
 	srcs/builtin/cd.c					\
+	srcs/builtin/print.c				\
+	srcs/builtin/create_export.c		\
 	srcs/builtin/echo.c					\
 	srcs/builtin/env.c					\
 	srcs/builtin/execution.c			\

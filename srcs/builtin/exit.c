@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// check if exit nbr is long long int
 static int	ft_check_long_long(char *nb)
 {
 	char	*long_long;

@@ -21,6 +21,13 @@ int	set_error_malloc(char *str)
 	return (-1);
 }
 
+// to return ptr if error malloc (norme)
+void	*error_malloc_return(char *str, void *ptr)
+{
+	set_error_malloc(str);
+	return (ptr);
+}
+
 // return 0 if c is white space, else return -1
 int	ft_space(char c)
 {
