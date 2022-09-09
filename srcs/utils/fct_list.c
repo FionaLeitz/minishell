@@ -30,25 +30,6 @@ t_token	*new_node(char *value)
 	return (new);
 }
 
-// create new element and place in first position on the list
-int	push_front(t_data *data, char *value)
-{	
-	t_token	*new;
-
-	new = new_node(value);
-	if (new == NULL)
-		return (-1);
-	if (data->head == NULL)
-	{
-		data->head = new;
-		return (0);
-	}
-	data->head->prev = new;
-	new->next = data->head;
-	data->head = new;
-	return (0);
-}
-
 // create new element and place in last position on the list
 int	push_back(t_data *data, char *value)
 {
