@@ -96,7 +96,7 @@ t_export	*new_element(char *str)
 }
 
 // print export if no argument
-void	print_export(t_params *params)
+int	print_export(t_params *params)
 {
 	t_export	*tmp;
 	int			i;
@@ -117,11 +117,10 @@ void	print_export(t_params *params)
 				else
 					ft_printf("%c", params->export->value[i]);
 			}
-			ft_printf("\"");
+			ft_printf("\"\n");
 		}
-		if (params->export->name[0] != '\0')
-			ft_printf("\n");
 		params->export = params->export->next;
 	}
 	params->export = tmp;
+	return (0);
 }

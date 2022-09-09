@@ -34,6 +34,13 @@ static void	bubble_sort_export(t_export *export)
 	}
 }
 
+// to return ptr if error malloc (norme)
+void	*error_malloc_return(char *str, void *ptr)
+{
+	set_error_malloc(str);
+	return (ptr);
+}
+
 // create export from env at the beggining of minishell
 t_export	*create_export(char **env)
 {
@@ -43,10 +50,7 @@ t_export	*create_export(char **env)
 
 	export = new_element(env[0]);
 	if (export == NULL)
-	{
-		set_error_malloc("export\n");
-		return (NULL);
-	}
+		return (error_malloc_return("export\n", NULL));
 	if (env[0] == NULL)
 		return (export);
 	tmp = export;
@@ -55,10 +59,7 @@ t_export	*create_export(char **env)
 	{
 		export->next = new_element(env[count]);
 		if (export->next == NULL)
-		{
-			set_error_malloc("creating export\n");
-			return (free_export(tmp));
-		}
+			return (error_malloc_return("export\n", NULL));
 		export = export->next;
 	}
 	export = tmp;
@@ -78,28 +79,24 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 	if (ft_strncmp(arg, tmp->name, limit - 1) == 0
 		&& tmp->name[limit - 1] == '\0' && arg[limit - 1] == '+')
 	{
-		str = malloc(sizeof(char) * (ft_strlen(&arg[limit])
-					+ ft_strlen(tmp->value)));
+		str = ft_strcat_malloc(tmp->value, &arg[limit + 1]);
 		if (str == NULL)
 			return (set_error_malloc("export\n"));
-		str[0] = '\0';
-		ft_strcat(str, tmp->value);
-		ft_strcat(str, &arg[limit + 1]);
 		free(tmp->value);
 		tmp->value = str;
-		return (1);
+		return (0);
 	}
-	if ((int)ft_strlen(tmp->name) >= limit && ft_strncmp(arg, tmp->name, limit) == 0
-			&& tmp->name[limit] == '\0')
+	if ((int)ft_strlen(tmp->name) >= limit && ft_strncmp(arg, tmp->name,
+			limit) == 0 && tmp->name[limit] == '\0')
 	{
 		free(tmp->value);
 		tmp->value = ft_strdup(&arg[limit]);
 		if (tmp->value == NULL)
 			return (set_error_malloc("export\n"));
-		return (1);
+		return (0);
 	}
-	return (0);
-}
+	return (1);
+}	
 
 // create if needed
 static int	new_export(char *arg, t_params *params)
@@ -117,16 +114,10 @@ static int	new_export(char *arg, t_params *params)
 	while (tmp)
 	{
 		ret = in_new_export(arg, tmp, limit);
-		if (ret == -1)
-			return (-1);
-		if (ret == 1)
-			return (0);
+		if (ret == -1 || ret == 0)
+			return (ret);
 		else if (ft_strncmp(arg, tmp->name, limit) < 0)
-		{
-			if (place_new(arg, tmp, tmp2, params) == -1)
-				return (-1);
-			return (0);
-		}
+			return (place_new(arg, tmp, tmp2, params));
 		tmp2 = tmp;
 		tmp = tmp->next;
 	}
@@ -136,6 +127,7 @@ static int	new_export(char *arg, t_params *params)
 	return (0);
 }
 
+// check if arg is invalid
 static int	ft_invalid(char *str)
 {
 	int	i;
@@ -159,10 +151,7 @@ int	ft_export(char **arg, t_params *params)
 
 	ret = 0;
 	if (arg[1] == NULL)
-	{
-		print_export(params);
-		return (ret);
-	}
+		return (print_export(params));
 	count = 0;
 	while (arg[++count])
 	{

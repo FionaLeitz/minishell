@@ -23,10 +23,7 @@ char	**ft_get_env(char **envp)
 		count++;
 	env = malloc(sizeof(char *) * (count + 1));
 	if (env == NULL)
-	{
-		set_error_malloc("creating env\n");
-		return (NULL);
-	}
+		return (error_malloc_return("creating env\n", NULL));
 	count = 0;
 	while (envp[count])
 	{
