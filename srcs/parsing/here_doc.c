@@ -51,6 +51,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 		return (-1);
 	if (pid == 0)
 	{
+		close(params->old_fd[0]);
 		free(path);
 		test = get_hd_line(delim, utils[0], utils[1], params);
 		if (test == -1)

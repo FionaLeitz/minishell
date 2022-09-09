@@ -64,6 +64,7 @@ int	in_replace(char *str, int s, char **str_value, t_data *data)
 	return (0);
 }
 
+// find replacement
 int	if_dollar(char **str_value, t_data *data, t_params *par, int *quote)
 {
 	int		s;
@@ -111,10 +112,8 @@ int	replace_var(t_token *token, t_data *data, t_params *params)
 				quote[0]++;
 			}
 			if (token->value[data->i] == '$')
-			{
 				if (if_dollar(&token->value, data, params, quote) == -1)
 					return (-1);
-			}
 		}
 		token = token->next;
 	}
