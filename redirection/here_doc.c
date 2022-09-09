@@ -41,6 +41,7 @@ char	*hd_name(void)
 	return (pathname);
 }
 
+// in child
 static int	then_child(char *delim, int *utils, t_params *params, char *path)
 {
 	int	test;
@@ -60,6 +61,7 @@ static int	then_child(char *delim, int *utils, t_params *params, char *path)
 	exit(g_exit_st);
 }
 
+// create child for heredoc
 static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 {
 	pid_t	pid;
@@ -79,6 +81,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	return (0);
 }
 
+// note if quotes in delimiter
 static void	check_quote_delim(char *delim)
 {
 	char	*delim_tmp;
@@ -88,6 +91,23 @@ static void	check_quote_delim(char *delim)
 		delim = del_quotes_hd(delim);
 	else
 		delim = delim_tmp;
+}
+
+// check error in ft_here_doc
+static int	verify_error(char *pathname, t_params *params, int child)
+{
+	if (errno == 12)
+	{
+		close(STDIN_FILENO);
+		free(pathname);
+		exit(free_exit(params, params->data, NULL));
+	}
+	if (check_child(child) == -1)
+	{
+		free(pathname);
+		return (-1);
+	}
+	return (0);
 }
 
 //main fct of here_doc, check delimiter, creates heredoc in child(fork) 
@@ -104,24 +124,13 @@ int	ft_here_doc(char *delim, t_params *params)
 	if (pathname == NULL)
 	{
 		close(STDIN_FILENO);
-		free_exit(params, params->data, NULL);
-		exit (12);
+		exit(free_exit(params, params->data, NULL));
 	}
 	utils[0] = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
 	child = fork_heredoc(delim, utils, params, pathname);
-	if (errno == 12)
-	{
-		close(STDIN_FILENO);
-		free(pathname);
-		free_exit(params, params->data, NULL);
-		exit (12);
-	}
-	if (check_child(child) == -1)
-	{
-		free(pathname);
+	if (verify_error(pathname, params, child) == -1)
 		return (-1);
-	}
 	ft_signals(DEFAULT);
 	if (utils[0] != -1)
 		close(utils[0]);

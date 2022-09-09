@@ -140,7 +140,7 @@ void		replace_quotes(char *str);
 int			ft_cut(t_data *data, t_params *params);
 int			print_prompt(t_data *data, t_params *params);
 //free.c
-void		free_exit(t_params *params, t_data *data, int *old_fd);
+int		free_exit(t_params *params, t_data *data, int *old_fd);
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
 //signaux.c
