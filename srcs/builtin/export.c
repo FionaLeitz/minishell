@@ -12,6 +12,24 @@
 
 #include "../../minishell.h"
 
+// if new element needs to be placed
+int	place_new(char *arg, t_export *new, t_export *new2, t_params *params)
+{
+	if (new2 == NULL)
+	{
+		params->export = new_element(arg);
+		if (params->export == NULL)
+			return (set_error_malloc("export\n"));
+		params->export->next = new;
+		return (0);
+	}
+	new2->next = new_element(arg);
+	if (new2->next == NULL)
+		return (set_error_malloc("export\n"));
+	new2->next->next = new;
+	return (0);
+}
+
 // concat if += and exist, or replace if exist
 static int	in_new_export(char *arg, t_export *tmp, int limit)
 {

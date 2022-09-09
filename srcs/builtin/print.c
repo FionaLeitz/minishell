@@ -1,23 +1,6 @@
 
 #include "../../minishell.h"
 
-// if env, print the environment unless arguments
-int	ft_env(char **arg, t_params *params)
-{
-	if (arg[1] != NULL)
-	{
-		ft_putstr_fd("env: ‘", 2);
-		ft_putstr_fd(arg[1], 2);
-		ft_putstr_fd("’: too many arguments\n", 2);
-		return (127);
-	}
-	if (params->env == NULL)
-		ft_printf("\n");
-	else
-		print_table(params->env);
-	return (0);
-}
-
 // print export if no argument
 int	print_export(t_params *params)
 {

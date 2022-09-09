@@ -12,6 +12,24 @@
 
 #include "../../minishell.h"
 
+// free export
+void	*free_export(t_export *export)
+{
+	t_export	*tmp;
+
+	while (export)
+	{
+		if (export->name)
+			free(export->name);
+		if (export->value)
+			free(export->value);
+		tmp = export;
+		export = export->next;
+		free(tmp);
+	}
+	return (NULL);
+}
+
 // free in exit, when exit
 int	free_exit(t_params *params, t_data *data, int *old_fd)
 {
