@@ -17,37 +17,36 @@ _ORANGE=$'\033[38;2;255;165;0m
 
 NAME  = minishell
 
-SRCS =	srcs/parsing/main.c				\
-	srcs/parsing/prompt.c				\
-	srcs/parsing/init.c					\
-	srcs/parsing/signaux.c				\
-	srcs/parsing/parse.c				\
-	srcs/parsing/fct_list.c				\
-	srcs/parsing/quotes.c				\
-	srcs/parsing/args_start.c			\
-	srcs/parsing/utils.c				\
-	srcs/parsing/redirection.c			\
-	srcs/parsing/redir_fd.c				\
-	srcs/parsing/dollar_fct.c			\
-	srcs/parsing/here_doc.c				\
-	srcs/parsing/free.c					\
-	srcs/parsing/new_heredoc.c			\
-	srcs/parsing/heredoc_utils.c		\
-	srcs/builtin/cd.c					\
-	srcs/builtin/print.c				\
+SRCS =	srcs/builtin/cd.c				\
 	srcs/builtin/create_export.c		\
 	srcs/builtin/echo.c					\
-	srcs/builtin/env.c					\
-	srcs/builtin/execution.c			\
 	srcs/builtin/exit.c					\
 	srcs/builtin/export.c				\
 	srcs/builtin/export2.c				\
 	srcs/builtin/get_env.c				\
-	srcs/builtin/pipes.c				\
+	srcs/builtin/print.c				\
 	srcs/builtin/pwd.c					\
-	srcs/builtin/select_builtin.c		\
-	srcs/builtin/table_utils.c			\
 	srcs/builtin/unset.c				\
+	srcs/execution/execution.c 			\
+	srcs/execution/pipes.c 				\
+	srcs/execution/select_builtin.c 	\
+	srcs/parsing/args_start.c			\
+	srcs/parsing/dollar_fct.c			\
+	srcs/parsing/parse.c 				\
+	srcs/parsing/quotes.c 				\
+	srcs/parsing/redirection.c 			\
+	srcs/redirection/here_doc.c 		\
+	srcs/redirection/heredoc_utils.c 	\
+	srcs/redirection/new_heredoc.c 		\
+	srcs/redirection/redir_fd.c 		\
+	srcs/utils/fct_list.c 				\
+	srcs/utils/free.c 					\
+	srcs/utils/init.c 					\
+	srcs/utils/table_utils.c 			\
+	srcs/utils/utils.c 					\
+	main.c 								\
+	prompt.c 							\
+	signals.c 							\
 
 OBJS	= ${SRCS:.c=.o}
 

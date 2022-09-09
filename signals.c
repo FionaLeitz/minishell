@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "minishell.h"
 
 // handles ctrl-c in the shell with prompt
 void	ft_sig_int(int signal)
