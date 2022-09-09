@@ -36,3 +36,13 @@ void	print_error_heredoc(char *str, int fd, t_params *params)
 	free_in_heredoc(params, fd);
 	exit(0);
 }
+
+// free things in heredoc's child
+void	free_in_heredoc(t_params *params, int fd)
+{
+	close(fd);
+	dup2(params->old_fd[0], 0);
+	close(params->old_fd[0]);
+	free_struct(params->data);
+	free_params(params);
+}

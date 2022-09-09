@@ -28,22 +28,6 @@ void	replace_quotes2(char *str)
 	}
 }
 
-//errno_malloc
-int	set_error_malloc(char *str)
-{
-	errno = ENOMEM;
-	ft_putstr_fd("Out of memory in ", 2);
-	ft_putstr_fd(str, 2);
-	return (-1);
-}
-
-// to return ptr if error malloc (norme)
-void	*error_malloc_return(char *str, void *ptr)
-{
-	set_error_malloc(str);
-	return (ptr);
-}
-
 // return 0 if c is white space, else return -1
 int	ft_space(char c)
 {
@@ -51,32 +35,6 @@ int	ft_space(char c)
 		|| c == '\v' || c == ' ')
 		return (0);
 	return (-1);
-}
-
-//fd protection
-int	check_fd(int fd, char *red)
-{
-	if (fd == -1)
-	{
-		ft_printf("Minishell: %s:", red);
-		perror(" ");
-		g_exit_st = 1;
-	}
-	return (-1);
-}
-
-//child protection when forking
-int	check_child(int pid)
-{
-	if (pid == -2)
-		return (-1);
-	if (pid < 0)
-	{
-		perror("Fork");
-		g_exit_st = 127;
-		return (-1);
-	}
-	return (0);
 }
 
 //increments SHLVL variable
