@@ -101,6 +101,7 @@ int			new_env(char *arg, t_params *params);
 void		replace_quotes2(char *str);
 // execution.c
 int			ft_execute(t_token *token, t_params *params);
+void		*error_malloc_return(char *str, void *ptr)
 // exit.c
 int			ft_exit(char **arg, int i, t_params *params, int *old_fd);
 // export.c
@@ -111,7 +112,7 @@ int			place_new(char *arg, t_export *new, t_export *new2,
 				t_params *params);
 void		*free_export(t_export *export);
 t_export	*new_element(char *str);
-void		print_export(t_params *params);
+int			print_export(t_params *params);
 // get_env.c
 char		**ft_get_env(char **envp);
 // pipes.c

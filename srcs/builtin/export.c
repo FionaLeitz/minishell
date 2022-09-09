@@ -84,7 +84,7 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 			return (set_error_malloc("export\n"));
 		free(tmp->value);
 		tmp->value = str;
-		return (1);
+		return (0);
 	}
 	if ((int)ft_strlen(tmp->name) >= limit && ft_strncmp(arg, tmp->name,
 			limit) == 0 && tmp->name[limit] == '\0')
@@ -93,10 +93,10 @@ static int	in_new_export(char *arg, t_export *tmp, int limit)
 		tmp->value = ft_strdup(&arg[limit]);
 		if (tmp->value == NULL)
 			return (set_error_malloc("export\n"));
-		return (1);
+		return (0);
 	}
-	return (0);
-}
+	return (1);
+}	
 
 // create if needed
 static int	new_export(char *arg, t_params *params)
@@ -114,16 +114,10 @@ static int	new_export(char *arg, t_params *params)
 	while (tmp)
 	{
 		ret = in_new_export(arg, tmp, limit);
-		if (ret == -1)
-			return (-1);
-		if (ret == 1)
-			return (0);
+		if (ret == -1 || ret == 0)
+			return (ret);
 		else if (ft_strncmp(arg, tmp->name, limit) < 0)
-		{
-			if (place_new(arg, tmp, tmp2, params) == -1)
-				return (-1);
-			return (0);
-		}
+			return (place_new(arg, tmp, tmp2, params));
 		tmp2 = tmp;
 		tmp = tmp->next;
 	}
@@ -157,10 +151,7 @@ int	ft_export(char **arg, t_params *params)
 
 	ret = 0;
 	if (arg[1] == NULL)
-	{
-		print_export(params);
-		return (ret);
-	}
+		return (print_export(params));
 	count = 0;
 	while (arg[++count])
 	{
