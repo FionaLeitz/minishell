@@ -18,13 +18,11 @@ _ORANGE=$'\033[38;2;255;165;0m
 NAME  = minishell
 
 SRCS =	srcs/builtin/cd.c							\
-		srcs/utils/create_export.c					\
 		srcs/builtin/echo.c							\
 		srcs/builtin/exit.c							\
 		srcs/builtin/export.c						\
 		srcs/builtin/export2.c						\
 		srcs/builtin/env.c							\
-		srcs/utils/get_env.c						\
 		srcs/builtin/print.c						\
 		srcs/builtin/pwd.c							\
 		srcs/builtin/unset.c						\
@@ -37,11 +35,14 @@ SRCS =	srcs/builtin/cd.c							\
 		srcs/parsing/quotes.c 						\
 		srcs/parsing/redirection.c 					\
 		srcs/redirection/here_doc.c 				\
+		srcs/redirection/here_doc_delim.c 			\
 		srcs/redirection/heredoc_utils.c 			\
 		srcs/redirection/new_heredoc.c 				\
 		srcs/redirection/redir_fd.c 				\
+		srcs/utils/create_export.c 					\
 		srcs/utils/fct_list.c 						\
 		srcs/utils/free.c 							\
+		srcs/utils/get_env.c						\
 		srcs/utils/init.c 							\
 		srcs/utils/table_utils.c 					\
 		srcs/utils/utils.c 							\
