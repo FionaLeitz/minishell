@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // free in exit, when exit
-void	free_exit(t_params *params, t_data *data, int *old_fd)
+int	free_exit(t_params *params, t_data *data, int *old_fd)
 {
 	if (old_fd != NULL)
 	{
@@ -24,6 +24,7 @@ void	free_exit(t_params *params, t_data *data, int *old_fd)
 	free(data->pipe_fd);
 	free_struct(data);
 	free_params(params);
+	return (12);
 }
 
 // free data
