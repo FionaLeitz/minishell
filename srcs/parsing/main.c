@@ -14,6 +14,7 @@
 
 int	g_exit_st = 0;
 
+// set up error malloc
 static int	if_errno(t_params params)
 {
 	free_params(&params);

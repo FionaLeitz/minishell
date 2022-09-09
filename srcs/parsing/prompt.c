@@ -33,6 +33,7 @@ int	syntax_check(t_data *data)
 	return (0);
 }
 
+// trim and send every token in function f
 int	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
 {
 	char	*s;
@@ -51,6 +52,7 @@ int	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
 	return (0);
 }
 
+// replace quotes
 void	replace_quotes(char *str)
 {
 	int	i;
@@ -66,6 +68,7 @@ void	replace_quotes(char *str)
 	}
 }
 
+// use replace_quotes on every string in tab
 static void	give_tab(char **tab)
 {
 	int	i;
@@ -105,6 +108,7 @@ int	ft_cut(t_data *data, t_params *params)
 	return (0);
 }
 
+// if parse error, suppress everything except heredocs before error
 static int	modify_line(t_data *data, int nbr)
 {
 	int	save;
@@ -130,15 +134,18 @@ static int	modify_line(t_data *data, int nbr)
 	return (nbr);
 }
 
-static void	if_str_zero(char *str, int i)
+// if no delimiter after heredoc with parse error
+static int	if_str_zero(char *str, int i)
 {
 	if (str[i] == '\0')
 	{
-		str[i] = '\0';
-		return ;
+		str[0] = '\0';
+		return (-1);
 	}
+	return (0);
 }
 
+// if parse error, keep only heredocs before error
 static void	only_heredocs(t_data *data)
 {
 	int	save;
@@ -157,7 +164,8 @@ static void	only_heredocs(t_data *data)
 			ft_memcpy(&data->trimmed[save], &data->trimmed[data->i],
 				ft_strlen(&data->trimmed[data->i]) + 2);
 			data->i = save + 2;
-			if_str_zero(data->trimmed, data->i);
+			if (if_str_zero(data->trimmed, data->i) == -1)
+				return ;
 			save += modify_line(data, save2);
 		}
 		data->i++;
@@ -165,6 +173,7 @@ static void	only_heredocs(t_data *data)
 	data->trimmed[save] = '\0';
 }
 
+// only if problem with malloc
 int	ft_get_out(t_data *data)
 {
 	free_struct(data);

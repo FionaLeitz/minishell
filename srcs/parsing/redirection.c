@@ -73,23 +73,7 @@ int	check_redir(t_data *data)
 	return (0);
 }
 
-static void	locate_redir(t_data *data, t_token *token)
-{
-	char	quote;
-
-	while (token->value[data->i] != '>' && token->value[data->i] != '<')
-	{
-		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
-		{
-			quote = token->value[data->i];
-			data->i++;
-			while (token->value[data->i] != quote)
-				data->i++;
-		}
-		data->i++;
-	}
-}
-
+// suppress spaces betwin redir sign and redir name
 static void	suppress_useless(t_data *data, t_token *token)
 {
 	int		tmp;
@@ -107,6 +91,24 @@ static void	suppress_useless(t_data *data, t_token *token)
 	while (token->value[data->i] != '\0' && ft_space(
 			token->value[data->i]) != 0 && token->value[data->i] != '>'
 		&& token->value[data->i] != '<')
+	{
+		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
+		{
+			quote = token->value[data->i];
+			data->i++;
+			while (token->value[data->i] != quote)
+				data->i++;
+		}
+		data->i++;
+	}
+}
+
+// find redirections
+static void	locate_redir(t_data *data, t_token *token)
+{
+	char	quote;
+
+	while (token->value[data->i] != '>' && token->value[data->i] != '<')
 	{
 		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
 		{

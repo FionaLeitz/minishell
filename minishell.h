@@ -156,7 +156,7 @@ void		check_exit_status(void);
 char		*hd_name(void);
 int			ft_here_doc(char *str, t_params *params);
 //int		ft_wait_hd(pid_t pid);
-int			get_hd_line(char *del, int fd, int quotes, t_params *params);
+//int			get_hd_line(char *del, int fd, int quotes, t_params *params);
 char		*write_hd_expand(char *line, int fd, t_params *params);
 //expand_heredoc.c
 char		*rep_hd(t_params *params, char *str, int size, int quote);

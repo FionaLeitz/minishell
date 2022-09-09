@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// free in exit, when exit
 void	free_exit(t_params *params, t_data *data, int *old_fd)
 {
 	if (old_fd != NULL)
