@@ -73,33 +73,30 @@ int	in_create_tab(char *str, int *i)
 // create char **args for every token, separating every "word"
 int	create_tab(t_data *data, t_token *token)
 {
-	int		i;
-	int		count;
-	int		j;
-	int		k;
 	int		tmp;
+	int		iter[4];
 
-	i = 0;
-	j = 0;
-	k = ft_count_words(data, token->value);
-	token->args = malloc(sizeof(char *) * (k + 1));
+	iter[0] = 0;
+	iter[1] = 0;
+	iter[2] = ft_count_words(data, token->value);
+	token->args = malloc(sizeof(char *) * (iter[2] + 1));
 	if (!token->args)
 		return (set_error_malloc("parse\n"));
-	token->args[k] = NULL;
-	while (j < k)
+	token->args[iter[2]] = NULL;
+	while (iter[1] < iter[2])
 	{
-		tmp = i;
-		count = in_create_tab(token->value, &i);
-		if (ft_space(token->value[i]) == 0
-			|| token->value[i] == '\0')
+		tmp = iter[0];
+		iter[3] = in_create_tab(token->value, &iter[0]);
+		if (ft_space(token->value[iter[0]]) == 0
+			|| token->value[iter[0]] == '\0')
 		{
-			token->args[j++] = ft_strndup(&token->value[tmp], count);
-			if (token->args[j - 1] == NULL)
+			token->args[iter[1]++] = ft_strndup(&token->value[tmp], iter[3]);
+			if (token->args[iter[1] - 1] == NULL)
 				return (set_error_malloc("parse\n"));
 		}
-		while (token->value[i] != '\0'
-			&& ft_space(token->value[i]) == 0)
-			i++;
+		while (token->value[iter[0]] != '\0'
+			&& ft_space(token->value[iter[0]]) == 0)
+			iter[0]++;
 	}
 	return (0);
 }

@@ -154,6 +154,7 @@ int	count_red(t_data *data, t_token *token)
 	char	quote;
 
 	count = 0;
+	quote = '\0';
 	data->i = 0;
 	while (token->value[data->i] != '\0')
 	{

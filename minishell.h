@@ -211,7 +211,7 @@ void		ft_exit_d(t_data *data, t_params *params);
 //new_heredoc.c
 void		free_in_heredoc(t_params *params, int fd);
 int			get_hd_line(char *del, int fd, int quotes, t_params *params);
-char		*write_hd(char *line, int fd, int quotes, t_params *params);
+char		*write_hd(char *line, int quotes, t_params *params);
 char		*expand_env_in_heredoc(char *str, t_params *params,
 				int size, char *buff);
 char		*expand_heredoc(char *line, t_params *params, int *i);

@@ -26,17 +26,11 @@ char	*hd_name(void)
 	{
 		tmp = ft_itoa(i);
 		if (tmp == NULL)
-		{
-			set_error_malloc("heredoc\n");
-			return (NULL);
-		}
+			return (error_malloc_return("heredoc\n", NULL));
 		pathname = ft_strjoin("/tmp/hd", tmp);
 		free(tmp);
 		if (pathname == NULL)
-		{
-			set_error_malloc("heredoc\n");
-			return (NULL);
-		}
+			return (error_malloc_return("heredoc\n", NULL));
 		fd_exist = open(pathname, O_RDONLY);
 		if (fd_exist == -1)
 			break ;
@@ -80,6 +74,14 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	}
 	return (0);
 }
+
+// static char *check_delim(char *delim, )
+// {
+// 	char *delim_tmp;
+
+// 	delim_tmp - delim
+
+// }
 
 //main fct of here_doc, check delimiter, creates heredoc in child(fork) 
 int	ft_here_doc(char *delim, t_params *params)

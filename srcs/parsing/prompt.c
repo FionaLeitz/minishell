@@ -130,15 +130,14 @@ static int	modify_line(t_data *data, int nbr)
 	return (nbr);
 }
 
-// static void if_str_null(char *str, int i)
-// {
-// 	if (str[i] == '\0')
-// 	{
-// 		str[i] = '\0';
-// 		return ;
-// 	}
-// }
-
+static void	if_str_zero(char *str, int i)
+{
+	if (str[i] == '\0')
+	{
+		str[i] = '\0';
+		return ;
+	}
+}
 
 static void	only_heredocs(t_data *data)
 {
@@ -158,11 +157,7 @@ static void	only_heredocs(t_data *data)
 			ft_memcpy(&data->trimmed[save], &data->trimmed[data->i],
 				ft_strlen(&data->trimmed[data->i]) + 2);
 			data->i = save + 2;
-			if (data->trimmed[data->i] == '\0')
-			{
-				data->trimmed[0] = '\0';
-				return ;
-			}
+			if_str_zero(data->trimmed, data->i);
 			save += modify_line(data, save2);
 		}
 		data->i++;

@@ -22,7 +22,7 @@ void	free_in_heredoc(t_params *params, int fd)
 }
 
 // fct to get the line of the here_doc with readline as in prompt
-int get_hd_line(char *del, int fd, int quotes, t_params *params)
+int	get_hd_line(char *del, int fd, int quotes, t_params *params)
 {
 	char	*line;
 	char	*new;
@@ -44,17 +44,14 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 		{
 			tmp = ft_strdup(line);
 			if (tmp == NULL)
-			{
-				set_error_malloc("heredoc\n");
-				return (-1);
-			}
+				return (set_error_malloc("heredoc\n"));
 			if (line && ft_strcmp(line, del) == 0)
 			{
 				free(tmp);
 				break ;
 			}
 			if (line)
-				new = write_hd(tmp, fd, quotes, params);
+				new = write_hd(tmp, quotes, params);
 			if (new == NULL)
 				return (-1);
 		}
@@ -66,12 +63,11 @@ int get_hd_line(char *del, int fd, int quotes, t_params *params)
 	return (0);
 }
 
-char	*write_hd(char *line, int fd, int quotes, t_params *params)
+char	*write_hd(char *line, int quotes, t_params *params)
 {
 	int		i;
 	char	*new;
 
-	(void)fd;
 	i = 0;
 	new = NULL;
 	while (line[i])
@@ -87,7 +83,8 @@ char	*write_hd(char *line, int fd, int quotes, t_params *params)
 	return (new);
 }
 
-char	*expand_env_in_heredoc(char *str, t_params *params, int size, char *buff)
+char	*expand_env_in_heredoc(char *str, t_params *params,
+			int size, char *buff)
 {
 	int		count;
 	char	*tmp;
