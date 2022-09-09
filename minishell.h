@@ -101,7 +101,7 @@ int			new_env(char *arg, t_params *params);
 void		replace_quotes2(char *str);
 // execution.c
 int			ft_execute(t_token *token, t_params *params);
-void		*error_malloc_return(char *str, void *ptr)
+void		*error_malloc_return(char *str, void *ptr);
 // exit.c
 int			ft_exit(char **arg, int i, t_params *params, int *old_fd);
 // export.c

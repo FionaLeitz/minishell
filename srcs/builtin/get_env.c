@@ -31,8 +31,7 @@ char	**ft_get_env(char **envp)
 		if (env[count] == NULL)
 		{
 			free_table(env);
-			set_error_malloc("creating env\n");
-			return (NULL);
+			return (error_malloc_return("creating env\n", NULL));
 		}
 		replace_quotes2(env[count]);
 		count++;
