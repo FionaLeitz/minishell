@@ -41,30 +41,34 @@ char	*hd_name(void)
 	return (pathname);
 }
 
+static int	then_child(char *delim, int *utils, t_params *params, char *path)
+{
+	int	test;
+
+	free(path);
+		test = get_hd_line(delim, utils[0], utils[1], params);
+	if (test == -1)
+		return (-1);
+	if (test == -2)
+		return (-2);
+	if (utils[0] != -1)
+		close(utils[0]);
+	free_struct(params->data);
+	free_params(params);
+	if (errno == 12)
+		exit(12);
+	exit(g_exit_st);
+}
+
 static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 {
 	pid_t	pid;
-	int		test;
 
 	pid = fork();
 	if (check_child(pid) == -1)
 		return (-1);
 	if (pid == 0)
-	{
-		free(path);
-		test = get_hd_line(delim, utils[0], utils[1], params);
-		if (test == -1)
-			return (-1);
-		if (test == -2)
-			return (-2);
-		if (utils[0] != -1)
-			close(utils[0]);
-		free_struct(params->data);
-		free_params(params);
-		if (errno == 12)
-			exit(12);
-		exit(g_exit_st);
-	}
+		return (then_child(delim, utils, params, path));
 	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
 		g_exit_st = WEXITSTATUS(g_exit_st);
 	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st))
@@ -75,29 +79,27 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	return (0);
 }
 
-// static char *check_delim(char *delim, )
-// {
-// 	char *delim_tmp;
+static void	check_quote_delim(char *delim)
+{
+	char	*delim_tmp;
 
-// 	delim_tmp - delim
-
-// }
+	delim_tmp = delim;
+	if (delim_quotes(delim) == 1)
+		delim = del_quotes_hd(delim);
+	else
+		delim = delim_tmp;
+}
 
 //main fct of here_doc, check delimiter, creates heredoc in child(fork) 
 int	ft_here_doc(char *delim, t_params *params)
 {
 	char		*pathname;
 	int			utils[2];
-	char		*delim_tmp;
 	int			child;
 
 	g_exit_st = 0;
-	delim_tmp = delim;
 	utils[1] = check_delim(delim);
-	if (delim_quotes(delim) == 1)
-		delim = del_quotes_hd(delim);
-	else
-		delim = delim_tmp;
+	check_quote_delim(delim);
 	pathname = hd_name();
 	if (pathname == NULL)
 	{

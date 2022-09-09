@@ -38,6 +38,35 @@ int	get_fd_output(char *pathname, char *red)
 	return (fd);
 }
 
+static void	if_rrd(char **str, int *i, t_token *token)
+{
+	if (str[*i][0] == '>')
+	{
+		if (token->fds[1] != 1 && token->fds[1] != -1)
+			close(token->fds[1]);
+		if (str[*i][1] == '>')
+			token->fds[1] = get_fd_output(&str[*i][2], ">>");
+		else
+			token->fds[1] = get_fd_output(&str[*i][1], ">");
+	}
+}
+
+static void	if_lrd(char **str, int *i, t_token *token, t_params *params)
+{
+	if (str[*i][0] == '<')
+	{
+		if (token->fds[0] > 0)
+			close(token->fds[0]);
+		if (str[*i][1] == '<')
+		{
+			params->old_fd[0] = dup(0);
+			token->fds[0] = ft_here_doc(&str[*i][2], params);
+		}
+		else
+			token->fds[0] = get_fd_input(&str[*i][1], "<");
+	}
+}
+
 void	ft_redirection(char **str, t_params *params, t_token *token)
 {
 	int	i;
@@ -45,27 +74,8 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i][0] == '>')
-		{
-			if (token->fds[1] != 1 && token->fds[1] != -1)
-				close(token->fds[1]);
-			if (str[i][1] == '>')
-				token->fds[1] = get_fd_output(&str[i][2], ">>");
-			else
-				token->fds[1] = get_fd_output(&str[i][1], ">");
-		}
-		if (str[i][0] == '<')
-		{
-			if (token->fds[0] > 0)
-				close(token->fds[0]);
-			if (str[i][1] == '<')
-			{
-				params->old_fd[0] = dup(0);
-				token->fds[0] = ft_here_doc(&str[i][2], params);
-			}
-			else
-				token->fds[0] = get_fd_input(&str[i][1], "<");
-		}
+		if_rrd(str, &i, token);
+		if_lrd(str, &i, token, params);
 		if (token->fds[0] == -1 || token->fds[1] == -1)
 			break ;
 	}

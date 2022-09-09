@@ -109,6 +109,21 @@ int	replace_var_redir(char **str, t_data *data, t_params *params)
 	return (0);
 }
 
+static void	while_loop_in_delquotesredir(char **red, int *i, int *j)
+{
+	while (red[*i][++(*j)] != '\0')
+	{
+		if (red[*i][0] == '<' && red[*i][1] == '<')
+			break ;
+		if (red[*i][*j] == '\'' || red[*i][*j] == '\"')
+			*j = in_del_quote(red[*i], *j);
+		if (red[*i][*j] == '\0')
+			break ;
+		if (red[*i][*j] == '\'' || red[*i][*j] == '\"')
+			(*j)--;
+	}
+}
+
 // find suppressable quotes in redirections
 int	del_quotes_redir(t_token *token, t_params *params)
 {
@@ -123,17 +138,7 @@ int	del_quotes_redir(t_token *token, t_params *params)
 			if (!(token->red[i][0] == '<' && token->red[i][1] == '<'))
 				replace_var_redir(&token->red[i], params->data, params);
 			j = -1;
-			while (token->red[i][++j] != '\0')
-			{
-				if (token->red[i][0] == '<' && token->red[i][1] == '<')
-					break ;
-				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
-					j = in_del_quote(token->red[i], j);
-				if (token->red[i][j] == '\0')
-					break ;
-				if (token->red[i][j] == '\'' || token->red[i][j] == '\"')
-					j--;
-			}
+			while_loop_in_delquotesredir(token->red, &i, &j);
 			if (in_del_quotes_redir(token->red[i]) == -1)
 				return (-1);
 		}

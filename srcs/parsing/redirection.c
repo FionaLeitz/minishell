@@ -147,31 +147,37 @@ int	get_red(t_data *data, t_token *token, int count)
 	return (0);
 }
 
+static void	while_loop_in_count_red(char *value, int *count)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	while (value[i] != '\0')
+	{
+		if (value[i] == '\'' || value[i] == '\"')
+		{
+			quote = value[i++];
+			while (value[i] != quote)
+				i++;
+		}
+		else if (value[i] == '>' || value[i] == '<')
+		{
+			if (value[i] == value[i + 1])
+				i++;
+			(*count)++;
+		}
+		i++;
+	}
+}
+
 // count redirection's number and create char **red (redirection's list)
 int	count_red(t_data *data, t_token *token)
 {
 	int		count;
-	char	quote;
 
 	count = 0;
-	quote = '\0';
-	data->i = 0;
-	while (token->value[data->i] != '\0')
-	{
-		if (token->value[data->i] == '\'' || token->value[data->i] == '\"')
-		{
-			quote = token->value[data->i++];
-			while (token->value[data->i] != quote)
-				data->i++;
-		}
-		else if (token->value[data->i] == '>' || token->value[data->i] == '<')
-		{
-			if (token->value[data->i] == token->value[data->i + 1])
-				data->i++;
-			count++;
-		}
-		data->i++;
-	}
+	while_loop_in_count_red(token->value, &count);
 	token->red = malloc(sizeof(char *) * (count + 1));
 	if (token->red == NULL)
 		return (set_error_malloc("parse\n"));
