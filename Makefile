@@ -29,16 +29,20 @@ SRCS =	srcs/builtin/cd.c							\
 		srcs/execution/execution.c 					\
 		srcs/execution/pipes.c 						\
 		srcs/execution/select_builtin.c 			\
+		srcs/execution/make_execute_cmd.c 			\
 		srcs/parsing/args_start.c					\
 		srcs/parsing/dollar_fct.c					\
 		srcs/parsing/parse.c 						\
 		srcs/parsing/quotes.c 						\
+		srcs/parsing/del_quotes.c 					\
 		srcs/parsing/redirection.c 					\
+		srcs/parsing/parse_redir.c 					\
 		srcs/redirection/here_doc.c 				\
 		srcs/redirection/here_doc_delim.c 			\
 		srcs/redirection/heredoc_utils.c 			\
-		srcs/redirection/new_heredoc.c 				\
+		srcs/redirection/heredoc_line.c 			\
 		srcs/redirection/redir_fd.c 				\
+		srcs/redirection/expand_heredoc.c 			\
 		srcs/utils/create_export.c 					\
 		srcs/utils/fct_list.c 						\
 		srcs/utils/free.c 							\
@@ -46,6 +50,7 @@ SRCS =	srcs/builtin/cd.c							\
 		srcs/utils/init.c 							\
 		srcs/utils/table_utils.c 					\
 		srcs/utils/utils.c 							\
+		srcs/utils/protections.c 					\
 		main.c 										\
 		prompt.c 									\
 		signals.c 									\

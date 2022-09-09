@@ -37,32 +37,6 @@ static int	error_path(char **path, int	*i, char *arg)
 	return (0);
 }
 
-// free all if error with command
-static void	free_command_no(t_params *params, int *old_fd)
-{
-	t_token	*tmp;
-
-	tmp = params->data->head;
-	while (tmp)
-	{
-		if (tmp->fds[0] > 0)
-			close(tmp->fds[0]);
-		if (tmp->fds[1] != 1 && tmp->fds[1] >= 0)
-			close(tmp->fds[1]);
-		tmp = tmp->next;
-	}
-	free(params->data->pid);
-	free(params->data->pipe_fd);
-	free_struct(params->data);
-	free_params(params);
-	if (old_fd != NULL)
-	{
-		close(old_fd[0]);
-		close(old_fd[1]);
-	}
-	exit(g_exit_st);
-}
-
 // check if command is a directory
 static int	path_directory(char	**arg, t_token *tok, t_params *par, int *fd)
 {
@@ -111,7 +85,7 @@ static int	find_path(char **arg, t_params *params, int i)
 }
 
 // check if command can be found
-static int	get_path(char **arg, t_token *token, t_params *params, int *old_fd)
+int	get_path(char **arg, t_token *token, t_params *params, int *old_fd)
 {
 	int	i;
 
@@ -135,51 +109,6 @@ static int	get_path(char **arg, t_token *token, t_params *params, int *old_fd)
 	if (find_path(arg, params, i) == -1)
 		return (-1);
 	return (0);
-}
-
-// execute command and write error if does not work
-static int	execute_command(t_token *token, t_params *params, int *old_fd)
-{
-	ft_signals(COMMAND);
-	get_path(token->args, token, params, old_fd);
-	if (errno == 12)
-		return (-1);
-	execve(token->args[0], token->args, params->env);
-	write(2, "minishell: ", 11);
-	write(2, token->args[0], ft_strlen(token->args[0]));
-	write(2, ": command not found\n", 20);
-	g_exit_st = 127;
-	free_command_no(params, old_fd);
-	return (0);
-}
-
-// execve if not built-in
-static void	make_command(t_token *token, t_params *params, int i, int *old_fd)
-{
-	int	pid;
-	int	status;
-
-	pid = 0;
-	status = 0;
-	if (i == 0)
-	{
-		ft_signals(MUTE);
-		pid = fork();
-		if (check_child(pid) == -1)
-			return ;
-	}
-	if (pid == 0)
-		if (execute_command(token, params, old_fd) == -1)
-			return ;
-	if (i == 0)
-	{
-		if (0 < waitpid(pid, &g_exit_st, 0) && (WIFEXITED(g_exit_st)))
-			g_exit_st = WEXITSTATUS(g_exit_st);
-		else if (WIFSIGNALED(g_exit_st))
-			g_exit_st = 128 + WTERMSIG(g_exit_st);
-		check_exit_status();
-	}
-	ft_signals(DEFAULT);
 }
 
 // select if built-in

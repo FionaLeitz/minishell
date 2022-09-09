@@ -85,3 +85,29 @@ void	free_params(t_params *params)
 		free(tmp);
 	}
 }
+
+// free all if error with command in select builtin
+void	free_command_no(t_params *params, int *old_fd)
+{
+	t_token	*tmp;
+
+	tmp = params->data->head;
+	while (tmp)
+	{
+		if (tmp->fds[0] > 0)
+			close(tmp->fds[0]);
+		if (tmp->fds[1] != 1 && tmp->fds[1] >= 0)
+			close(tmp->fds[1]);
+		tmp = tmp->next;
+	}
+	free(params->data->pid);
+	free(params->data->pipe_fd);
+	free_struct(params->data);
+	free_params(params);
+	if (old_fd != NULL)
+	{
+		close(old_fd[0]);
+		close(old_fd[1]);
+	}
+	exit(g_exit_st);
+}

@@ -124,6 +124,7 @@ int			ft_pwd(char **arg);
 // select_builtin.c
 void		ft_select_builtin(t_token *token, t_params *params, int i,
 				int *old_fd);
+int			get_path(char **arg, t_token *token, t_params *params, int *old_fd);
 // table_utils.c
 void		print_table(char **table);
 void		free_table(char **table);
@@ -139,10 +140,7 @@ int			syntax_check(t_data *data);
 void		replace_quotes(char *str);
 int			ft_cut(t_data *data, t_params *params);
 int			print_prompt(t_data *data, t_params *params);
-//free.c
-int			free_exit(t_params *params, t_data *data, int *old_fd);
-void		free_struct(t_data *data);
-void		free_params(t_params *params);
+
 //signaux.c
 void		ft_sig_int(int signal);
 void		ft_sig_quit(int signal);
@@ -204,6 +202,7 @@ void		check_quote_delim(char *delim);
 //heredoc_utils.c
 int			ft_if_char(char *str, char c);
 void		print_error_heredoc(char *str, int fd, t_params *params);
+void		free_in_heredoc(t_params *params, int fd);
 //UTILS
 //utils.c
 void		*error_malloc_return(char *str, void *ptr);
@@ -213,7 +212,12 @@ int			check_fd(int fd, char *red);
 int			check_child(int pid);
 int			ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
-
+//free.c
+int			free_exit(t_params *params, t_data *data, int *old_fd);
+void		free_struct(t_data *data);
+void		free_params(t_params *params);
+void		free_command_no(t_params *params, int *old_fd);
+int			print_error_redir(char *str, char c);
 //new_heredoc.c
 void		free_in_heredoc(t_params *params, int fd);
 int			get_hd_line(char *del, int fd, int quotes, t_params *params);
@@ -221,6 +225,9 @@ char		*write_hd(char *line, int quotes, t_params *params);
 char		*expand_env_in_heredoc(char *str, t_params *params,
 				int size, char *buff);
 char		*expand_heredoc(char *line, t_params *params, int *i);
+
+int			execute_command(t_token *token, t_params *params, int *old_fd);
+void		make_command(t_token *token, t_params *params, int i, int *old_fd);
 
 #endif
 
