@@ -39,7 +39,7 @@ void	free_struct(t_data *data)
 		tmp = data->head;
 		if (tmp->fds[0] > 0)
 			close(tmp->fds[0]);
-		if (tmp->fds[1] != 1 && tmp->fds[1] >=0)
+		if (tmp->fds[1] != 1 && tmp->fds[1] >= 0)
 			close(tmp->fds[1]);
 		free(tmp->value);
 		free_table(tmp->args);

@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+//errno_malloc
 int	set_error_malloc(char *str)
 {
 	errno = ENOMEM;

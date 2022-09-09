@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 10:25:06 by masamoil          #+#    #+#             */
-/*   Updated: 2022/09/01 15:36:11 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:56:10 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,8 @@ int			ft_size(t_token *lst);
 //dollar_fct.c
 char		*rep(char **env, char *str, int *quote, char *buff);
 int			in_replace(char *str, int s, char **str_value, t_data *data);
-int			if_dollar(char **str_value, t_data *data, t_params *par, int *quote);
+int			if_dollar(char **str_value,
+				t_data *data, t_params *par, int *quote);
 int			replace_var(t_token *token, t_data *data, t_params *params);
 //redir_fd.c
 int			get_fd_input(char *pathname, char *red);
@@ -207,11 +208,12 @@ int			ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
 
 //new_heredoc.c
-void	free_in_heredoc(t_params *params, int fd);
-int		get_hd_line(char *del, int fd, int quotes, t_params *params);
-char	*write_hd(char *line, int fd, int quotes, t_params *params);
-char	*expand_env_in_heredoc(char *str, t_params *params, int size, char *buff);
-char	*expand_heredoc(char *line, t_params *params, int *i);
+void		free_in_heredoc(t_params *params, int fd);
+int			get_hd_line(char *del, int fd, int quotes, t_params *params);
+char		*write_hd(char *line, int fd, int quotes, t_params *params);
+char		*expand_env_in_heredoc(char *str, t_params *params,
+				int size, char *buff);
+char		*expand_heredoc(char *line, t_params *params, int *i);
 
 #endif
 

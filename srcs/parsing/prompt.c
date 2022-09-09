@@ -110,12 +110,14 @@ static int	modify_line(t_data *data, int nbr)
 	int	save;
 
 	save = 0;
-	while (data->trimmed[data->i] != '\0' && ft_space(data->trimmed[data->i]) == 0)
+	while (data->trimmed[data->i] != '\0'
+		&& ft_space(data->trimmed[data->i]) == 0)
 	{
 		data->i++;
 		nbr++;
 	}
-	while (data->trimmed[data->i] != '\0' && ft_space(data->trimmed[data->i]) != 0)
+	while (data->trimmed[data->i] != '\0'
+		&& ft_space(data->trimmed[data->i]) != 0)
 	{
 		save = data->i;
 		if (data->trimmed[data->i] == '\''
@@ -127,6 +129,16 @@ static int	modify_line(t_data *data, int nbr)
 	}
 	return (nbr);
 }
+
+static void if_str_null(char *str, int i)
+{
+	if (str[i] == '\0')
+	{
+		str[i] == '\0';
+		return ;
+	}
+}
+
 
 static void	only_heredocs(t_data *data)
 {
@@ -175,6 +187,8 @@ int	print_prompt(t_data *data, t_params *params)
 	init_data(data);
 	while (1)
 	{
+		params->old_fd[0] = -1;
+		params->old_fd[1] = -1;
 		init_data(data);
 		ft_signals(DEFAULT);
 		data->input = readline(PROMPT);
@@ -187,15 +201,6 @@ int	print_prompt(t_data *data, t_params *params)
 		tmp = data->head;
 		if (ft_execute(tmp, params) == -1)
 			return (ft_get_out(data));
-		// tmp = data->head;
-		// while (tmp)
-		// {
-		// 	if (tmp->fds[0] !=0)
-		// 		close(tmp->fds[0]);
-		// 	if (tmp->fds[1] != 1)
-		// 		close(tmp->fds[1]);
-		// 	tmp = tmp->next;
-		// }
 		free_struct(data);
 	}
 	rl_clear_history();

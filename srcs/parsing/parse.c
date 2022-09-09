@@ -43,7 +43,8 @@ int	check_string(t_data *data)
 				data->i++;
 			if (data->trimmed[data->i] == '|' || data->trimmed[data->i] == '\0')
 			{
-				ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+				ft_putstr_fd("minishell: syntax error ", 2);
+				ft_putstr_fd("near unexpected token `|'\n", 2);
 				return (-1);
 			}
 		}
@@ -74,8 +75,9 @@ int	first_pipe_cut(t_data *data)
 		}
 		else if (data->trimmed[data->i] == '|')
 		{
-			if (push_back(data, ft_strndup(&data->trimmed[count], data->i - count)) == -1)
-				return (-1);			
+			if (push_back(data, ft_strndup(&data->trimmed[count],
+						data->i - count)) == -1)
+				return (-1);
 			count = data->i + 1;
 		}
 		data->i++;

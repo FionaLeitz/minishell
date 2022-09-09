@@ -56,7 +56,7 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 		}
 		if (str[i][0] == '<')
 		{
-			if (token->fds[0] >0)
+			if (token->fds[0] > 0)
 				close(token->fds[0]);
 			if (str[i][1] == '<')
 			{

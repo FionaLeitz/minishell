@@ -14,18 +14,22 @@
 
 int	g_exit_st = 0;
 
+static int	if_errno(t_params params)
+{
+	free_params(&params);
+	return (12);
+}
+
 // main
 int	main(int ac, char **av, char **envp)
 {
 	t_data		data;
 	t_params	params;
 
-	params.old_fd[0] = -1;
-	params.old_fd[1] = -1;
+	if (ac != 1)
+		return (ft_printf("This minishell does not take arguments\n"));
 	(void)av;
 	errno = 0;
-	//tests whether fd is an open fd referring to a terminal,
-	//in this case returns 1, otherwise => 0 end errno's set
 	if (isatty(0) == 0 || isatty(1) == 0)
 		return (0);
 	params.export = NULL;
@@ -35,20 +39,11 @@ int	main(int ac, char **av, char **envp)
 	if (params.env[0] != NULL)
 		ft_shlvl(params.env);
 	if (errno == 12)
-	{
-		free_params(&params);
-		return (12);
-	}
+		return (if_errno(params));
 	params.export = create_export(params.env);
 	if (errno == 12)
-	{
-		free_params(&params);
-		return (12);
-	}
-	if (ac != 1)
-		ft_putstr_fd("This minishell does not take arguments\n", 2);
-	else
-		print_prompt(&data, &params);
+		return (if_errno(params));
+	print_prompt(&data, &params);
 	free_export(params.export);
 	free_table(params.env);
 	return (g_exit_st);

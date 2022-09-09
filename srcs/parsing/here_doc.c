@@ -89,7 +89,6 @@ int	ft_here_doc(char *delim, t_params *params)
 	char		*delim_tmp;
 	int			child;
 
-
 	g_exit_st = 0;
 	delim_tmp = delim;
 	utils[1] = check_delim(delim);
