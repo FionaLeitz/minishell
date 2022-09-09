@@ -90,9 +90,6 @@ typedef struct s_params
 	int				old_fd[2];
 }					t_params;
 
-
-
-
 void		replace_quotes2(char *str);
 // BUILT-IN
 // cd.c
