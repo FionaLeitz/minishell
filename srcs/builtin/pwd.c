@@ -12,33 +12,23 @@
 
 #include "../../minishell.h"
 
-// TO DO DEMANDER POUR 4096 !!!
 // print curent working directory
 int	ft_pwd(char **arg)
 {
-	char	path[4096];
-	char	*path2;
+	char	*path;
 
 	(void)arg;
-	if (getcwd(path, 4095) == NULL)
+	path = getcwd(NULL, 0);
+	if (path == NULL)
 	{
-		perror("Minishell: pwd: error retrieving current directory: getcwd: cannot access parent directories");
-		return (1);
-	}
-	path2 = ft_strdup(path);
-	if (path2 == NULL)
-		set_error_malloc("pwd\n");
-	if (path2 == NULL)
-	{
-		ft_putstr_fd("error retrieving current directory: ", 2);
-		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-		ft_putstr_fd("No such file or directory\n", 2);
+		perror("Minishell: pwd: error retrieving current directory: getcwd: \
+		cannot access parent directories");
 		return (1);
 	}
 	else
 	{
-		ft_printf("%s\n", path2);
-		free(path2);
+		ft_printf("%s\n", path);
+		free(path);
 	}
 	return (0);
 }
