@@ -12,6 +12,22 @@
 
 #include "../../minishell.h"
 
+// replace quotes when needed to disapear
+void	replace_quotes2(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			str[i] = -1;
+		else if (str[i] == '\"')
+			str[i] = -2;
+		i++;
+	}
+}
+
 //errno_malloc
 int	set_error_malloc(char *str)
 {

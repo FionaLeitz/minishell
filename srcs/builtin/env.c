@@ -12,6 +12,23 @@
 
 #include "../../minishell.h"
 
+// if env, print the environment unless arguments
+int	ft_env(char **arg, t_params *params)
+{
+	if (arg[1] != NULL)
+	{
+		ft_putstr_fd("env: ‘", 2);
+		ft_putstr_fd(arg[1], 2);
+		ft_putstr_fd("’: too many arguments\n", 2);
+		return (127);
+	}
+	if (params->env == NULL)
+		ft_printf("\n");
+	else
+		print_table(params->env);
+	return (0);
+}
+
 // if new variable, recreate environment plus new variable
 static int	make_new_env(int count, int l, t_params *params, char *arg)
 {
@@ -62,22 +79,6 @@ static int	if_concat(char *arg, t_params *params, int n)
 	free(params->env[n]);
 	params->env[n] = tmp;
 	return (0);
-}
-
-// replace quotes when needed to disapear
-void	replace_quotes2(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			str[i] = -1;
-		else if (str[i] == '\"')
-			str[i] = -2;
-		i++;
-	}
 }
 
 // if export, make new environment
