@@ -27,7 +27,6 @@ int	prompt(t_data *data, t_params *params)
 	t_token	*tmp;
 
 	params->data = data;
-//	init_data(data);
 	while (1)
 	{
 		params->old_fd[0] = -1;
