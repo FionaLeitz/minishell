@@ -70,7 +70,7 @@ static int	if_concat(char *arg, t_params *params, int n)
 {
 	char	*tmp;
 
-	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[n])));
+	tmp = malloc(sizeof(char) * (ft_strlen(arg) + ft_strlen(params->env[n]) + 1));
 	if (tmp == NULL)
 		return (set_error_malloc("export\n"));
 	tmp[0] = '\0';
