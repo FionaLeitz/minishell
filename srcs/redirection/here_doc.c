@@ -67,6 +67,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	pid_t	pid;
 
 	pid = fork();
+	close(params->old_fd[0]);
 	if (check_child(pid) == -1)
 		return (-1);
 	if (pid == 0)
