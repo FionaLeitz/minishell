@@ -20,8 +20,9 @@ int	check_fd(int fd, char *red)
 		ft_printf("Minishell: %s:", red);
 		perror(" ");
 		g_exit_st = 1;
+		return (-1);
 	}
-	return (-1);
+	return (0);
 }
 
 //child protection when forking
