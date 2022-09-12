@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-static int	in_del_quotes_redir(char *str)
+static int	suppress_quotes(char *str)
 {
 	int		j;
 	char	*tmp;
@@ -39,7 +39,7 @@ static int	in_del_quotes_redir(char *str)
 }
 
 // find $ in redirection
-int	replace_var_redir(char **str, t_data *data, t_params *params)
+static int	expand_redir(char **str, t_data *data, t_params *params)
 {
 	int		quote[3];
 
@@ -65,27 +65,28 @@ int	replace_var_redir(char **str, t_data *data, t_params *params)
 	}
 	return (0);
 }
-
-static void	while_loop_in_delquotesredir(char **red, int *i, int *j)
+/*
+static void	find_quotes(char **red, int *i, int *j)
 {
 	while (red[*i][++(*j)] != '\0')
 	{
 		if (red[*i][0] == '<' && red[*i][1] == '<')
 			break ;
 		if (red[*i][*j] == '\'' || red[*i][*j] == '\"')
-			*j = in_del_quote(red[*i], *j);
+			*j = move_to_suppress(red[*i], *j);
 		if (red[*i][*j] == '\0')
 			break ;
 		if (red[*i][*j] == '\'' || red[*i][*j] == '\"')
 			(*j)--;
 	}
 }
+*/
 
 // find suppressable quotes in redirections
 int	del_quotes_redir(t_token *token, t_params *params)
 {
 	int		i;
-	int		j;
+//	int		j;
 
 	while (token)
 	{
@@ -93,10 +94,10 @@ int	del_quotes_redir(t_token *token, t_params *params)
 		while (token->red[++i])
 		{
 			if (!(token->red[i][0] == '<' && token->red[i][1] == '<'))
-				replace_var_redir(&token->red[i], params->data, params);
-			j = -1;
-			while_loop_in_delquotesredir(token->red, &i, &j);
-			if (in_del_quotes_redir(token->red[i]) == -1)
+				expand_redir(&token->red[i], params->data, params);
+//			j = -1;
+//			find_quotes(token->red, &i, &j);
+			if (suppress_quotes(token->red[i]) == -1)
 				return (-1);
 		}
 		token = token->next;

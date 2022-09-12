@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // in check_redir
-char	first_redir(char *str, t_data *data)
+static char	first_redir(char *str, t_data *data)
 {
 	char	redir;
 

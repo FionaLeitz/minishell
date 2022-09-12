@@ -12,167 +12,6 @@
 
 #include "minishell.h"
 
-// parse errors
-int	syntax_check(t_data *data)
-{
-	if (data->input != NULL && ft_strlen(data->input) != 0)
-		add_history(data->input);
-	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
-	if (check_quotes(data) == -1)
-	{
-		ft_putstr_fd("minishell: quotes are unclosed\n", 2);
-		return (2);
-	}
-	if (data->trimmed[0] == '|')
-	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-		return (2);
-	}
-	if (check_string(data) == -1)
-		return (2);
-	return (0);
-}
-
-// trim and send every token in function f
-int	in_cut(t_data *data, t_token *token, int (f)(t_data*, t_token*))
-{
-	char	*s;
-
-	while (token)
-	{
-		token->fds[0] = 0;
-		token->fds[1] = 1;
-		s = ft_strtrim(token->value, " \t\n\v\f\r");
-		free(token->value);
-		token->value = s;
-		if (f(data, token) == -1)
-			return (-1);
-		token = token->next;
-	}
-	return (0);
-}
-
-// replace quotes
-void	replace_quotes(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == -1)
-			str[i] = '\'';
-		else if (str[i] == -2)
-			str[i] = '\"';
-		i++;
-	}
-}
-
-// use replace_quotes on every string in tab
-static void	give_tab(char **tab)
-{
-	int	i;
-
-	i = -1;
-	while (tab[++i])
-		replace_quotes(tab[i]);
-}
-
-// start separating pipes
-int	ft_cut(t_data *data, t_params *params)
-{
-	t_token	*tmp;
-
-	if (first_pipe_cut(data) == -1)
-		return (-1);
-	tmp = data->head;
-	if (in_cut(data, tmp, count_red) == -1)
-		return (-1);
-	tmp = data->head;
-	if (replace_var(tmp, data, params) == -1)
-		return (-1);
-	tmp = data->head;
-	if (in_cut(data, tmp, create_tab) == -1)
-		return (-1);
-	tmp = data->head;
-	if (del_quotes(tmp, params) == -1)
-		return (-1);
-	tmp = data->head;
-	while (tmp)
-	{
-		ft_redirection(tmp->red, params, tmp);
-		give_tab(tmp->args);
-		give_tab(tmp->red);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-// if parse error, suppress everything except heredocs before error
-static int	modify_line(t_data *data, int nbr)
-{
-	int	save;
-
-	save = 0;
-	while (data->trimmed[data->i] != '\0'
-		&& ft_space(data->trimmed[data->i]) == 0)
-	{
-		data->i++;
-		nbr++;
-	}
-	while (data->trimmed[data->i] != '\0'
-		&& ft_space(data->trimmed[data->i]) != 0)
-	{
-		save = data->i;
-		if (data->trimmed[data->i] == '\''
-			|| data->trimmed[data->i] == '\"')
-			jump_quotes(data->trimmed, data);
-		else
-			data->i++;
-		nbr += data->i - save;
-	}
-	return (nbr);
-}
-
-// if no delimiter after heredoc with parse error
-static int	if_str_zero(char *str, int i)
-{
-	if (str[i] == '\0')
-	{
-		str[0] = '\0';
-		return (-1);
-	}
-	return (0);
-}
-
-// if parse error, keep only heredocs before error
-static void	only_heredocs(t_data *data)
-{
-	int	save;
-	int	save2;
-
-	g_exit_st = 2;
-	data->i -= 1;
-	ft_bzero(&data->trimmed[data->i], ft_strlen(&data->trimmed[data->i]));
-	data->i = 0;
-	save = 0;
-	while (data->trimmed[data->i])
-	{
-		save2 = 2;
-		if (data->trimmed[data->i] == '<' && data->trimmed[data->i + 1] == '<')
-		{
-			ft_memcpy(&data->trimmed[save], &data->trimmed[data->i],
-				ft_strlen(&data->trimmed[data->i]) + 2);
-			data->i = save + 2;
-			if (if_str_zero(data->trimmed, data->i) == -1)
-				return ;
-			save += modify_line(data, save2);
-		}
-		data->i++;
-	}
-	data->trimmed[save] = '\0';
-}
-
 // only if problem with malloc
 int	ft_get_out(t_data *data)
 {
@@ -183,12 +22,12 @@ int	ft_get_out(t_data *data)
 }
 
 // give the prompt, get readline, parses and execution's fonctions
-int	print_prompt(t_data *data, t_params *params)
+int	prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
 
 	params->data = data;
-	init_data(data);
+//	init_data(data);
 	while (1)
 	{
 		params->old_fd[0] = -1;

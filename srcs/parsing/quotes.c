@@ -43,7 +43,7 @@ int	check_quotes(t_data *data)
 }
 
 // suppress quotes
-int	in_del_quote(char *str, int j)
+int	move_to_suppress(char *str, int j)
 {
 	char	quote;
 
@@ -72,7 +72,7 @@ int	del_quotes(t_token *token, t_params *params)
 			while (tmp->args[i][++j] != '\0')
 			{
 				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')
-					j = in_del_quote(tmp->args[i], j);
+					j = move_to_suppress(tmp->args[i], j);
 				if (tmp->args[i][j] == '\0')
 					break ;
 				if (tmp->args[i][j] == '\'' || tmp->args[i][j] == '\"')

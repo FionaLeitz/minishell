@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // find replacement
-char	*expand_env_in_heredoc(char *str, t_params *params,
+static char	*expand_env_in_heredoc(char *str, t_params *params,
 			int size, char *buff)
 {
 	int		count;
@@ -38,7 +38,7 @@ char	*expand_env_in_heredoc(char *str, t_params *params,
 }
 
 // and replace
-char	*replace_var_heredoc(char *str, int first, char *line, int *i)
+static char	*replace_var_heredoc(char *str, int first, char *line, int *i)
 {
 	char	*tmp;
 

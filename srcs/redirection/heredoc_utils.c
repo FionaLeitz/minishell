@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
+/*
 int	ft_if_char(char *str, char c)
 {
 	int	i;
@@ -25,7 +25,7 @@ int	ft_if_char(char *str, char c)
 	}
 	return (-1);
 }
-
+*/
 void	print_error_heredoc(char *str, int fd, t_params *params)
 {
 	ft_putstr_fd("minishell: warning: ", 2);

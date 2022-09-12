@@ -12,6 +12,7 @@
 
 #include "../../minishell.h"
 
+// open for input redirection
 int	get_fd_input(char *pathname, char *red)
 {
 	int	fd;
@@ -20,12 +21,14 @@ int	get_fd_input(char *pathname, char *red)
 	if (ft_strcmp(red, "<") == 0)
 	{
 		fd = open(pathname, O_RDONLY);
-		check_fd(fd, pathname);
+		if (check_fd(fd, pathname) == -1)
+			return (-1);
 	}
 	return (fd);
 }
 
-int	get_fd_output(char *pathname, char *red)
+// open for output redirection
+static int	get_fd_output(char *pathname, char *red)
 {
 	int	fd;
 
@@ -34,11 +37,13 @@ int	get_fd_output(char *pathname, char *red)
 		fd = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	else if (ft_strcmp (red, ">>") == 0)
 		fd = open(pathname, O_CREAT | O_RDWR | O_APPEND, 00664);
-	check_fd(fd, pathname);
+	if (check_fd(fd, pathname) == -1)
+		return (-1);
 	return (fd);
 }
 
-static void	if_rrd(char **str, int *i, t_token *token)
+// if redirection to the right
+static void	right_redir(char **str, int *i, t_token *token)
 {
 	if (str[*i][0] == '>')
 	{
@@ -51,7 +56,8 @@ static void	if_rrd(char **str, int *i, t_token *token)
 	}
 }
 
-static void	if_lrd(char **str, int *i, t_token *token, t_params *params)
+// if redirection to the left
+static void	left_redir(char **str, int *i, t_token *token, t_params *params)
 {
 	if (str[*i][0] == '<')
 	{
@@ -67,6 +73,7 @@ static void	if_lrd(char **str, int *i, t_token *token, t_params *params)
 	}
 }
 
+// open
 void	ft_redirection(char **str, t_params *params, t_token *token)
 {
 	int	i;
@@ -74,8 +81,8 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 	i = -1;
 	while (str[++i])
 	{
-		if_rrd(str, &i, token);
-		if_lrd(str, &i, token, params);
+		right_redir(str, &i, token);
+		left_redir(str, &i, token, params);
 		if (token->fds[0] == -1 || token->fds[1] == -1)
 			break ;
 	}

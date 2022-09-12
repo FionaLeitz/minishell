@@ -90,6 +90,16 @@ typedef struct s_params
 	int				old_fd[2];
 }					t_params;
 
+//prompt.c
+int			prompt(t_data *data, t_params *params);
+
+//signaux.c
+void		ft_sig_int(int signal);
+void		ft_sig_quit(int signal);
+void		ft_sig_heredoc(int signal);
+void		ft_signals(t_sig_mode mode);
+void		check_exit_status(void);
+
 // BUILT-IN
 // cd.c
 int			ft_cd(char **arg, t_params *params);
@@ -116,7 +126,6 @@ int			ft_unset(char **arg, t_params *params);
 // execution.c
 int			ft_execute(t_token *token, t_params *params);
 //make_execute_cmd.c
-int			execute_command(t_token *token, t_params *params, int *old_fd);
 void		make_command(t_token *token, t_params *params, int i, int *old_fd);
 // pipes.c
 int			ft_pipe(t_token *token, t_params *params, int *pid,
@@ -125,66 +134,59 @@ int			ft_pipe(t_token *token, t_params *params, int *pid,
 int			get_path(char **arg, t_token *token, t_params *params, int *old_fd);
 void		ft_select_builtin(t_token *token, t_params *params, int i,
 				int *old_fd);
+// INIT
+// create_export.c
+t_export	*create_export(char **env);
+// get_env.c
+char		**ft_get_env(char **envp);
+//init.c
+void		init_data(t_data *data);
+void		init_token(t_token *token);
 // PARSING
-//args_start.c
-int			ft_count_words(t_data *data, char *s);
-int			in_create_tab(char *str, int *i);
-int			create_tab(t_data *data, t_token *token);
-//del_quotes.c
-int			replace_var_redir(char **str, t_data *data, t_params *params);
+// args_start.c
+int			create_arg_tab(t_data *data, t_token *token);
+// cut.c
+int			ft_cut(t_data *data, t_params *params);
+void		replace_quotes(char *str);
+// del_quotes.c
 int			del_quotes_redir(t_token *token, t_params *params);
-//dollar_fct.c
-char		*rep(char **env, char *str, int *quote, char *buff);
-int			in_replace(char *str, int s, char **str_value, t_data *data);
+// dollar_fct.c
 int			if_dollar(char **str_value,
 				t_data *data, t_params *par, int *quote);
-int			replace_var(t_token *token, t_data *data, t_params *params);
+int			expand(t_token *token, t_data *data, t_params *params);
+// only_heredocs
+void		only_heredocs(t_data *data);
 //parse_redir.c
-char		first_redir(char *str, t_data *data);
 int			check_redir(t_data *data);
 //parse.c
 void		jump_quotes(char *str, t_data *data);
-int			check_string(t_data *data);
-int			first_pipe_cut(t_data *data);
+int			syntax_check(t_data *data);
+int			pipe_cut(t_data *data);
 //quotes.c
 int			get_next_quote(char quote, t_data *data);
 int			check_quotes(t_data *data);
-int			in_del_quote(char *str, int j);
+int			move_to_suppress(char *str, int j);
 int			del_quotes(t_token *token, t_params *params);
 //redirection.c
-int			get_red(t_data *data, t_token *token, int count);
-int			count_red(t_data *data, t_token *token);
+int			create_red_tab(t_data *data, t_token *token);
 //REDIRECTION
 //expand_heredoc.c
-char		*expand_env_in_heredoc(char *str, t_params *params,
-				int size, char *buff);
-char		*replace_var_heredoc(char *str, int first,
-				char *line, int *i);
 char		*expand_heredoc(char *line, t_params *params, int *i);				
 //here_doc_delim.c
-int			delim_quotes(char *delim);
 int			check_delim(char *delim);
-char		*del_quotes_hd(char *delim);
 void		check_quote_delim(char *delim);
 //here_doc.c
-char		*hd_name(void);
 int			ft_here_doc(char *str, t_params *params);
 //heredoc_line.c
-char		*line_to_write(char *line, int quotes, t_params *params);
 int			get_hd_line(char *del, int fd, int quotes, t_params *params);
 //heredoc_utils.c
-int			ft_if_char(char *str, char c);
 void		print_error_heredoc(char *str, int fd, t_params *params);
 void		free_in_heredoc(t_params *params, int fd);
 //redir_fd.c
 int			get_fd_input(char *pathname, char *red);
-int			get_fd_output(char *pathname, char *red);
 void		ft_redirection(char **str, t_params *params, t_token *token);
 //UTILS
-//create_export.c
-t_export	*create_export(char **env);
 //fct_list.c
-t_token		*new_node(char *value);
 int			push_back(t_data *data, char *value);
 int			ft_size(t_token *lst);
 //free.c
@@ -193,11 +195,6 @@ int			free_exit(t_params *params, t_data *data, int *old_fd);
 void		free_struct(t_data *data);
 void		free_params(t_params *params);
 void		free_command_no(t_params *params, int *old_fd);
-// get_env.c
-char		**ft_get_env(char **envp);
-//init.c
-void		init_data(t_data *data);
-void		init_token(t_token *token);
 //protections.c
 int			check_fd(int fd, char *red);
 int			check_child(int pid);
@@ -213,24 +210,10 @@ int			ft_shlvl(char **envp);
 void		ft_exit_d(t_data *data, t_params *params);
 int			print_error_redir(char *str, char c);
 
-//prompt.c
-int			syntax_check(t_data *data);
-void		replace_quotes(char *str);
-int			ft_cut(t_data *data, t_params *params);
-int			print_prompt(t_data *data, t_params *params);
-
-//signaux.c
-void		ft_sig_int(int signal);
-void		ft_sig_quit(int signal);
-void		ft_sig_heredoc(int signal);
-void		ft_signals(t_sig_mode mode);
-void		check_exit_status(void);
-
 #endif
 
-// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=.ignore_readline ./minishell'
-// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline ./minishell'
-// alias minishell='valgrind --track-fds=yes --suppressions=.ignore_readline ./minishell'
+// alias minishell='valgrind --leak-check=full --show-leak-kinds=all
+// --track-fds=yes --suppressions=.ignore_readline ./minishell'
 // {
 // ignore_libreadline_conditional_jump_errors
 // Memcheck:Leak

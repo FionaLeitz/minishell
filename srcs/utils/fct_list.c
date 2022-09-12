@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // create new token element
-t_token	*new_node(char *value)
+static t_token	*new_node(char *value)
 {
 	t_token	*new;
 

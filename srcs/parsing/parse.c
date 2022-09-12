@@ -57,8 +57,29 @@ int	check_string(t_data *data)
 	return (0);
 }
 
-// create first element, which is the first command and argument before pipe
-int	first_pipe_cut(t_data *data)
+// parse errors
+int	syntax_check(t_data *data)
+{
+	if (data->input != NULL && ft_strlen(data->input) != 0)
+		add_history(data->input);
+	data->trimmed = ft_strtrim(data->input, " \t\n\v\f\r");
+	if (check_quotes(data) == -1)
+	{
+		ft_putstr_fd("minishell: quotes are unclosed\n", 2);
+		return (2);
+	}
+	if (data->trimmed[0] == '|')
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		return (2);
+	}
+	if (check_string(data) == -1)
+		return (2);
+	return (0);
+}
+
+// create command and argument
+int	pipe_cut(t_data *data)
 {
 	int		count;
 	char	quote;

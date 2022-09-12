@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 //searches for quotes in delimiter
-int	delim_quotes(char *delim)
+static int	delim_quotes(char *delim)
 {
 	int	i;
 
@@ -53,7 +53,7 @@ static int	in_del_quote_hd(char *str, int i)
 	return (i);
 }
 
-char	*del_quotes_hd(char *delim)
+static char	*del_quotes_hd(char *delim)
 {
 	int	i;
 

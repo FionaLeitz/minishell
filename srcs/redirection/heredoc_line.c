@@ -34,7 +34,7 @@ static void	check_signals(char *line, char *del, int fd, t_params *params)
 }
 
 // verify if expand needed
-char	*line_to_write(char *line, int quotes, t_params *params)
+static char	*line_to_write(char *line, int quotes, t_params *params)
 {
 	int		i;
 	char	*new;

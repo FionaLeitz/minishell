@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // execute command and write error if does not work
-int	execute_command(t_token *token, t_params *params, int *old_fd)
+static int	execute_command(t_token *token, t_params *params, int *old_fd)
 {
 	ft_signals(COMMAND);
 	get_path(token->args, token, params, old_fd);

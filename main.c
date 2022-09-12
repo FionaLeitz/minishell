@@ -15,10 +15,10 @@
 int	g_exit_st = 0;
 
 // set up error malloc
-static int	if_errno(t_params params)
+static int	wrong_malloc(t_params params)
 {
 	free_params(&params);
-	return (12);
+	return (errno);
 }
 
 // main
@@ -40,11 +40,11 @@ int	main(int ac, char **av, char **envp)
 	if (params.env[0] != NULL)
 		ft_shlvl(params.env);
 	if (errno == 12)
-		return (if_errno(params));
+		return (wrong_malloc(params));
 	params.export = create_export(params.env);
 	if (errno == 12)
-		return (if_errno(params));
-	print_prompt(&data, &params);
+		return (wrong_malloc(params));
+	prompt(&data, &params);
 	free_export(params.export);
 	free_table(params.env);
 	return (g_exit_st);

@@ -60,8 +60,8 @@ static void	locate_redir(t_data *data, t_token *token)
 	}
 }
 
-// in count_red, create char **red (redirection's list)
-int	get_red(t_data *data, t_token *token, int count)
+// in create_red_tab, create char **red (redirection's list)
+static int	get_red(t_data *data, t_token *token, int count)
 {
 	int		j;
 	int		save;
@@ -88,7 +88,7 @@ int	get_red(t_data *data, t_token *token, int count)
 	return (0);
 }
 
-static void	while_loop_in_count_red(char *value, int *count)
+static void	count_red(char *value, int *count)
 {
 	int		i;
 	char	quote;
@@ -113,12 +113,12 @@ static void	while_loop_in_count_red(char *value, int *count)
 }
 
 // count redirection's number and create char **red (redirection's list)
-int	count_red(t_data *data, t_token *token)
+int	create_red_tab(t_data *data, t_token *token)
 {
 	int		count;
 
 	count = 0;
-	while_loop_in_count_red(token->value, &count);
+	count_red(token->value, &count);
 	token->red = malloc(sizeof(char *) * (count + 1));
 	if (token->red == NULL)
 		return (set_error_malloc("parse\n"));

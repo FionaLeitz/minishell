@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // find variable to replace $
-char	*rep(char **env, char *str, int *quote, char *buff)
+static char	*needed_var(char **env, char *str, int *quote, char *buff)
 {
 	int		count;
 
@@ -36,7 +36,7 @@ char	*rep(char **env, char *str, int *quote, char *buff)
 }
 
 // replace $
-int	in_replace(char *str, int s, char **str_value, t_data *data)
+static int	replace_var(char *str, int s, char **str_value, t_data *data)
 {
 	char	*tmp;
 
@@ -83,15 +83,15 @@ int	if_dollar(char **str_value, t_data *data, t_params *par, int *quote)
 	quote[1] = data->i - s - 1;
 	if (quote[0] % 2 == 0)
 	{
-		str = rep(par->env, &str_value[0][s + 1], quote, buff);
-		if (in_replace(str, s, &str_value[0], data) == -1)
+		str = needed_var(par->env, &str_value[0][s + 1], quote, buff);
+		if (replace_var(str, s, &str_value[0], data) == -1)
 			return (-1);
 	}
 	return (0);
 }
 
 // find $
-int	replace_var(t_token *token, t_data *data, t_params *params)
+int	expand(t_token *token, t_data *data, t_params *params)
 {
 	int		quote[3];
 

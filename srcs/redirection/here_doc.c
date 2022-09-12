@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 //used to create a new here_doc name each time hd1, hd2, etc...
-char	*hd_name(void)
+static char	*hd_name(void)
 {
 	char	*pathname;
 	int		i;
