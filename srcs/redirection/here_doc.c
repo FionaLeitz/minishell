@@ -44,18 +44,13 @@ static char	*hd_name(void)
 // in child
 static int	then_child(char *delim, int *utils, t_params *params, char *path)
 {
-	int	test;
-
 	free(path);
-		test = get_hd_line(delim, utils[0], utils[1], params);
-	if (test == -1)
-		return (-1);
-	if (test == -2)
-		return (-2);
+	get_hd_line(delim, utils[0], utils[1], params);
 	if (utils[0] != -1)
 		close(utils[0]);
 	free_struct(params->data);
 	free_params(params);
+	close(params->old_fd[0]);
 	if (errno == 12)
 		exit(12);
 	exit(g_exit_st);
@@ -67,7 +62,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	pid_t	pid;
 
 	pid = fork();
-	close(params->old_fd[0]);
+//	close(params->old_fd[0]);
 	if (check_child(pid) == -1)
 		return (-1);
 	if (pid == 0)

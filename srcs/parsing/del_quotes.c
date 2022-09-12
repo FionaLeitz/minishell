@@ -65,7 +65,7 @@ static int	expand_redir(char **str, t_data *data, t_params *params)
 	}
 	return (0);
 }
-/*
+
 static void	find_quotes(char **red, int *i, int *j)
 {
 	while (red[*i][++(*j)] != '\0')
@@ -80,13 +80,12 @@ static void	find_quotes(char **red, int *i, int *j)
 			(*j)--;
 	}
 }
-*/
 
 // find suppressable quotes in redirections
 int	del_quotes_redir(t_token *token, t_params *params)
 {
 	int		i;
-//	int		j;
+	int		j;
 
 	while (token)
 	{
@@ -95,8 +94,8 @@ int	del_quotes_redir(t_token *token, t_params *params)
 		{
 			if (!(token->red[i][0] == '<' && token->red[i][1] == '<'))
 				expand_redir(&token->red[i], params->data, params);
-//			j = -1;
-//			find_quotes(token->red, &i, &j);
+			j = -1;
+			find_quotes(token->red, &i, &j);
 			if (suppress_quotes(token->red[i]) == -1)
 				return (-1);
 		}

@@ -17,7 +17,7 @@ int	check_fd(int fd, char *red)
 {
 	if (fd == -1)
 	{
-		ft_printf("Minishell: %s:", red);
+		ft_printf("Minishell: %s", red);
 		perror(" ");
 		g_exit_st = 1;
 		return (-1);
