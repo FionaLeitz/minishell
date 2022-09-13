@@ -25,6 +25,7 @@ int	ft_get_out(t_data *data)
 int	prompt(t_data *data, t_params *params)
 {
 	t_token	*tmp;
+	int		syntax;
 
 	params->data = data;
 	while (1)
@@ -36,13 +37,18 @@ int	prompt(t_data *data, t_params *params)
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
-		if (syntax_check(data) != 0)
+
+		syntax = syntax_check(data);
+		if (syntax == 2)
 			only_heredocs(data);
-		if (ft_cut(data, params) == -1)
-			return (ft_get_out(data));
-		tmp = data->head;
-		if (ft_execute(tmp, params) == -1)
-			return (ft_get_out(data));
+		if (syntax != -1)
+		{
+			if (ft_cut(data, params) == -1)
+				return (ft_get_out(data));
+			tmp = data->head;
+			if (ft_execute(tmp, params) == -1)
+				return (ft_get_out(data));
+		}
 		free_struct(data);
 	}
 	rl_clear_history();

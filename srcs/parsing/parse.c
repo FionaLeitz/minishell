@@ -66,7 +66,7 @@ int	syntax_check(t_data *data)
 	if (check_quotes(data) == -1)
 	{
 		ft_putstr_fd("minishell: quotes are unclosed\n", 2);
-		return (2);
+		return (-1);
 	}
 	if (data->trimmed[0] == '|')
 	{
