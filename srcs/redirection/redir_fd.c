@@ -65,10 +65,12 @@ static void	left_redir(char **str, int *i, t_token *token, t_params *params)
 			close(token->fds[0]);
 		if (str[*i][1] == '<')
 		{
-			if (params->old_fd[0] != -1)
-				close(params->old_fd[0]);
+//			if (params->old_fd[0] != -1)
+//				close(params->old_fd[0]);
 			params->old_fd[0] = dup(0);
 			token->fds[0] = ft_here_doc(&str[*i][2], params);
+			if (params->old_fd[0] != -1)
+				close(params->old_fd[0]);
 		}
 		else
 			token->fds[0] = get_fd_input(&str[*i][1], "<");
@@ -88,9 +90,9 @@ void	ft_redirection(char **str, t_params *params, t_token *token)
 		if (token->fds[0] == -1 || token->fds[1] == -1)
 			break ;
 	}
-	if (params->old_fd[0] != -1)
-	{
-		dup2(params->old_fd[0], 0);
-		close(params->old_fd[0]);
-	}
+//	if (params->old_fd[0] != -1)
+//	{
+//		dup2(params->old_fd[0], 0);
+//		close(params->old_fd[0]);
+//	}
 }
