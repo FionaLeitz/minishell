@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 17:57:57 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/24 17:59:09 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/13 13:08:12 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,10 @@ int	ft_shlvl(char **envp)
 	i = 0;
 	if (envp == NULL)
 		return (0);
-	while (ft_strncmp("SHLVL=", *envp, 6))
+	while (*envp && ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
+	if (!envp[i])
+		return (-1);
 	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
 	tmp = ft_strndup(envp[i], 6);
 	if (tmp == NULL)
