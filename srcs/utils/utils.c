@@ -40,25 +40,23 @@ int	ft_space(char c)
 //increments SHLVL variable
 int	ft_shlvl(char **envp)
 {
-	int		i;
 	char	shlvl[12];
 	char	*tmp;
 
-	i = 0;
 	if (envp == NULL)
 		return (0);
 	while (*envp && ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
-	if (!envp[i])
+	if (!*envp)
 		return (-1);
 	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
-	tmp = ft_strndup(envp[i], 6);
+	tmp = ft_strndup(*envp, 6);
 	if (tmp == NULL)
 		return (set_error_malloc("creating env\n"));
-	free(envp[i]);
-	envp[i] = ft_strjoin(tmp, shlvl);
+	free(*envp);
+	*envp = ft_strjoin(tmp, shlvl);
 	free(tmp);
-	if (envp[i] == NULL)
+	if (*envp == NULL)
 		return (set_error_malloc("creating env\n"));
 	return (0);
 }
