@@ -36,15 +36,13 @@ int	ft_space(char c)
 		return (0);
 	return (-1);
 }
-
+/*
 //increments SHLVL variable
 int	ft_shlvl(char **envp)
 {
 	char	shlvl[12];
 	char	*tmp;
 
-	if (envp == NULL)
-		return (0);
 	while (*envp && ft_strncmp("SHLVL=", *envp, 6))
 		envp++;
 	if (!*envp)
@@ -60,7 +58,7 @@ int	ft_shlvl(char **envp)
 		return (set_error_malloc("creating env\n"));
 	return (0);
 }
-
+*/
 // handles ctrl-d
 void	ft_exit_d(t_data *data, t_params *params)
 {

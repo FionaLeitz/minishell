@@ -70,6 +70,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 		g_exit_st = WEXITSTATUS(g_exit_st);
 	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st))
 	{
+		free(path);
 		g_exit_st = 130;
 		return (1);
 	}
@@ -100,9 +101,10 @@ int	ft_here_doc(char *delim, t_params *params)
 	int			utils[2];
 	int			child;
 
-	g_exit_st = 0;
-	utils[1] = check_delim(delim);
-	check_quote_delim(delim);
+//	g_exit_st = 0;
+//	utils[1] = check_delim(delim);
+	utils[1] = delim_quotes(delim);
+//	check_quote_delim(delim, utils[1]);
 	pathname = hd_name();
 	if (pathname == NULL)
 	{
@@ -112,6 +114,8 @@ int	ft_here_doc(char *delim, t_params *params)
 	utils[0] = open(pathname, O_CREAT | O_RDWR | O_TRUNC, 00664);
 	ft_signals(MUTE);
 	child = fork_heredoc(delim, utils, params, pathname);
+	if (child == 1)
+		return (-2);
 	if (verify_error(pathname, params, child) == -1)
 		return (-1);
 	ft_signals(DEFAULT);

@@ -12,21 +12,7 @@
 
 #include "../../minishell.h"
 
-//searches for quotes in delimiter
-static int	delim_quotes(char *delim)
-{
-	int	i;
-
-	i = 0;
-	while (delim[i])
-	{
-		if (delim[i] == '\'' || delim[i] == '\"')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
+/*
 //defines whether there are quotes in delimiter, changes variable quotes
 int	check_delim(char *delim)
 {
@@ -38,7 +24,7 @@ int	check_delim(char *delim)
 	else if (delim_quotes(delim) == 1)
 		quotes = 1;
 	return (quotes);
-}
+}*/
 
 //delete quotes in delimiter
 static int	in_del_quote_hd(char *str, int i)
@@ -71,14 +57,33 @@ static char	*del_quotes_hd(char *delim)
 	return (delim);
 }
 
+//searches for quotes in delimiter
+int	delim_quotes(char *delim)
+{
+	int	i;
+
+	i = 0;
+	while (delim[i])
+	{
+		if (delim[i] == '\'' || delim[i] == '\"')
+		{
+			/*delim = */del_quotes_hd(delim);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+/*
 // note if quotes in delimiter in heredoc
-void	check_quote_delim(char *delim)
+void	check_quote_delim(char *delim, int quotes)
 {
 	char	*delim_tmp;
 
 	delim_tmp = delim;
-	if (delim_quotes(delim) == 1)
+	if (quotes == 1)
 		delim = del_quotes_hd(delim);
 	else
 		delim = delim_tmp;
 }
+*/

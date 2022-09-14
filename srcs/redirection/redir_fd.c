@@ -67,10 +67,14 @@ static void	left_redir(char **str, int *i, t_token *token, t_params *params)
 		{
 //			if (params->old_fd[0] != -1)
 //				close(params->old_fd[0]);
-			params->old_fd[0] = dup(0);
-			token->fds[0] = ft_here_doc(&str[*i][2], params);
-			if (params->old_fd[0] != -1)
-				close(params->old_fd[0]);
+			if (token->fds[0] != -2)
+			{
+				g_exit_st = 0;
+				params->old_fd[0] = dup(0);
+				token->fds[0] = ft_here_doc(&str[*i][2], params);
+				if (params->old_fd[0] != -1)
+					close(params->old_fd[0]);
+			}
 		}
 		else
 			token->fds[0] = get_fd_input(&str[*i][1], "<");

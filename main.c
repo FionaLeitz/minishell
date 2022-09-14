@@ -14,13 +14,6 @@
 
 int	g_exit_st = 0;
 
-// set up error malloc
-static int	wrong_malloc(t_params params)
-{
-	free_params(&params);
-	return (errno);
-}
-
 // main
 int	main(int ac, char **av, char **envp)
 {
@@ -34,7 +27,9 @@ int	main(int ac, char **av, char **envp)
 	if (isatty(0) == 0 || isatty(1) == 0)
 		return (0);
 	params.export = NULL;
-	params.env = ft_get_env(envp);
+	if (initiate_params(&params, envp) != 0)
+		return (12);
+/*	params.env = ft_get_env(envp);
 	if (errno == 12)
 		return (12);
 	if (params.env[0] != NULL)
@@ -43,7 +38,7 @@ int	main(int ac, char **av, char **envp)
 		return (wrong_malloc(params));
 	params.export = create_export(params.env);
 	if (errno == 12)
-		return (wrong_malloc(params));
+		return (wrong_malloc(params));*/
 	prompt(&data, &params);
 	free_export(params.export);
 	free_table(params.env);

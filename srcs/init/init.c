@@ -34,3 +34,51 @@ void	init_token(t_token *token)
 	token->fds[0] = 0;
 	token->fds[1] = 1;
 }
+
+// set up error malloc
+static int	wrong_malloc(t_params params)
+{
+	free_params(&params);
+	return (errno);
+}
+
+// start params
+int	initiate_params(t_params *params, char **envp)
+{
+	if (envp != NULL)
+	{
+		params->env = ft_get_env(envp);
+		if (errno == 12)
+			return (12);
+		if (params->env[0] != NULL)
+			ft_shlvl(params->env);
+		if (errno == 12)
+			return (wrong_malloc(*params));
+		params->export = create_export(params->env);
+		if (errno == 12)
+			return (wrong_malloc(*params));
+	}
+	return (0);
+}
+
+//increments SHLVL variable
+int	ft_shlvl(char **envp)
+{
+	char	shlvl[12];
+	char	*tmp;
+
+	while (*envp && ft_strncmp("SHLVL=", *envp, 6))
+		envp++;
+	if (!*envp)
+		return (-1);
+	ft_itoa_no_malloc(ft_atoi(*envp + 6) + 1, shlvl);
+	tmp = ft_strndup(*envp, 6);
+	if (tmp == NULL)
+		return (set_error_malloc("creating env\n"));
+	free(*envp);
+	*envp = ft_strjoin(tmp, shlvl);
+	free(tmp);
+	if (*envp == NULL)
+		return (set_error_malloc("creating env\n"));
+	return (0);
+}
