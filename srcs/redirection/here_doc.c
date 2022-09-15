@@ -22,7 +22,7 @@ static char	*hd_name(void)
 
 	i = 1;
 	fd_exist = 0;
-	while (fd_exist != -1)
+	while (1)
 	{
 		tmp = ft_itoa(i);
 		if (tmp == NULL)
@@ -32,11 +32,15 @@ static char	*hd_name(void)
 		if (pathname == NULL)
 			return (error_malloc_return("heredoc\n", NULL));
 		fd_exist = open(pathname, O_RDONLY);
-		if (fd_exist == -1)
+		if (fd_exist != -1)
+		{
+			close(fd_exist);
 			break ;
-		close(fd_exist);
-		fd_exist = 0;
+		}
+//		close(fd_exist);
+//		fd_exist = 0;
 		++i;
+		free(pathname);
 	}
 	return (pathname);
 }
@@ -63,7 +67,11 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 
 	pid = fork();
 	if (check_child(pid) == -1)
+	{
+		unlink(path);
+		free(path);
 		return (-1);
+	}
 	if (pid == 0)
 		return (then_child(delim, utils, params, path));
 	if (pid != -1 && (0 < waitpid(pid, &g_exit_st, 0)))
@@ -71,6 +79,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st))
 	{
 		free(path);
+		close(utils[0]);
 		g_exit_st = 130;
 		return (1);
 	}
@@ -83,11 +92,13 @@ static int	verify_error(char *pathname, t_params *params, int child)
 	if (errno == 12)
 	{
 		close(STDIN_FILENO);
+		unlink(pathname);
 		free(pathname);
 		exit(free_exit(params, params->data, NULL));
 	}
 	if (check_child(child) == -1)
 	{
+		unlink(pathname);
 		free(pathname);
 		return (-1);
 	}
