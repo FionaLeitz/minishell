@@ -75,6 +75,7 @@ static int	fork_heredoc(char *delim, int *utils, t_params *params, char *path)
 		g_exit_st = WEXITSTATUS(g_exit_st);
 	if (WIFSIGNALED(g_exit_st) && WTERMSIG(g_exit_st))
 	{
+		unlink(path);
 		free(path);
 		close(utils[0]);
 		g_exit_st = 130;
@@ -88,6 +89,7 @@ static int	verify_error(char *pathname, t_params *params, int child)
 {
 	if (errno == 12)
 	{
+		unlink(pathname);
 		close(STDIN_FILENO);
 		unlink(pathname);
 		free(pathname);
