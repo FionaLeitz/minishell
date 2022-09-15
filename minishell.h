@@ -88,6 +88,7 @@ typedef struct s_params
 	t_export		*export;
 	t_data			*data;
 	int				old_fd[2];
+	int				error;
 }					t_params;
 
 //prompt.c

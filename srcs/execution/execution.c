@@ -75,6 +75,8 @@ int	ft_execute(t_token *token, t_params *params)
 	int			nbr;
 	int			nbr2;
 
+//	if (token->fds[0] == -2)
+//		return (g_exit_st);
 	if (token->next == NULL && token->prev == NULL)
 		return (only_one(token, params));
 	nbr = ft_size(token);

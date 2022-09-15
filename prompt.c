@@ -21,10 +21,24 @@ int	ft_get_out(t_data *data)
 	return (12);
 }
 
+int	can_continue(t_data *data, t_params *params)
+{
+	t_token	*tmp;
+
+	if (ft_cut(data, params) == -1)
+		return (ft_get_out(data));
+	tmp = data->head;
+	if (params->error == -2)
+		return (0);
+	if (ft_execute(tmp, params) == -1)
+		return (ft_get_out(data));
+	return (0);
+}
+
 // give the prompt, get readline, parses and execution's fonctions
 int	prompt(t_data *data, t_params *params)
 {
-	t_token	*tmp;
+//	t_token	*tmp;
 	int		syntax;
 
 	params->data = data;
@@ -32,23 +46,25 @@ int	prompt(t_data *data, t_params *params)
 	{
 		params->old_fd[0] = -1;
 		params->old_fd[1] = -1;
+		params->error = 0;
 		init_data(data);
 		ft_signals(DEFAULT);
 		data->input = readline(PROMPT);
 		if (!data->input)
 			ft_exit_d(data, params);
-
 		syntax = syntax_check(data);
 		if (syntax == 2)
 			only_heredocs(data);
 		if (syntax != -1)
-		{
+			if (can_continue(data, params) == 12)
+				return (12);
+/*		{
 			if (ft_cut(data, params) == -1)
 				return (ft_get_out(data));
 			tmp = data->head;
 			if (ft_execute(tmp, params) == -1)
 				return (ft_get_out(data));
-		}
+		}*/
 		free_struct(data);
 	}
 	rl_clear_history();

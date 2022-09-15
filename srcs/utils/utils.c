@@ -59,6 +59,7 @@ int	ft_shlvl(char **envp)
 	return (0);
 }
 */
+
 // handles ctrl-d
 void	ft_exit_d(t_data *data, t_params *params)
 {
