@@ -32,12 +32,9 @@ static char	*hd_name(void)
 		if (pathname == NULL)
 			return (error_malloc_return("heredoc\n", NULL));
 		fd_exist = open(pathname, O_RDONLY);
-		if (fd_exist != -1)
-		{
-			close(fd_exist);
+		if (fd_exist == -1)
 			break ;
-		}
-//		close(fd_exist);
+		close(fd_exist);
 //		fd_exist = 0;
 		++i;
 		free(pathname);
