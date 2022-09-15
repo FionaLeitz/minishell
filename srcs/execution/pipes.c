@@ -82,7 +82,7 @@ static void	clean_child(t_params *params, int *pid, t_pipe_fd *pipe_fd)
 		token = token->next;
 		free(tmp);
 	}
-	exit(0);
+	exit(g_exit_st);
 }
 
 // get exit status from child
