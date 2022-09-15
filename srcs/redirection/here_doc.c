@@ -35,7 +35,6 @@ static char	*hd_name(void)
 		if (fd_exist == -1)
 			break ;
 		close(fd_exist);
-//		fd_exist = 0;
 		++i;
 		free(pathname);
 	}
@@ -111,10 +110,7 @@ int	ft_here_doc(char *delim, t_params *params)
 	int			utils[2];
 	int			child;
 
-//	g_exit_st = 0;
-//	utils[1] = check_delim(delim);
 	utils[1] = delim_quotes(delim);
-//	check_quote_delim(delim, utils[1]);
 	pathname = hd_name();
 	if (pathname == NULL)
 	{

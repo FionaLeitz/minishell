@@ -38,7 +38,6 @@ int	can_continue(t_data *data, t_params *params)
 // give the prompt, get readline, parses and execution's fonctions
 int	prompt(t_data *data, t_params *params)
 {
-//	t_token	*tmp;
 	int		syntax;
 
 	params->data = data;
@@ -58,13 +57,6 @@ int	prompt(t_data *data, t_params *params)
 		if (syntax != -1)
 			if (can_continue(data, params) == 12)
 				return (12);
-/*		{
-			if (ft_cut(data, params) == -1)
-				return (ft_get_out(data));
-			tmp = data->head;
-			if (ft_execute(tmp, params) == -1)
-				return (ft_get_out(data));
-		}*/
 		free_struct(data);
 	}
 	rl_clear_history();

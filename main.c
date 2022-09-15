@@ -29,16 +29,6 @@ int	main(int ac, char **av, char **envp)
 	params.export = NULL;
 	if (initiate_params(&params, envp) != 0)
 		return (12);
-/*	params.env = ft_get_env(envp);
-	if (errno == 12)
-		return (12);
-	if (params.env[0] != NULL)
-		ft_shlvl(params.env);
-	if (errno == 12)
-		return (wrong_malloc(params));
-	params.export = create_export(params.env);
-	if (errno == 12)
-		return (wrong_malloc(params));*/
 	prompt(&data, &params);
 	free_export(params.export);
 	free_table(params.env);

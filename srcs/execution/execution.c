@@ -6,7 +6,7 @@
 /*   By: masamoil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 16:05:49 by masamoil          #+#    #+#             */
-/*   Updated: 2022/08/26 17:12:55 by masamoil         ###   ########.fr       */
+/*   Updated: 2022/09/15 15:52:02 by masamoil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ int	ft_execute(t_token *token, t_params *params)
 	int			nbr;
 	int			nbr2;
 
-//	if (token->fds[0] == -2)
-//		return (g_exit_st);
 	if (token->next == NULL && token->prev == NULL)
 		return (only_one(token, params));
 	nbr = ft_size(token);
