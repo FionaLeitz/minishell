@@ -215,7 +215,8 @@ int			print_error_redir(char *str, char c);
 
 #endif
 
-// alias minishell='valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=.ignore_readline ./minishell'
+// alias minishell='valgrind --leak-check=full --show-leak-kinds=all
+// --track-fds=yes --suppressions=.ignore_readline ./minishell'
 // {
 // ignore_libreadline_conditional_jump_errors
 // Memcheck:Leak
